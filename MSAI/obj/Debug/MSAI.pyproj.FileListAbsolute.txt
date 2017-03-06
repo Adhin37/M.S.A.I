@@ -1,0 +1,13 @@
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\bin\Microsoft.PythonTools.WebRole.dll
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\obj\Debug\attach_server.py
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\obj\Debug\visualstudio_py_debugger.py
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\obj\Debug\visualstudio_py_repl.py
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\obj\Debug\visualstudio_py_util.py
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\obj\Debug\__init__.py
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\obj\Debug\__main__.py
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\bin\AzureSetup.cfg
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\bin\Microsoft.PythonTools.AzureSetup.exe
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\bin\Microsoft.PythonTools.AzureSetup.exe.config
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\bin\wfastcgi.py
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\obj\Debug\web.config
+C:\Users\Adhin\Documents\Visual Studio 2015\Projects\MSAI\MSAI\obj\Debug\web.debug.config
