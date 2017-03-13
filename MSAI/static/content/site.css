@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    /*padding-top: 50px;*/
     padding-bottom: 20px;
 }
 
@@ -39,4 +39,35 @@ input[type="checkbox"].input-validation-error {
 
 .validation-summary-valid {
     display: none;
+}
+
+.glyphicon-hidden {
+    float: right;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.text-results, .content-results {
+    padding-left: 15px;
+}
+
+.content-results {
+    padding-bottom: 15px;
+}
+
+.btn-submit-img {
+    margin-top: 15px;
+}
+
+.panel-default .panel-heading {
+    background-color: #7f8c8d;
+    color: #f0f0f0;
+}
+
+.panel-default {
+    border-color: #95a5a6;
+}
+
+footer {
+    text-align: center;
 }

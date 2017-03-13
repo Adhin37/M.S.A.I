@@ -7,10 +7,11 @@
     <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
     <script src="/static/scripts/modernizr-2.6.2.js"></script>
+
 </head>
 
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -30,8 +31,8 @@
         </div>
     </div>
 
-    <div class="container body-content">
-        {{!base}}
+    <div class="container-fluid body-content">
+		 {{!base}}
         <hr />
         <footer>
             <p>&copy; {{ year }} - MSAI</p>
@@ -41,6 +42,8 @@
     <script src="/static/scripts/jquery-1.10.2.js"></script>
     <script src="/static/scripts/bootstrap.js"></script>
     <script src="/static/scripts/respond.js"></script>
+	<script src="/static/scripts/functions.js"></script>
+
 
 </body>
 </html>
