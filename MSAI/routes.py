@@ -7,6 +7,7 @@ from datetime import datetime
 import os
 import numpy as np
 import cv2
+import getpass
 
 @route('/')
 @route('/home')
@@ -48,22 +49,32 @@ def test():
 @route('/test', method='POST')
 @view('test')
 def do_upload():
-    upload = request.files.get('upload')
+    dir_opencv='C:\\opencv'
+    dir_msai='C:\\Users\\'+getpass.getuser()+'\\Documents\\MSAI'
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    if not os.path.exists(dir_msai):
+        os.makedirs(dir_msai)
 
+    upload = request.files.get('upload')
+    
+    print upload.filename
     name, ext = os.path.splitext(upload.filename)
-    if ext not in ('.png', '.jpg', '.jpeg'):
+    if ext not in ('.png', '.jpg', '.jpeg', ".gif"):
         return "File extension not allowed."
 
-    save_path = "/tmp/"
+    save_path = os.path.join(dir_path,"tmp")
     if not os.path.exists(save_path):
         os.makedirs(save_path)
+    file_path = os.path.join(save_path, upload.filename)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+            
+    upload.save(file_path)
 
-    #file_path = "{path}/{file}".format(path=save_path, file=upload.filename)
-    #upload.save(file_path)
+    face_cascade = cv2.CascadeClassifier(os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_frontalface_default.xml'))
+    eye_cascade = cv2.CascadeClassifier(os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_eye.xml')) 
 
-    face_cascade = cv2.CascadeClassifier('C:\opencv\sources\data\haarcascades\haarcascade_frontalface_default.xml')
-    eye_cascade = cv2.CascadeClassifier('C:\opencv\sources\data\haarcascades\haarcascade_eye.xml')    
-    img = cv2.imread(os.path.join('C:\\Users\\Patrick\\Desktop\\Test Python OpenCV',upload.filename),1)
+    img = cv2.imread(file_path,1)
 
     faces = face_cascade.detectMultiScale(img, 1.3, 5)
     for (x,y,w,h) in faces:
@@ -73,15 +84,19 @@ def do_upload():
         eyes = eye_cascade.detectMultiScale(roi_gray)
         for (ex,ey,ew,eh) in eyes:
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
-    file_save = 'testee.png'
-    cv2.imwrite(os.path.join('C:\Users\Patrick\Documents\Visual Studio 2015\Projects\BottleWebProject1\BottleWebProject1\static\pictures',file_save), img)
-    
+    file_save = upload.filename 
+
+    cv2.imwrite(os.path.join(os.path.join(dir_path,'static\\pictures'),file_save), img)
+    if os.path.isfile(os.path.join(dir_msai,file_save)):
+        os.remove(os.path.join(dir_msai,file_save))
+    cv2.imwrite(os.path.join(dir_msai,file_save), img)
+
     return dict(
-        title='Resultat',
-        message='Resultat OpenCV',
+        title = 'Resultat',
+        message = 'Resultat OpenCV',
         #message="File successfully saved to '{0}'.".format(save_path),
-        year=datetime.now().year,
-        file= file_save
+        year = datetime.now().year,
+        file = file_save
     )
 
 
