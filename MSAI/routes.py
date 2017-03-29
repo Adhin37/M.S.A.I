@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Routes and views for the bottle application.
 """
@@ -8,6 +10,7 @@ import os
 import numpy as np
 import cv2
 import getpass
+
 
 @route('/')
 @route('/home')
@@ -43,6 +46,16 @@ def test():
     return dict(
         title='Test',
         message='Test OPENCV.',
+        year=datetime.now().year
+    )
+
+@route('/add_object')
+@view('add_object')
+def add_object():
+    return dict(
+        title='Test',
+        message='',
+        color = "vide",
         year=datetime.now().year
     )
 
@@ -99,5 +112,38 @@ def do_upload():
         file = file_save
     )
 
+@route('/add_object', method='POST')
+@view('add_object')
+def do_upload():
+    dir_msai='C:\\Users\\'+getpass.getuser()+'\\Documents\\MSAI'
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    if not os.path.exists(dir_msai):
+        os.makedirs(dir_msai)
 
+    upload = request.files.get('upload')
+    
+    print upload.filename
+    name, ext = os.path.splitext(upload.filename)
+    if ext not in ('.png'):
+        message = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + ext + "."
+        color = "alert alert-danger"
 
+    else :
+        save_path = os.path.join(dir_path,"static\pictures\object")
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+        file_path = os.path.join(save_path, upload.filename)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+            
+        upload.save(file_path)
+        message = "L'objet a bien été ajouté dans la base de connaissance."
+        color = "alert alert-success"
+
+    return dict(
+        title = 'Resultat',
+        message = message,
+        color = color,
+        #message="File successfully saved to '{0}'.".format(save_path),
+        year = datetime.now().year,
+    )
