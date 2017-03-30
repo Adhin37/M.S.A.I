@@ -1,7 +1,7 @@
-# M.S.A.I
+﻿# M.S.A.I
 Intelligence artificielle ayant pour but de détecter une situation anormale.
 
-Prérequis ! 
+Prérequis ! (NB : Mettre tout en version 32bits)
 
 Python :
 - Version 2.7.13
