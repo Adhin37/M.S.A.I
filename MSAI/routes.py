@@ -52,9 +52,16 @@ def test():
 @route('/add_object')
 @view('add_object')
 def add_object():
+    liste = []
+    path = "C:\Users\Kaworu\Documents\GitHub\MSAI\MSAI\matrices"
+    dirs = os.listdir(path)
+    for dir in dirs:
+           liste.append(dir)
+
     return dict(
         title='Test',
         message='',
+        liste=liste,
         color = "vide",
         year=datetime.now().year
     )
@@ -114,6 +121,7 @@ def do_upload():
 
 @route('/add_object', method='POST')
 @view('add_object')
+
 def do_upload():
     dir_msai='C:\\Users\\'+getpass.getuser()+'\\Documents\\MSAI'
     dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -147,3 +155,4 @@ def do_upload():
         #message="File successfully saved to '{0}'.".format(save_path),
         year = datetime.now().year,
     )
+
