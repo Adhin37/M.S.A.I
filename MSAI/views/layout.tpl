@@ -24,7 +24,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="/test">Test OpenCV</a></li>
-					<li><a href="/add_object">Ajouter un nouvel objet</a></li>
+					<li><a href="/add_object">Gestion des matrices</a></li>
                     <li><a href="/about">A propos</a></li>
                     <li><a href="/contact">Contact</a></li>
                 </ul>
