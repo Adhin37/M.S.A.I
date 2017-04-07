@@ -4,7 +4,7 @@
 
 function afficher() {
  
-document.getElementById("matriceSelectionnee").value = document.getElementById("selectionMatrice").value
+document.getElementById("select_list_matrix").value = document.getElementById("selected_matrix").value
 
 } </script>
 
@@ -31,7 +31,7 @@ document.getElementById("matriceSelectionnee").value = document.getElementById("
 					<form action="/delete_matrix" method="post" enctype="multipart/form-data">
 	<div class="form-group">
 		<label for="sel1">ou sélectionner une matrice existante :</label>
-			<select id="selectionMatrice" name="selectionMatrice" class="form-control" onchange="afficher(form);">
+			<select id="selected_matrix" name="selected_matrix" class="form-control" onchange="afficher(form);">
 				<% for l in list_matrix: %>
 				<option>{{l}}</option>
 				<% end %>
@@ -63,7 +63,7 @@ document.getElementById("matriceSelectionnee").value = document.getElementById("
 					<option value="negative_img">Négative (sans l'objet sur l'image)</option>
 					</select>
 					</div>
-				<input type="hidden" class="form-control" name="matriceSelectionnee" id="matriceSelectionnee"> </br>
+				<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix"> </br>
 				<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Ajouter l'image" />
 				</form>
 				</div>

@@ -172,7 +172,7 @@ def do_upload():
 
 def do_upload():
     typeImage = request.POST.dict['typeImage'][0]
-    matriceSelectionnee = request.POST.dict['matriceSelectionnee'][0]
+    select_list_matrix = request.POST.dict['select_list_matrix'][0]
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
 
@@ -186,7 +186,7 @@ def do_upload():
             color_add_pic = "alert alert-danger"
 
         else :
-            save_path = os.path.join(dir_path,"matrices", matriceSelectionnee , typeImage)
+            save_path = os.path.join(dir_path,"matrices", select_list_matrix , typeImage)
 
             file_path = os.path.join(save_path, upload.filename)
             if os.path.isfile(file_path):
@@ -256,7 +256,7 @@ def add_matrix():
 @view('manage_matrix')
 
 def delete_matrice():
-    name= request.POST.dict['selectionMatrice'][0]
+    name= request.POST.dict['selected_matrix'][0]
     dir_path = os.path.dirname(os.path.realpath(__file__)) 
     message_delete_matrix = dir_path + '\\matrices\\'
 
