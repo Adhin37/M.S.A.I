@@ -3,9 +3,7 @@
 <script type="text/javascript"> 
 
 function afficher() {
- 
-document.getElementById("select_list_matrix").value = document.getElementById("selected_matrix").value
-
+document.getElementById("select_list_matrix").value = document.getElementById("selected_matrix").value;
 } </script>
 
 <body onLoad="afficher();">
@@ -38,7 +36,7 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 			</select>
 	</div>
 	<div class="form-group">
-		<input type="submit" class="btn btn-sm btn-primary btn btn-danger" value="Supprimer la matrice" />
+		<input type="submit" class="btn btn-sm btn-primary btn btn-danger" id= "btn_delete_matrix" value="Supprimer la matrice" />
 	</div>
 </form>
 				</div>

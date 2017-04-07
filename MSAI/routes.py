@@ -173,7 +173,6 @@ def do_upload():
 def do_upload():
     typeImage = request.POST.dict['typeImage'][0]
     select_list_matrix = request.POST.dict['select_list_matrix'][0]
-
     dir_path = os.path.dirname(os.path.realpath(__file__))
 
     uploads = request.files.getall('upload')
@@ -198,7 +197,7 @@ def do_upload():
 
     #Actualisation de la liste des matrices
     list_matrix = []
-    dirs = os.listdir(nouvelleMatrice)
+    dirs = os.listdir(dir_path + "\\matrices")
     for dir in dirs:
            list_matrix.append(dir)
 
@@ -221,12 +220,15 @@ def add_matrix():
     dir_path = os.path.dirname(os.path.realpath(__file__)) 
     nouvelleMatrice = dir_path + '\\matrices\\'
     
-    if os.path.isdir(nouvelleMatrice + name) == True :
+    if name =='' :
+        message_create_matrix = "Erreur, vous n'avez pas nommée la matrice à créer."
+        color_add_matrix = "alert alert-danger"
+    elif os.path.isdir(nouvelleMatrice + name) == True :
         message_create_matrix = "Erreur, la matrice " + name +" existe déjà."
-        color_add_pic = "alert alert-danger"
+        color_add_matrix = "alert alert-danger"
     elif name is None :
         message_create_matrix = "Veuillez saisir un nom pour la matrice."
-        color_add_pic = "alert alert-danger"
+        color_add_matrix = "alert alert-danger"
     else :
         os.mkdir(nouvelleMatrice + name)
         os.mkdir(nouvelleMatrice + name + "\\positive_img")
@@ -255,12 +257,12 @@ def add_matrix():
 @route('/delete_matrix', method='POST')
 @view('manage_matrix')
 
-def delete_matrice():
+def delete_matrix():
     name= request.POST.dict['selected_matrix'][0]
     dir_path = os.path.dirname(os.path.realpath(__file__)) 
     message_delete_matrix = dir_path + '\\matrices\\'
 
-    if name is not None :
+    if name != '' :
         shutil.rmtree(message_delete_matrix + name)   
     
     #Actualisation de la liste des matrices
