@@ -22,12 +22,9 @@ def wsgi_app():
 if __name__ == '__main__':
     PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
     STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static').replace('\\', '/')
-    HOST = os.environ.get('SERVER_HOST', 'localhost')
-    try:
-        PORT = int(os.environ.get('SERVER_PORT', '5555'))
-    except ValueError:
-        PORT = 5555
-
+    HOST = os.environ.get('SERVER_HOST', '0.0.0.0')
+    # PORT de lancement du serveur
+    PORT = 1854
     @bottle.route('/static/<filepath:path>')
     def server_static(filepath):
         """Handler for static files, used with the development server.
@@ -36,4 +33,4 @@ if __name__ == '__main__':
         return bottle.static_file(filepath, root=STATIC_ROOT)
 
     # Starts a local test server.
-    bottle.run(server='wsgiref', host=HOST, port=PORT)
+    bottle.run(reloader=True, server='wsgiref', host=HOST, port=PORT)
