@@ -19,6 +19,7 @@
     <PythonWsgiHandler>{StartupModule}.wsgi_app()</PythonWsgiHandler>
     <Name>MSAI</Name>
     <RootNamespace>BottleWebProject1</RootNamespace>
+    <WebBrowserPort>1854</WebBrowserPort>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +32,7 @@
   <ItemGroup>
     <Compile Include="app.py" />
     <Compile Include="routes.py" />
+    <Compile Include="utils.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="static\" />
@@ -65,6 +67,7 @@
     <Content Include="static\scripts\respond.js" />
     <Content Include="static\scripts\respond.min.js" />
     <Content Include="static\scripts\_references.js" />
+    <Content Include="views\manage_matrix.tpl" />
     <Content Include="views\test.tpl" />
     <Content Include="views\about.tpl" />
     <Content Include="views\contact.tpl" />

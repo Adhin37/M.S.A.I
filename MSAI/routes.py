@@ -13,6 +13,8 @@ import getpass
 import shutil
 import utils
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
 @route('/')
 @route('/home')
 @view('index')
@@ -50,54 +52,72 @@ def test():
         year=datetime.now().year
     )
 
-@route('/add_object')
-@view('add_object')
-def add_object():
-    liste = []
-    path = "C:\Users\Kaworu\Documents\GitHub\MSAI\MSAI\matrices"
+@route('/manage_matrix')
+@view('manage_matrix')
+def manage_matrix():
+    list_matrix = []
+    path =  os.path.join(dir_path,'matrices')
+    print 'path:'+path+'\n'
+    if not os.path.exists(path):
+        os.makedirs(path)
     dirs = os.listdir(path)
     for dir in dirs:
-           liste.append(dir)
+           list_matrix.append(dir)
 
     return dict(
         title='Test',
-        message='',
-        message_matrice ='',
-        supressionMatrice = '',
-        liste=liste,
-        color = "vide",
-        color_matrice ='',
+        message_add_pic='',
+        message_create_matrix ='',
+        message_delete_matrix = '',
+        list_matrix=list_matrix,
+        color_add_pic = "vide",
+        color_add_matrix ='',
         year=datetime.now().year
     )
 
 
-@route('/add_matrice')
-@view('add_object')
-def add_object():
+@route('/add_matrix')
+@view('manage_matrix')
+def add_matrix():
 
     return dict(
         title='Test',
-        message='',
-        message_matrice = '',
-        supressionMatrice = '',
-        liste=liste,
-        color = "vide",
-        color_matrice = '',
+        message_add_pic='',
+        message_create_matrix = '',
+        message_delete_matrix = '',
+        list_matrix=list_matrix,
+        color_add_pic = "vide",
+        color_add_matrix = '',
         year=datetime.now().year
     )
 
-@route('/delete_matrice')
-@view('add_object')
-def add_object():
+@route('/delete_matrix')
+@view('manage_matrix')
+def delete_matrix():
 
     return dict(
         title='Test',
-        message='',
-        message_matrice = '',
-        supressionMatrice = '',
-        liste=liste,
-        color = "vide",
-        color_matrice = '',
+        message_add_pic='',
+        message_create_matrix = '',
+        message_delete_matrix = '',
+        list_matrix=list_matrix,
+        color_add_pic = "vide",
+        color_add_matrix = '',
+        year=datetime.now().year
+    )
+
+@route('/add_pictures')
+@view('manage_matrix')
+def add_pictures():
+
+    return dict(
+        title='Test',
+        message_add_pic='',
+        message_create_matrix = '',
+        message_delete_matrix = '',
+        list_matrix=list_matrix,
+        color_add_pic = "vide",
+        color_add_matrix = '',
         year=datetime.now().year
     )
 
@@ -105,8 +125,6 @@ def add_object():
 @view('test')
 def do_upload():
     dir_opencv='C:\\opencv'
-    dir_msai='C:\\Users\\'+getpass.getuser()+'\\Documents\\MSAI'
-    dir_path = os.path.dirname(os.path.realpath(__file__))
     if not os.path.exists(dir_msai):
         os.makedirs(dir_msai)
 
@@ -142,26 +160,20 @@ def do_upload():
     file_save = upload.filename 
 
     cv2.imwrite(os.path.join(os.path.join(dir_path,'static\\pictures'),file_save), img)
-    if os.path.isfile(os.path.join(dir_msai,file_save)):
-        os.remove(os.path.join(dir_msai,file_save))
-    cv2.imwrite(os.path.join(dir_msai,file_save), img)
 
     return dict(
         title = 'Resultat',
         message = 'Resultat OpenCV',
-        #message="File successfully saved to '{0}'.".format(save_path),
         year = datetime.now().year,
         file = file_save
     )
 
-@route('/add_object', method='POST')
-@view('add_object')
+@route('/add_pictures', method='POST')
+@view('manage_matrix')
 
 def do_upload():
     typeImage = request.POST.dict['typeImage'][0]
-    matriceSelectionnee = request.POST.dict['matriceSelectionnee'][0]
-
-    dir_path = os.path.dirname(os.path.realpath(__file__))
+    select_list_matrix = request.POST.dict['select_list_matrix'][0]
 
     uploads = request.files.getall('upload')
 
@@ -169,105 +181,101 @@ def do_upload():
     
         name, ext = os.path.splitext(upload.filename)
         if ext not in ('.png'):
-            message = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + ext + "."
-            color = "alert alert-danger"
+            message_add_pic = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + ext + "."
+            color_add_pic = "alert alert-danger"
 
         else :
-            save_path = os.path.join(dir_path,"matrices", matriceSelectionnee , typeImage)
+            save_path = os.path.join(dir_path,"matrices", select_list_matrix , typeImage)
 
             file_path = os.path.join(save_path, upload.filename)
             if os.path.isfile(file_path):
                 os.remove(file_path)
             
             upload.save(file_path)
-            message = "L'objet a bien été ajouté dans la base de connaissance."
-            color = "alert alert-success"
+            message_add_pic = "L'objet a bien été ajouté dans la base de connaissance."
+            color_add_pic = "alert alert-success"
 
     #Actualisation de la liste des matrices
-    liste = []
-    dirs = os.listdir(nouvelleMatrice)
+    list_matrix = []
+    dirs = os.listdir(dir_path + "\\matrices")
     for dir in dirs:
-           liste.append(dir)
+           list_matrix.append(dir)
 
     return dict(
         title = 'Resultat',
-        message = message,
-        message_matrice = '',
-        supressionMatrice = '',
-        color_matrice = '',
-        color = color,
-        liste = liste,
-        #message="File successfully saved to '{0}'.".format(save_path),
+        message_add_pic = message_add_pic,
+        message_create_matrix = '',
+        message_delete_matrix = '',
+        color_add_matrix = '',
+        color_add_pic = color_add_pic,
+        list_matrix = list_matrix,
         year = datetime.now().year,
     )
 
-@route('/add_matrice', method='POST')
-@view('add_object')
+@route('/add_matrix', method='POST')
+@view('manage_matrix')
 
-def add_matrice():
+def add_matrix():
     name= request.POST.dict['name_matrice'][0]
-    dir_path = os.path.dirname(os.path.realpath(__file__)) 
     nouvelleMatrice = dir_path + '\\matrices\\'
     
-    if os.path.isdir(nouvelleMatrice + name) == True :
-        message_matrice = "Erreur, la matrice " + name +" existe déjà."
-        color = "alert alert-danger"
+    if name =='' :
+        message_create_matrix = "Erreur, vous n'avez pas nommée la matrice à créer."
+        color_add_matrix = "alert alert-danger"
+    elif os.path.isdir(nouvelleMatrice + name) == True :
+        message_create_matrix = "Erreur, la matrice " + name +" existe déjà."
+        color_add_matrix = "alert alert-danger"
     elif name is None :
-        message_matrice = "Veuillez saisir un nom pour la matrice."
-        color = "alert alert-danger"
+        message_create_matrix = "Veuillez saisir un nom pour la matrice."
+        color_add_matrix = "alert alert-danger"
     else :
         os.mkdir(nouvelleMatrice + name)
         os.mkdir(nouvelleMatrice + name + "\\positive_img")
         os.mkdir(nouvelleMatrice + name + "\\negative_img")
 
-        message_matrice = "La matrice a bien été créée."
-        color = "alert alert-success"
+        message_create_matrix = "La matrice a bien été créée."
+        color_add_matrix = "alert alert-success"
 
     #Actualisation de la liste des matrices
-    liste = []
+    list_matrix = []
     dirs = os.listdir(nouvelleMatrice)
     for dir in dirs:
-           liste.append(dir)
+           list_matrix.append(dir)
 
     return dict(
         title = 'Resultat',
-        message = '',
-        message_matrice = message_matrice,
-        supressionMatrice = '',
-        liste = liste,
-        color = '',
-        color_matrice = color,
-        #message="File successfully saved to '{0}'.".format(save_path),
+        message_add_pic = '',
+        message_create_matrix = message_create_matrix,
+        message_delete_matrix = '',
+        list_matrix = list_matrix,
+        color_add_pic = '',
+        color_add_matrix = color_add_matrix,
         year = datetime.now().year,
     )
 
-@route('/delete_matrice', method='POST')
-@view('add_object')
+@route('/delete_matrix', method='POST')
+@view('manage_matrix')
 
-def delete_matrice():
-    name= request.POST.dict['selectionMatrice'][0]
-    dir_path = os.path.dirname(os.path.realpath(__file__)) 
-    supressionMatrice = dir_path + '\\matrices\\'
+def delete_matrix():
+    name= request.POST.dict['selected_matrix'][0]
+    message_delete_matrix = dir_path + '\\matrices\\'
 
-    if name is not None :
-        shutil.rmtree(supressionMatrice + name)   
-        message_matrice_suppr = "Supression de la matrice " + name +" réussie."
-        color_suppr = "alert alert-sucess"
+    if name != '' :
+        shutil.rmtree(message_delete_matrix + name)   
     
     #Actualisation de la liste des matrices
-    liste = []
-    dirs = os.listdir(supressionMatrice)
+    list_matrix = []
+    dirs = os.listdir(message_delete_matrix)
     for dir in dirs:
-           liste.append(dir)
+           list_matrix.append(dir)
 
     return dict(
         title = 'Resultat',
-        message = '',
-        message_matrice = '',
-        supressionMatrice = message_matrice_suppr,
-        liste = liste,
-        color = '',
-        color_matrice = '',
-        #message="File successfully saved to '{0}'.".format(save_path),
+        message_add_pic = '',
+        message_create_matrix = '',
+        message_delete_matrix = message_delete_matrix,
+        list_matrix = list_matrix,
+        color_add_pic = '',
+        color_add_matrix = '',
         year = datetime.now().year,
     )

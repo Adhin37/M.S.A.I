@@ -87,9 +87,9 @@ ENV/
 
 # Rope project settings
 .ropeproject
-.vs/ProjetMSAI/v14/.suo
 MSAI/static/pictures/*
 MSAI/tmp/*
-MSAI/MSAI.pyproj
 MSAI/web.debug.config
 MSAI/obj/Debug/*
+MSAI/matrices/*
+.vs/ProjetMSAI/v14/.suo

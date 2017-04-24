@@ -1,11 +1,9 @@
-% rebase('layout.tpl', title=title, year=year, liste=liste)
+% rebase('layout.tpl', title=title, year=year, list_matrix=list_matrix)
 
 <script type="text/javascript"> 
 
 function afficher() {
- 
-document.getElementById("matriceSelectionnee").value = document.getElementById("selectionMatrice").value
-
+document.getElementById("select_list_matrix").value = document.getElementById("selected_matrix").value;
 } </script>
 
 <body onLoad="afficher();">
@@ -16,11 +14,11 @@ document.getElementById("matriceSelectionnee").value = document.getElementById("
 		<div class="panel-heading">Les matrices</div>
 			<div class="panel-body paddingPanel">
 				<div class="form-group">
-					<form action="/add_matrice" method="post" enctype="multipart/form-data">
+					<form action="/add_matrix" method="post" enctype="multipart/form-data">
 						<div class="form-group">
-							<div class="{{ color_matrice }}" role="alert">
+							<div class="{{ color_add_matrix }}" role="alert">
 								<button type="button" class="close" data-dismiss="alert" ></button>
-								{{ message_matrice }}</div>
+								{{ message_create_matrix }}</div>
 								<label for="usr">Créer une nouvelle matrice :</label>
 								<input type="text" class="form-control" name="name_matrice" id="usr"> </br>
 								<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Créer matrice" />
@@ -28,17 +26,17 @@ document.getElementById("matriceSelectionnee").value = document.getElementById("
 						</div>
 					</form>
 
-					<form action="/delete_matrice" method="post" enctype="multipart/form-data">
+					<form action="/delete_matrix" method="post" enctype="multipart/form-data">
 	<div class="form-group">
 		<label for="sel1">ou sélectionner une matrice existante :</label>
-			<select id="selectionMatrice" name="selectionMatrice" class="form-control" onchange="afficher(form);">
-				<% for l in liste: %>
+			<select id="selected_matrix" name="selected_matrix" class="form-control" onchange="afficher(form);">
+				<% for l in list_matrix: %>
 				<option>{{l}}</option>
 				<% end %>
 			</select>
 	</div>
 	<div class="form-group">
-		<input type="submit" class="btn btn-sm btn-primary btn btn-danger" value="Supprimer la matrice" />
+		<input type="submit" class="btn btn-sm btn-primary btn btn-danger" id= "btn_delete_matrix" value="Supprimer la matrice" />
 	</div>
 </form>
 				</div>
@@ -49,11 +47,11 @@ document.getElementById("matriceSelectionnee").value = document.getElementById("
 	<div class="panel panel-default panel-submit">
 		<div class="panel-heading">Les images</div>
 			<div class="panel-body paddingPanel">
-				<form action="/add_object" method="post" enctype="multipart/form-data">
+				<form action="/add_pictures" method="post" enctype="multipart/form-data">
 					<div class="form-group">
-						<div class="{{ color }}" role="alert">
+						<div class="{{ color_add_pic }}" role="alert">
 						<button type="button" class="close" data-dismiss="alert" ></button>
-						{{ message }}
+						{{ message_add_pic }}
 						</div>
 					<label for="sel1">Ajouter une image à la matrice sélectionnée:</label>
 					<p> La format de l'image doit être en jpeg<p>
@@ -63,7 +61,7 @@ document.getElementById("matriceSelectionnee").value = document.getElementById("
 					<option value="negative_img">Négative (sans l'objet sur l'image)</option>
 					</select>
 					</div>
-				<input type="hidden" class="form-control" name="matriceSelectionnee" id="matriceSelectionnee"> </br>
+				<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix"> </br>
 				<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Ajouter l'image" />
 				</form>
 				</div>
