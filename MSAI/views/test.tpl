@@ -30,7 +30,7 @@
 <div class="col-md-9">
 		<div class="panel panel-default">
             <div class="panel-heading">Résultat :</div>
-            <div class="panel-body paddingPanel" style="visibility: hidden;">
+            <div class="panel-body paddingPanel" >
 				<img src="static/pictures/{{file}}" style="width: 100%;"/>
 			</div>
         </div>

@@ -125,12 +125,9 @@ def add_pictures():
 @view('test')
 def do_upload():
     dir_opencv='C:\\opencv'
-    if not os.path.exists(dir_msai):
-        os.makedirs(dir_msai)
 
     upload = request.files.get('upload')
-    
-    print upload.filename
+
     name, ext = os.path.splitext(upload.filename)
     if ext not in ('.png', '.jpg', '.jpeg', ".gif"):
         return "File extension not allowed."
