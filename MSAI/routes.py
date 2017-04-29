@@ -124,7 +124,14 @@ def add_pictures():
 @route('/test', method='POST')
 @view('test')
 def do_upload():
+    # ----- Pour Windows -----
     dir_opencv='C:\\opencv'
+    dir_msai='C:\\Users\\'+getpass.getuser()+'\\Documents\\MSAI'
+	# ------------------------
+    # ----- Pour Linux -----
+    #dir_opencv='/home/jenkins/opencv-3.1.0'
+    #dir_msai='/home/jenkins/MSAI/MSAI'
+	# ----------------------
 
     upload = request.files.get('upload')
 
@@ -132,18 +139,24 @@ def do_upload():
     if ext not in ('.png', '.jpg', '.jpeg', ".gif"):
         return "File extension not allowed."
 
-    save_path = os.path.join(dir_path,"tmp")
+    save_path = os.path.abspath(dir_path+'/tmp')
     if not os.path.exists(save_path):
         os.makedirs(save_path)
-    file_path = os.path.join(save_path, upload.filename)
+    file_path = os.path.abspath(save_path+'/'+upload.filename)
     if os.path.isfile(file_path):
         os.remove(file_path)
             
     upload.save(file_path)
 
+    # ----- Pour Windows -----
     face_cascade = cv2.CascadeClassifier(os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_frontalface_default.xml'))
     eye_cascade = cv2.CascadeClassifier(os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_eye.xml')) 
-
+    # ------------------------
+    # ----- Pour Linux -----
+    #face_cascade = cv2.CascadeClassifier(os.path.abspath(dir_opencv+'/data/haarcascades/haarcascade_frontalface_default.xml'))
+    #eye_cascade = cv2.CascadeClassifier(os.path.abspath(dir_opencv+'/data/haarcascades/haarcascade_eye.xml')) 
+    # ----------------------
+   
     img = cv2.imread(file_path,1)
 
     faces = face_cascade.detectMultiScale(img, 1.3, 5)
@@ -156,7 +169,10 @@ def do_upload():
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
     file_save = upload.filename 
 
-    cv2.imwrite(os.path.join(os.path.join(dir_path,'static\\pictures'),file_save), img)
+    cv2.imwrite(os.path.abspath(dir_path+'/static/pictures/'+file_save), img)
+    if os.path.isfile(os.path.abspath(dir_msai+'/'+file_save)):
+        os.remove(os.path.abspath(dir_msai+'/'+file_save))
+    cv2.imwrite(os.path.abspath(dir_msai+'/'+file_save), img)
 
     return dict(
         title = 'Resultat',
@@ -182,9 +198,9 @@ def do_upload():
             color_add_pic = "alert alert-danger"
 
         else :
-            save_path = os.path.join(dir_path,"matrices", select_list_matrix , typeImage)
+            save_path = os.path.abspath(dir_path+"/matrices/"+select_list_matrix+"/"+typeImage)
 
-            file_path = os.path.join(save_path, upload.filename)
+            file_path = os.path.abspath(save_path+"/"+upload.filename)
             if os.path.isfile(file_path):
                 os.remove(file_path)
             
