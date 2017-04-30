@@ -46,10 +46,21 @@ def about():
 @route('/test')
 @view('test')
 def test():
+
+    list_filter = []
+    path =  os.path.join(dir_path,'matrices')
+    print 'path:'+path+'\n'
+    if not os.path.exists(path):
+        os.makedirs(path)
+    dirs = os.listdir(path)
+    for dir in dirs:
+           list_filter.append(dir)
     return dict(
-        title='Test',
-        message='Test OPENCV.',
-        year=datetime.now().year
+        title='123456',
+        message='OPENCV.',
+        essai='Test',
+        year=datetime.now().year,
+        list_filter=list_filter
     )
 
 @route('/manage_matrix')
@@ -65,7 +76,7 @@ def manage_matrix():
            list_matrix.append(dir)
 
     return dict(
-        title='Test',
+        title='??????',
         message_add_pic='',
         message_create_matrix ='',
         message_delete_matrix = '',
@@ -169,6 +180,16 @@ def do_upload():
 @view('manage_matrix')
 
 def do_upload():
+
+    list_filter = []
+    path =  os.path.join(dir_path,'matrices')
+    print 'path:'+path+'\n'
+    if not os.path.exists(path):
+        os.makedirs(path)
+    dirs = os.listdir(path)
+    for dir in dirs:
+           list_filter.append(dir)
+
     typeImage = request.POST.dict['typeImage'][0]
     select_list_matrix = request.POST.dict['select_list_matrix'][0]
 
