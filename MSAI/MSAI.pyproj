@@ -31,8 +31,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
+    <Compile Include="face_detect.py" />
+    <Compile Include="image_commons.py" />
+    <Compile Include="ObjectDetector.py" />
+    <Compile Include="objectMatriceCouteau.py" />
     <Compile Include="routes.py" />
     <Compile Include="utils.py" />
+    <Compile Include="webcam.py" />
+    <Compile Include="webcam_emotion.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="static\" />
