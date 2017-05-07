@@ -24,3 +24,16 @@ D:\Cours\MSIA\M.S.A.I\MSAI\bin\Microsoft.PythonTools.AzureSetup.exe.config
 D:\Cours\MSIA\M.S.A.I\MSAI\bin\wfastcgi.py
 D:\Cours\MSIA\M.S.A.I\MSAI\obj\Debug\web.config
 D:\Cours\MSIA\M.S.A.I\MSAI\obj\Debug\web.debug.config
+D:\Cours\MSIA\MSAI\MSAI\bin\Microsoft.PythonTools.WebRole.dll
+D:\Cours\MSIA\MSAI\MSAI\obj\Debug\attach_server.py
+D:\Cours\MSIA\MSAI\MSAI\obj\Debug\visualstudio_py_debugger.py
+D:\Cours\MSIA\MSAI\MSAI\obj\Debug\visualstudio_py_repl.py
+D:\Cours\MSIA\MSAI\MSAI\obj\Debug\visualstudio_py_util.py
+D:\Cours\MSIA\MSAI\MSAI\obj\Debug\__init__.py
+D:\Cours\MSIA\MSAI\MSAI\obj\Debug\__main__.py
+D:\Cours\MSIA\MSAI\MSAI\bin\AzureSetup.cfg
+D:\Cours\MSIA\MSAI\MSAI\bin\Microsoft.PythonTools.AzureSetup.exe
+D:\Cours\MSIA\MSAI\MSAI\bin\Microsoft.PythonTools.AzureSetup.exe.config
+D:\Cours\MSIA\MSAI\MSAI\bin\wfastcgi.py
+D:\Cours\MSIA\MSAI\MSAI\obj\Debug\web.config
+D:\Cours\MSIA\MSAI\MSAI\obj\Debug\web.debug.config

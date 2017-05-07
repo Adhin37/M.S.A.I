@@ -15,6 +15,7 @@ import utils
 import variables
 
 varUtil = variables.VariablesRoutes()
+list_filter = []
 
 @route('/')
 @route('/home')
@@ -48,7 +49,7 @@ def about():
 @view('test')
 def test():
 
-    path =  os.path.join(dir_path,'matrices')
+    path =  os.path.join(varUtil.dir_path,'matrices')
     print 'path:'+path+'\n'
     if not os.path.exists(path):
         os.makedirs(path)
@@ -190,7 +191,7 @@ def do_upload():
 
 def do_upload():
 
-    path =  os.path.join(dir_path,'matrices')
+    path =  os.path.join(varUtil.dir_path,'matrices')
     print 'path:'+path+'\n'
     if not os.path.exists(path):
         os.makedirs(path)
