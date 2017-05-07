@@ -160,7 +160,7 @@ def do_upload():
     face_cascade = cv2.CascadeClassifier(os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_frontalface_default.xml'))
     eye_cascade = cv2.CascadeClassifier(os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_eye.xml')) 
     # ------------------------
-    # ----- Pour Linux -----
+    # ----- Pour Linux ----- 
     #face_cascade = cv2.CascadeClassifier(os.path.abspath(dir_opencv+'/data/haarcascades/haarcascade_frontalface_default.xml'))
     #eye_cascade = cv2.CascadeClassifier(os.path.abspath(dir_opencv+'/data/haarcascades/haarcascade_eye.xml')) 
     # ----------------------
