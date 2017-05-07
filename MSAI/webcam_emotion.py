@@ -76,16 +76,16 @@ def train_and_evaluate(clf, X_train, X_test, y_train, y_test):
 
 def detectFaces(frame):
 	dir_opencv = 'C:\\opencv'
-    cascPath = os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_frontalface_default.xml')
-    faceCascade = cv2.CascadeClassifier(cascPath)
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    detected_faces = faceCascade.detectMultiScale(
+	cascPath = os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_frontalface_default.xml')
+	faceCascade = cv2.CascadeClassifier(cascPath)
+	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+	detected_faces = faceCascade.detectMultiScale(
             gray,
             scaleFactor=1.1,
             minNeighbors=6,
             minSize=(50, 50),
             flags=cv2.CASCADE_SCALE_IMAGE)
-    return gray, detected_faces
+	return gray, detected_faces
 
 
 def extract_face_features(gray, detected_face, offset_coefficients):

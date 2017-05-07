@@ -14,6 +14,7 @@ import shutil
 import utils
 
 dir_path = os.path.dirname(os.path.realpath(__file__))
+list_filter = []
 
 @route('/')
 @route('/home')
@@ -47,18 +48,16 @@ def about():
 @view('test')
 def test():
 
-    list_filter = []
     path =  os.path.join(dir_path,'matrices')
     print 'path:'+path+'\n'
     if not os.path.exists(path):
         os.makedirs(path)
     dirs = os.listdir(path)
     for dir in dirs:
-           list_filter.append(dir)
+        list_filter.append(dir)
     return dict(
-        title='123456',
-        message='OPENCV.',
-        essai='Test',
+        title='Test',
+        message='Test OPENCV.',
         year=datetime.now().year,
         list_filter=list_filter
     )
@@ -76,7 +75,7 @@ def manage_matrix():
            list_matrix.append(dir)
 
     return dict(
-        title='??????',
+        title='Manage Matrice',
         message_add_pic='',
         message_create_matrix ='',
         message_delete_matrix = '',
@@ -135,7 +134,12 @@ def add_pictures():
 @route('/test', method='POST')
 @view('test')
 def do_upload():
-    dir_opencv='C:\\opencv'
+    # ----- Pour Windows -----
+    dir_opencv='C:\\Program Files (x86)\\opencv'
+	# ------------------------
+    # ----- Pour Linux -----
+    #dir_opencv='/home/jenkins/opencv-3.1.0'
+	# ----------------------
 
     upload = request.files.get('upload')
 
@@ -143,18 +147,24 @@ def do_upload():
     if ext not in ('.png', '.jpg', '.jpeg', ".gif"):
         return "File extension not allowed."
 
-    save_path = os.path.join(dir_path,"tmp")
+    save_path = os.path.abspath(dir_path+'/tmp')
     if not os.path.exists(save_path):
         os.makedirs(save_path)
-    file_path = os.path.join(save_path, upload.filename)
+    file_path = os.path.abspath(save_path+'/'+upload.filename)
     if os.path.isfile(file_path):
         os.remove(file_path)
             
     upload.save(file_path)
 
+    # ----- Pour Windows -----
     face_cascade = cv2.CascadeClassifier(os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_frontalface_default.xml'))
     eye_cascade = cv2.CascadeClassifier(os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_eye.xml')) 
-
+    # ------------------------
+    # ----- Pour Linux -----
+    #face_cascade = cv2.CascadeClassifier(os.path.abspath(dir_opencv+'/data/haarcascades/haarcascade_frontalface_default.xml'))
+    #eye_cascade = cv2.CascadeClassifier(os.path.abspath(dir_opencv+'/data/haarcascades/haarcascade_eye.xml')) 
+    # ----------------------
+   
     img = cv2.imread(file_path,1)
 
     faces = face_cascade.detectMultiScale(img, 1.3, 5)
@@ -167,13 +177,14 @@ def do_upload():
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
     file_save = upload.filename 
 
-    cv2.imwrite(os.path.join(os.path.join(dir_path,'static\\pictures'),file_save), img)
+    cv2.imwrite(os.path.abspath(dir_path+'/static/pictures/'+file_save), img)
 
     return dict(
         title = 'Resultat',
         message = 'Resultat OpenCV',
         year = datetime.now().year,
-        file = file_save
+        file = file_save,
+        list_filter=list_filter
     )
 
 @route('/add_pictures', method='POST')
@@ -181,14 +192,13 @@ def do_upload():
 
 def do_upload():
 
-    list_filter = []
     path =  os.path.join(dir_path,'matrices')
     print 'path:'+path+'\n'
     if not os.path.exists(path):
         os.makedirs(path)
     dirs = os.listdir(path)
     for dir in dirs:
-           list_filter.append(dir)
+        list_filter.append(dir)
 
     typeImage = request.POST.dict['typeImage'][0]
     select_list_matrix = request.POST.dict['select_list_matrix'][0]
@@ -203,9 +213,9 @@ def do_upload():
             color_add_pic = "alert alert-danger"
 
         else :
-            save_path = os.path.join(dir_path,"matrices", select_list_matrix , typeImage)
+            save_path = os.path.abspath(dir_path+"/matrices/"+select_list_matrix+"/"+typeImage)
 
-            file_path = os.path.join(save_path, upload.filename)
+            file_path = os.path.abspath(save_path+"/"+upload.filename)
             if os.path.isfile(file_path):
                 os.remove(file_path)
             
