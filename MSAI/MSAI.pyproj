@@ -39,6 +39,9 @@
     <Compile Include="utils.py" />
     <Compile Include="webcam.py" />
     <Compile Include="webcam_emotion.py" />
+    <Compile Include="variables.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="static\" />

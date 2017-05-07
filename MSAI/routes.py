@@ -12,9 +12,9 @@ import cv2
 import getpass
 import shutil
 import utils
+import variables
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-list_filter = []
+varUtil = variables.VariablesRoutes()
 
 @route('/')
 @route('/home')
@@ -66,7 +66,7 @@ def test():
 @view('manage_matrix')
 def manage_matrix():
     list_matrix = []
-    path =  os.path.join(dir_path,'matrices')
+    path =  os.path.join(varUtil.dir_path,'matrices')
     print 'path:'+path+'\n'
     if not os.path.exists(path):
         os.makedirs(path)
@@ -134,12 +134,13 @@ def add_pictures():
 @route('/test', method='POST')
 @view('test')
 def do_upload():
-    # ----- Pour Windows -----
-    dir_opencv='C:\\Program Files (x86)\\opencv'
-	# ------------------------
-    # ----- Pour Linux -----
-    #dir_opencv='/home/jenkins/opencv-3.1.0'
-	# ----------------------
+
+    #while True:
+    #    print varUtil.dir_opencv+" introuvable, veuillez indiquer l'emplacement de ce dossier. A l'avenir, deplacez-le dans C:\ pour eviter cette erreur"
+    #    varUtil.dir_opencv=raw_input("Dossier opencv : ")
+    #    print varUtil.dir_opencv
+    #    if os.path.isdir(varUtil.dir_opencv):
+    #        break
 
     upload = request.files.get('upload')
 
@@ -147,7 +148,7 @@ def do_upload():
     if ext not in ('.png', '.jpg', '.jpeg', ".gif"):
         return "File extension not allowed."
 
-    save_path = os.path.abspath(dir_path+'/tmp')
+    save_path = os.path.abspath(varUtil.dir_path+'/tmp')
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     file_path = os.path.abspath(save_path+'/'+upload.filename)
@@ -156,15 +157,9 @@ def do_upload():
             
     upload.save(file_path)
 
-    # ----- Pour Windows -----
-    face_cascade = cv2.CascadeClassifier(os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_frontalface_default.xml'))
-    eye_cascade = cv2.CascadeClassifier(os.path.join(dir_opencv,'sources\\data\\haarcascades\\haarcascade_eye.xml')) 
-    # ------------------------
-    # ----- Pour Linux ----- 
-    #face_cascade = cv2.CascadeClassifier(os.path.abspath(dir_opencv+'/data/haarcascades/haarcascade_frontalface_default.xml'))
-    #eye_cascade = cv2.CascadeClassifier(os.path.abspath(dir_opencv+'/data/haarcascades/haarcascade_eye.xml')) 
-    # ----------------------
-   
+    face_cascade = cv2.CascadeClassifier(varUtil.face)
+    eye_cascade = cv2.CascadeClassifier(varUtil.eye)
+
     img = cv2.imread(file_path,1)
 
     faces = face_cascade.detectMultiScale(img, 1.3, 5)
@@ -177,7 +172,10 @@ def do_upload():
             cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
     file_save = upload.filename 
 
-    cv2.imwrite(os.path.abspath(dir_path+'/static/pictures/'+file_save), img)
+    if not os.path.exists(os.path.abspath(varUtil.dir_path+'/static/pictures/')):
+        os.makedirs(os.path.abspath(varUtil.dir_path+'/static/pictures/'))
+
+    cv2.imwrite(os.path.abspath(varUtil.dir_path+'/static/pictures/'+file_save), img)
 
     return dict(
         title = 'Resultat',
@@ -213,7 +211,7 @@ def do_upload():
             color_add_pic = "alert alert-danger"
 
         else :
-            save_path = os.path.abspath(dir_path+"/matrices/"+select_list_matrix+"/"+typeImage)
+            save_path = os.path.abspath(varUtil.dir_path+"/matrices/"+select_list_matrix+"/"+typeImage)
 
             file_path = os.path.abspath(save_path+"/"+upload.filename)
             if os.path.isfile(file_path):
@@ -225,7 +223,7 @@ def do_upload():
 
     #Actualisation de la liste des matrices
     list_matrix = []
-    dirs = os.listdir(dir_path + "\\matrices")
+    dirs = os.listdir(varUtil.dir_path + "\\matrices")
     for dir in dirs:
            list_matrix.append(dir)
 
@@ -245,7 +243,7 @@ def do_upload():
 
 def add_matrix():
     name= request.POST.dict['name_matrice'][0]
-    nouvelleMatrice = dir_path + '\\matrices\\'
+    nouvelleMatrice = varUtil.dir_path + '\\matrices\\'
     
     if name =='' :
         message_create_matrix = "Erreur, vous n'avez pas nommée la matrice à créer."
@@ -286,7 +284,7 @@ def add_matrix():
 
 def delete_matrix():
     name= request.POST.dict['selected_matrix'][0]
-    message_delete_matrix = dir_path + '\\matrices\\'
+    message_delete_matrix = varUtil.dir_path + '\\matrices\\'
 
     if name != '' :
         shutil.rmtree(message_delete_matrix + name)   
