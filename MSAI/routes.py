@@ -5,12 +5,10 @@ Routes and views for the bottle application.
 """
 
 from bottle import route, view, request, run
-from datetime import datetime
 import os
 import numpy as np
 import cv2
 import getpass
-import shutil
 from utils import Utils
 from matrix import Matrix
 
@@ -23,14 +21,14 @@ list_filter = []
 @view('index')
 def home():
     """Renders the home page."""
-    return dict(year=datetime.now().year)
+    return dict(year=my_utility.date.year)
 
 @route('/contact')
 @view('contact')
 def contact():
     """Renders the contact page."""
     return dict(title='Contact',
-        year=datetime.now().year)
+        year=my_utility.date.year)
 
 @route('/about')
 @view('about')
@@ -38,7 +36,7 @@ def about():
     """Renders the about page."""
     return dict(title='A propos',
         message='Application MSAI.',
-        year=datetime.now().year)
+        year=my_utility.date.year)
 
 @route('/test')
 @view('test')
@@ -53,21 +51,23 @@ def test():
         list_filter.append(dir)
     return dict(title='Test',
         message='Test OPENCV.',
-        year=datetime.now().year,
-        list_filter=list_filter)
+        year=my_utility.date.year,
+        list_filter = list_filter)
 
 @route('/test', method='POST')
 @view('test')
 def do_upload():
 
-    #while True:
-    #    print my_utility.dir_opencv+" introuvable, veuillez indiquer
-    #    l'emplacement de ce dossier.  A l'avenir, deplacez-le dans C:\ pour
-    #    eviter cette erreur"
-    #    my_utility.dir_opencv=raw_input("Dossier opencv : ")
-    #    print my_utility.dir_opencv
-    #    if os.path.isdir(my_utility.dir_opencv):
-    #        break
+    """
+    while True:
+        print my_utility.dir_opencv+" introuvable, veuillez indiquer
+        l'emplacement de ce dossier.  A l'avenir, deplacez-le dans C:\ pour
+        eviter cette erreur"
+        my_utility.dir_opencv=raw_input("Dossier opencv : ")
+        print my_utility.dir_opencv
+        if os.path.isdir(my_utility.dir_opencv):
+            break
+    """
 
     upload = request.files.get('upload')
 
@@ -84,8 +84,8 @@ def do_upload():
             
     upload.save(file_path)
 
-    face_cascade = cv2.CascadeClassifier(my_utility.face)
-    eye_cascade = cv2.CascadeClassifier(my_utility.eye)
+    face_cascade = cv2.CascadeClassifier(my_matrix.face)
+    eye_cascade = cv2.CascadeClassifier(my_matrix.eye)
 
     img = cv2.imread(file_path,1)
 
@@ -105,63 +105,49 @@ def do_upload():
 
     return dict(title = 'Resultat',
         message = 'Resultat OpenCV',
-        year = datetime.now().year,
+        year = my_utility.date.year,
         file = file_save,
-        list_filter=list_filter)
+        list_filter = list_filter)
 
 @route('/manage_matrix')
 @view('manage_matrix')
 def manage_matrix():
-    my_matrix.UpdateDirectoryList()
+    my_matrix.UpdateDirectoryMatrix()
 
-    return dict(title='Manage Matrice',
+    return dict(title='Management Matrice',
         message_add_pic='',
         message_create_matrix ='',
         message_delete_matrix = '',
         list_matrix=my_matrix.list_dir_matrix,
         color_add_pic = "vide",
         color_add_matrix ='',
-        year=datetime.now().year)
+        year = my_utility.date.year)
 
 
 @route('/add_matrix')
 @view('manage_matrix')
 def add_matrix():
 
-    return dict(title='Test',
+    return dict(title='Management Matrice',
         message_add_pic='',
         message_create_matrix = '',
         message_delete_matrix = '',
         list_matrix=list_matrix,
         color_add_pic = "vide",
         color_add_matrix = '',
-        year=datetime.now().year)
+        year = my_utility.date.year)
 
 @route('/add_matrix', method='POST')
 @view('manage_matrix')
 
 def add_matrix():
-    name = request.POST.dict['name_matrice'][0]
-    nouvelleMatrice = my_matrix.dir_matrix
-    
-    if name == '' :
-        message_create_matrix = "Erreur, vous n'avez pas nommée la matrice à créer."
-        color_add_matrix = "alert alert-danger"
-    elif os.path.isdir(nouvelleMatrice + name) == True :
-        message_create_matrix = "Erreur, la matrice " + name + " existe déjà."
-        color_add_matrix = "alert alert-danger"
-    elif name is None :
-        message_create_matrix = "Veuillez saisir un nom pour la matrice."
-        color_add_matrix = "alert alert-danger"
-    else :
-        os.mkdir(nouvelleMatrice + name)
-        os.mkdir(nouvelleMatrice + name + "\\positive_img")
-        os.mkdir(nouvelleMatrice + name + "\\negative_img")
+    name_matrix = request.POST.dict['name_matrice'][0]
+    message_create_matrix = ''
+    color_status_matrix = ''    
 
-        message_create_matrix = "La matrice a bien été créée."
-        color_add_matrix = "alert alert-success"
-
-    my_matrix.UpdateDirectoryList()
+    """Assignation des 2 valeurs de retour"""
+    message_create_matrix, color_status_matrix = my_matrix.AddDirectoryMatrix(name_matrix)
+    my_matrix.UpdateDirectoryMatrix()
 
     return dict(title = 'Resultat',
         message_add_pic = '',
@@ -169,21 +155,8 @@ def add_matrix():
         message_delete_matrix = '',
         list_matrix = my_matrix.list_dir_matrix,
         color_add_pic = '',
-        color_add_matrix = color_add_matrix,
-        year = datetime.now().year,)
-
-@route('/delete_matrix')
-@view('manage_matrix')
-def delete_matrix():
-
-    return dict(title='Test',
-        message_add_pic='',
-        message_create_matrix = '',
-        message_delete_matrix = '',
-        list_matrix=list_matrix,
-        color_add_pic = "vide",
-        color_add_matrix = '',
-        year=datetime.now().year)
+        color_add_matrix = color_status_matrix,
+        year = my_utility.date.year)
 
 @route('/add_pictures')
 @view('manage_matrix')
@@ -193,10 +166,10 @@ def add_pictures():
         message_add_pic='',
         message_create_matrix = '',
         message_delete_matrix = '',
-        list_matrix=list_matrix,
+        list_matrix = my_matrix.list_dir_matrix,
         color_add_pic = "vide",
         color_add_matrix = '',
-        year=datetime.now().year)
+        year = my_utility.date.year)
 
 @route('/add_pictures', method='POST')
 @view('manage_matrix')
@@ -222,11 +195,8 @@ def do_upload():
         if ext not in ('.png'):
             message_add_pic = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + ext + "."
             color_add_pic = "alert alert-danger"
-
         else :
-            save_path = os.path.abspath(my_matrix.dir_matrix + select_list_matrix + "/" + typeImage)
-
-            file_path = os.path.abspath(save_path + "/" + upload.filename)
+            file_path = os.path.abspath(my_matrix.dir_matrix +'/'+ select_list_matrix +'/'+ typeImage+'/'+ upload.filename)
             if os.path.isfile(file_path):
                 os.remove(file_path)
             
@@ -234,7 +204,7 @@ def do_upload():
             message_add_pic = "L'objet a bien été ajouté dans la base de connaissance."
             color_add_pic = "alert alert-success"
 
-    my_matrix.UpdateDirectoryList()
+    my_matrix.UpdateDirectoryMatrix()
 
     return dict(title = 'Resultat',
         message_add_pic = message_add_pic,
@@ -242,26 +212,39 @@ def do_upload():
         message_delete_matrix = '',
         color_add_matrix = '',
         color_add_pic = color_add_pic,
-        list_matrix = list_matrix,
-        year = datetime.now().year,)
+        list_matrix = my_matrix.list_dir_matrix,
+        year = my_utility.date.year)
+
+@route('/delete_matrix')
+@view('manage_matrix')
+def delete_matrix():
+
+    return dict(title='Test',
+        message_add_pic='',
+        message_create_matrix = '',
+        message_delete_matrix = '',
+        list_matrix=my_matrix.list_dir_matrix,
+        color_add_pic = "vide",
+        color_add_matrix = '',
+        year = my_utility.date.year)
 
 @route('/delete_matrix', method='POST')
 @view('manage_matrix')
 
 def delete_matrix():
-    name = request.POST.dict['selected_matrix'][0]
-    message_delete_matrix = my_matrix.dir_matrix
-
-    if name != '' :
-        shutil.rmtree(message_delete_matrix + name)   
-
-    my_matrix.UpdateDirectoryList()
+    name_matrix = request.POST.dict['selected_matrix'][0]
+    message_delete_matrix = ''
+    color_status_matrix = '' 
+    
+    """Assignation des 2 valeurs de retour"""
+    message_delete_matrix, color_status_matrix = my_matrix.DeleteDirectoryMatrix(name_matrix)
+    my_matrix.UpdateDirectoryMatrix()
 
     return dict(title = 'Resultat',
         message_add_pic = '',
         message_create_matrix = '',
         message_delete_matrix = message_delete_matrix,
-        list_matrix = list_matrix,
+        list_matrix = my_matrix.list_dir_matrix,
         color_add_pic = '',
         color_add_matrix = '',
-        year = datetime.now().year,)
+        year = my_utility.date.year)
