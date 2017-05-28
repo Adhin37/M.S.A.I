@@ -103,6 +103,9 @@ def do_upload():
         os.makedirs(os.path.abspath(my_utility.dir_path + '/static/pictures/'))
     cv2.imwrite(os.path.abspath(my_utility.dir_path + '/static/pictures/' + file_save), img)
 
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+		
     return dict(title = 'Resultat',
         message = 'Resultat OpenCV',
         year = my_utility.date.year,

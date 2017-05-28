@@ -24,8 +24,8 @@ class Matrix(object):
             os.makedirs(self.dir_models)
 
         #A Supprimer des que list_matrix sera fonctionnel dans /test, POST
-        self.face = os.path.abspath(os.path.join(self.dir_models,'haarcascade_frontalface_default.xml'))
-        self.eye = os.path.abspath(os.path.join(self.dir_models,'haarcascade_eye.xml'))
+        self.face = os.path.join(self.dir_models,'haarcascade_frontalface_default.xml')
+        self.eye = os.path.join(self.dir_models,'haarcascade_eye.xml')
 
         self.UpdateDirectoryMatrix()
         self.UpdateMatrix()
@@ -42,8 +42,8 @@ class Matrix(object):
             color_status_matrix = "alert alert-danger"
         else :
             os.mkdir(os.path.join(self.dir_matrix, name_matrix))
-            os.mkdir(os.path.join(os.path.join(self.dir_matrix, name_matrix),"positive_img"))
-            os.mkdir(os.path.join(os.path.join(self.dir_matrix, name_matrix),"negative_img"))
+            os.mkdir(os.path.abspath(self.dir_matrix + '/' + name_matrix + '/' + "positive_img"))
+            os.mkdir(os.path.abspath(self.dir_matrix + '/' + name_matrix + '/' + "negative_img"))
 
             message_create_matrix = "La matrice a bien été créée."
             color_status_matrix = "alert alert-success"
@@ -54,7 +54,7 @@ class Matrix(object):
         self.list_dir_matrix = []
         dirs = os.listdir(self.dir_matrix)
         for dir in dirs:
-            if os.path.isdir(os.path.abspath(os.path.join(self.dir_matrix, dir))):
+            if os.path.isdir(os.path.join(self.dir_matrix, dir)):
                 self.list_dir_matrix.append(dir)
         return self.list_dir_matrix
 
@@ -79,7 +79,7 @@ class Matrix(object):
         self.list_matrix = []
         files = os.listdir(self.dir_models)
         for file in files:
-            full_file = os.path.abspath(os.path.join(self.dir_models, file))
+            full_file = os.path.join(self.dir_models, file)
             if os.path.isfile(full_file):
                 self.list_matrix.append(full_file)
         return self.list_matrix
