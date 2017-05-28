@@ -31,19 +31,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
+    <Compile Include="matrix.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="face_detect.py" />
     <Compile Include="image_commons.py" />
     <Compile Include="ObjectDetector.py" />
     <Compile Include="objectMatriceCouteau.py" />
     <Compile Include="routes.py" />
-    <Compile Include="utils.py" />
     <Compile Include="webcam.py" />
     <Compile Include="webcam_emotion.py" />
-    <Compile Include="variables.py">
+    <Compile Include="utils.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="models\" />
     <Folder Include="static\" />
     <Folder Include="static\content\" />
     <Folder Include="static\fonts\" />
@@ -52,6 +55,10 @@
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="models\emotion_detection_model.xml" />
+    <Content Include="models\haarcascade_eye.xml" />
+    <Content Include="models\haarcascade_frontalface_default.xml" />
+    <Content Include="models\knife_classifier.xml" />
     <Content Include="requirements.txt" />
     <Content Include="static\content\bootstrap.css" />
     <Content Include="static\content\bootstrap.min.css" />
