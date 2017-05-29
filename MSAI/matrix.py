@@ -84,3 +84,20 @@ class Matrix(object):
                 self.list_matrix.append(full_file)
         return self.list_matrix
 
+    def AddObject(self, name_matrix, picture_pos_neg, picture_ext, picture_filename):
+        """Ajout objet dans la matrice sélectionnée via la liste"""
+        message_add_pic = ''
+        color_add_pic = ''
+    
+        if picture_ext not in ('.png'):
+            message_add_pic = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + picture_ext + "."
+            color_add_pic = "alert alert-danger"
+        else :
+            file_path = os.path.abspath(self.dir_matrix +'/'+ name_matrix +'/'+ picture_pos_neg+'/'+ picture_filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+            
+            message_add_pic = "L'objet a bien été ajouté dans la base de connaissance."
+            color_add_pic = "alert alert-success"
+
+        return message_add_pic, color_add_pic, file_path

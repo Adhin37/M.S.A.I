@@ -176,36 +176,19 @@ def add_pictures():
 
 @route('/add_pictures', method='POST')
 @view('manage_matrix')
-
-def do_upload():
-
-    path = my_matrix.dir_matrix
-    print 'path:' + path + '\n'
-    if not os.path.exists(path):
-        os.makedirs(path)
-    dirs = os.listdir(path)
-    for dir in dirs:
-        list_filter.append(dir)
-
-    typeImage = request.POST.dict['typeImage'][0]
-    select_list_matrix = request.POST.dict['select_list_matrix'][0]
-
+def add_pictures():
+    name_matrix = request.POST.dict['select_list_matrix'][0]
+    picture_type = request.POST.dict['typeImage'][0]    
     uploads = request.files.getall('upload')
 
-    for upload in uploads:        
-    
+    for upload in uploads:    
         name, ext = os.path.splitext(upload.filename)
-        if ext not in ('.png'):
-            message_add_pic = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + ext + "."
-            color_add_pic = "alert alert-danger"
+        message_add_pic, color_add_pic, filepath = my_matrix.AddObject(name_matrix, picture_type, ext, upload.filename) 
+
+        if color_add_pic == "alert alert-danger":
+            break
         else :
-            file_path = os.path.abspath(my_matrix.dir_matrix +'/'+ select_list_matrix +'/'+ typeImage+'/'+ upload.filename)
-            if os.path.isfile(file_path):
-                os.remove(file_path)
-            
-            upload.save(file_path)
-            message_add_pic = "L'objet a bien été ajouté dans la base de connaissance."
-            color_add_pic = "alert alert-success"
+            upload.save(filepath)
 
     my_matrix.UpdateDirectoryMatrix()
 
