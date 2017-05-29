@@ -5,6 +5,7 @@ Routes and views for the bottle application.
 """
 
 from bottle import route, view, request, run
+from emotion import emotions_present,_load_emoticons
 import os
 import numpy as np
 import cv2
@@ -103,8 +104,20 @@ def do_upload():
         os.makedirs(os.path.abspath(my_utility.dir_path + '/static/pictures/'))
     cv2.imwrite(os.path.abspath(my_utility.dir_path + '/static/pictures/' + file_save), img)
 
+    emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
+    emoticons = _load_emoticons(emotions)
+    source = os.path.abspath(my_utility.dir_path + '/static/pictures/' + file_save)
+    if cv2.__version__ == '3.1.0':
+        fisher_face = cv2.face.createFisherFaceRecognizer()
+    else:
+        fisher_face = cv2.createFisherFaceRecognizer()
+    fisher_face.load('models/emotion_detection_model.xml')
+
+    neutral,anger,disgust,happy,sadness,surprise,all_emotion = emotions_present(fisher_face, emoticons, source, update_time=30)
+
     if os.path.isfile(file_path):
         os.remove(file_path)
+
 		
     return dict(title = 'Resultat',
         message = 'Resultat OpenCV',
