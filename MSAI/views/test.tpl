@@ -18,7 +18,8 @@ function toggle_div(bouton, id) {
 		<div class="panel-heading">Sélection Image :</div>
 			<div class="panel-body paddingPanel">
 				<input type="file" name="upload"/>
-				<button type="button" class="btn btn-sm btn-primary btn-submit-img" onclick="toggle_div(this,'zoneFiltre');">Options avancées</button> 
+				<input type="submit" class="btn btn-sm btn-primary btn-submit-img" value="Lancer l'analyse" />
+				<button type="button" class="btn btn-sm btn-info btn-submit-img" onclick="toggle_div(this,'zoneFiltre');"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span></button> 
 				<div id="zoneFiltre" style="display:none;">
 				<br />
 				<h4>Matrices <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
@@ -76,9 +77,8 @@ function toggle_div(bouton, id) {
 					<input type="text" class="form-control" aria-label="..." value="Surpris" readonly>
 				</div>
 					<br/>
-				</div>				
-								
-				<input type="submit" class="btn btn-sm btn-primary btn-submit-img" value="Lancer l'analyse" />
+				</div>							
+
             </div>
 
 			<hr />
