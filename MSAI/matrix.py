@@ -29,6 +29,9 @@ class Matrix(object):
 
         self.UpdateDirectoryMatrix()
         self.UpdateMatrix()
+    def Generate(self):
+        print "hbyubhj"+self.dir_matrix
+        return self.list_dir_matrix
 
     def AddDirectoryMatrix(self, name_matrix):
         message_create_matrix = ''

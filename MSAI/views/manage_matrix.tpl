@@ -66,6 +66,17 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 				</form>
 				</div>
 		</div>
+		<div class="panel-heading">Géneration Classifier</div>
+			<div class="panel-body paddingPanel">
+				<form action="/do_classifier" method="post" enctype="multipart/form-data">
+					<div class="form-group">
+					<label for="sel1">Lancer la génération du classifier de la matrice sélectionnée:</label>
+					<p> Une fois lancé, le script peut être très long (plusieurs jours en fonction du nombre d'images)<p>
+					</div>
+				<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Lancer génération" />
+				</form>
+				</div>
+		</div>
 	</div>
 	</div>
 </div> <!-- /container -->

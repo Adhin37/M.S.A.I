@@ -105,7 +105,6 @@ def do_upload():
 
     if os.path.isfile(file_path):
         os.remove(file_path)
-		
     return dict(title = 'Resultat',
         message = 'Resultat OpenCV',
         year = my_utility.date.year,
@@ -126,6 +125,20 @@ def manage_matrix():
         color_add_matrix ='',
         year = my_utility.date.year)
 
+@route('/do_classifier', method='POST')
+@view('manage_matrix')
+def do_classifier():
+    my_matrix.Generate()
+    #path =  os.path.join(varUtil.dir_path,'matrices')
+   # print 'path:'+path+'\n'
+    return dict(title='Management Matrice',
+        message_add_pic='',
+        message_create_matrix ='',
+        message_delete_matrix = '',
+        list_matrix=my_matrix.list_dir_matrix,
+        color_add_pic = "vide",
+        color_add_matrix ='',
+        year = my_utility.date.year)
 
 @route('/add_matrix')
 @view('manage_matrix')
