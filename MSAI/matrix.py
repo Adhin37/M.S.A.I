@@ -18,15 +18,15 @@ class Matrix(object):
         self.my_utility = Utils()
         self.dir_matrix = os.path.join(self.my_utility.dir_path, "matrices")
         self.dir_models = os.path.join(self.my_utility.dir_path, "models")
-        
+
         if not os.path.exists(self.dir_matrix):
             os.makedirs(self.dir_matrix)
         if not os.path.exists(self.dir_models):
             os.makedirs(self.dir_models)
 
         #A Supprimer des que list_matrix sera fonctionnel dans /test, POST
-        self.face = os.path.join(self.dir_models,'haarcascade_frontalface_default.xml')
-        self.eye = os.path.join(self.dir_models,'haarcascade_eye.xml')
+        self.face = os.path.join(self.dir_models, 'haarcascade_frontalface_default.xml')
+        self.eye = os.path.join(self.dir_models, 'haarcascade_eye.xml')
 
         self.UpdateDirectoryMatrix()
         self.UpdateMatrix()
@@ -34,10 +34,11 @@ class Matrix(object):
         current_matrix = os.path.join(self.dir_matrix, "test")
         dir_script = os.path.abspath(self.my_utility.dir_path + "/doMatrice/generateClassifier.sh")
         print "hbyubhj"+self.dir_matrix
-        os.chmod(dir_script, 777)
+        os.chmod(dir_script, 0777)
         print "non : "
         print dir_script
-        subprocess.call(['./' + dir_script + ' '+ current_matrix])
+        #Obliger d'utiliser une "," pour passer les paramètres
+        subprocess.call(['. ' + dir_script, current_matrix], shell=True)
         return self.list_dir_matrix
 
     def AddDirectoryMatrix(self, name_matrix):
