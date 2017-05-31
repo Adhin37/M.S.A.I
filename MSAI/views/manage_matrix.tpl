@@ -27,18 +27,18 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 					</form>
 
 					<form action="/delete_matrix" method="post" enctype="multipart/form-data">
-	<div class="form-group">
-		<label for="sel1">ou sélectionner une matrice existante :</label>
-			<select id="selected_matrix" name="selected_matrix" class="form-control" onchange="afficher(form);">
-				<% for l in list_matrix: %>
-				<option>{{l}}</option>
-				<% end %>
-			</select>
-	</div>
-	<div class="form-group">
-		<input type="submit" class="btn btn-sm btn-primary btn btn-danger" id= "btn_delete_matrix" value="Supprimer la matrice" />
-	</div>
-</form>
+						<div class="form-group">
+							<label for="sel1">ou sélectionner une matrice existante :</label>
+								<select id="selected_matrix" name="selected_matrix" class="form-control" onchange="afficher(form);">
+									<% for l in list_matrix: %>
+									<option>{{l}}</option>
+									<% end %>
+								</select>
+						</div>
+						<div class="form-group">
+							<input type="submit" class="btn btn-sm btn-primary btn btn-danger" id= "btn_delete_matrix" value="Supprimer la matrice" />
+						</div>
+					</form>
 				</div>
 		</div>
 	</div>

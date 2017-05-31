@@ -1,12 +1,25 @@
+# coding: utf-8
+
+from datetime import datetime
+import platform
 import os
 
 
-def RefreshList():
-    #Actualisation de la liste des matrices
-    dir_path = os.path.dirname(os.path.realpath(__file__)) + "\\matrices"
-    liste = []
-    dirs = os.listdir(dir_path)
-    for dir in dirs:
-        liste.append(dir)
-    return liste;
+class Utils(object):
 
+    """Variables"""
+    dir_path = ''
+    dir_opencv = ''
+    osName = ''
+    date = ''
+
+    """Fonctions"""
+    def __init__(self):
+        self.dir_path = os.path.dirname(os.path.realpath(__file__))
+        self.osName = platform.system()
+        self.date = datetime.now()
+
+        if self.osName == 'Windows':
+            self.dir_opencv = os.path.abspath('C:/opencv')
+        elif self.osName == 'Linux':
+            self.dir_opencv = os.getenv("HOME") + '/opencv-3.1.0'
