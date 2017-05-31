@@ -2,6 +2,7 @@
 
 import os
 import shutil
+import subprocess
 from utils import Utils
 
 class Matrix(object):
@@ -30,7 +31,13 @@ class Matrix(object):
         self.UpdateDirectoryMatrix()
         self.UpdateMatrix()
     def Generate(self):
+        current_matrix = os.path.join(self.dir_matrix, "test")
+        dir_script = os.path.abspath(self.my_utility.dir_path + "/doMatrice/generateClassifier.sh")
         print "hbyubhj"+self.dir_matrix
+        os.chmod(dir_script, 777)
+        print "non : "
+        print dir_script
+        subprocess.call(['./' + dir_script + ' '+ current_matrix])
         return self.list_dir_matrix
 
     def AddDirectoryMatrix(self, name_matrix):
@@ -47,6 +54,8 @@ class Matrix(object):
             os.mkdir(os.path.join(self.dir_matrix, name_matrix))
             os.mkdir(os.path.abspath(self.dir_matrix + '/' + name_matrix + '/' + "positive_img"))
             os.mkdir(os.path.abspath(self.dir_matrix + '/' + name_matrix + '/' + "negative_img"))
+            os.mkdir(os.path.abspath(self.dir_matrix + '/' + name_matrix + '/' + "classifier"))
+            os.mkdir(os.path.abspath(self.dir_matrix + '/' + name_matrix + '/' + "samples"))
 
             message_create_matrix = "La matrice a bien été créée."
             color_status_matrix = "alert alert-success"

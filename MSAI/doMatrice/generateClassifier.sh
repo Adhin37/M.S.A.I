@@ -1,6 +1,8 @@
 #!/bin/bash
+matrix_path=$1
 screen -dmS "generate_matrice" sh
 
+screen -S "generate_matrice" -X stuff "cd $matrix_path"
 screen -S "generate_matrice" -X stuff "pos=$(find positive_img -type f | wc -l)"
 screen -S "generate_matrice" -X stuff "find ./positive_img -iname \"*.jpg\" > positives.txt"
 
