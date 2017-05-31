@@ -117,13 +117,13 @@ def do_upload():
 
     if os.path.isfile(file_path):
         os.remove(file_path)
-
-		
+	
     return dict(title = 'Resultat',
         message = 'Resultat OpenCV',
         year = my_utility.date.year,
         file = file_save,
-        list_filter = list_filter)
+        list_filter = list_filter,
+	emotion = all_emotion)
 
 @route('/manage_matrix')
 @view('manage_matrix')

@@ -82,7 +82,7 @@ function toggle_div(bouton, id) {
             </div>
 
 			<hr />
-			<p class="text-results">J'ai identifié { value } visage(s).</p>
+			<p class="text-results">J'ai identifié { values } visage(s).</p>
 
 			<hr />
 			<div class="content-results">
@@ -98,7 +98,7 @@ function toggle_div(bouton, id) {
 <div class="col-md-9">
 		<div class="panel panel-default">
             <div class="panel-heading">Résultat :</div>
-            <div class="panel-body paddingPanel" >
+            <div class="panel-body paddingPanel">
 				<img src="static/pictures/{{file}}" style="width: 100%;"/>
 			</div>
         </div>
