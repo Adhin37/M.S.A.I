@@ -57,20 +57,20 @@ def draw_rectangle(source_image,index,coordinates):
     :param coordinates: Coordinates to draw an image at. Tuple of x, y, width and height.
     """
     x, y, w, h = coordinates
-    cv2.rectangle(source_image, (x,y), (x + w,y + h), 255,2)
+    cv2.rectangle(source_image, (x,y), (x+w,y+h), 255,2)
     font = cv2.FONT_HERSHEY_SIMPLEX
     if index == 1:
- 	cv2.putText(source_image,'anger',(x + w / 2,y - h / 2), font, 1, (255,25,255), 2, cv2.LINE_AA)
+ 	cv2.putText(source_image,'anger',(x+w/2,y-h/2), font, 1, (255,25,255), 2, cv2.LINE_AA)
     elif index == 2:
-	cv2.putText(source_image,'disgust',(x + w / 2,y - h / 2), font, 1, (255,25,255), 2, cv2.LINE_AA)
+	cv2.putText(source_image,'disgust',(x+w/2,y-h/2), font, 1, (255,25,255), 2, cv2.LINE_AA)
     elif index == 3:
-	cv2.putText(source_image,'happy',(x + w / 2,y - h / 2), font, 1, (255,25,255), 2, cv2.LINE_AA)
+	cv2.putText(source_image,'happy',(x+w/2,y-h/2), font, 1, (255,25,255), 2, cv2.LINE_AA)
     elif index == 4:
-	cv2.putText(source_image,'sadness',(x + w / 2,y - h / 2), font, 1, (255,25,255), 2, cv2.LINE_AA)
+	cv2.putText(source_image,'sadness',(x+w/2,y-h/2), font, 1, (255,25,255), 2, cv2.LINE_AA)
     elif index == 5:
-	cv2.putText(source_image,'surprise',(x + w / 2,y - h / 2), font, 1, (255,25,255), 2, cv2.LINE_AA)
+	cv2.putText(source_image,'surprise',(x+w/2,y-h/2), font, 1, (255,25,255), 2, cv2.LINE_AA)
     else:
-	cv2.putText(source_image,'neutral',(x + w / 2,y - h / 2), font, 1, (255,25,255), 2, cv2.LINE_AA)
+	cv2.putText(source_image,'neutral',(x+w/2,y-h/2), font, 1, (255,25,255), 2, cv2.LINE_AA)
     #cv2.putText(source_image,'exact',(x+w,y+h),255,2)
  
    
