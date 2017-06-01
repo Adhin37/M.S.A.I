@@ -39,7 +39,7 @@ if __name__ == '__main__':
     except socket.error, e:
         raise ValueError('[ERROR]: SERVER BIND IMPOSSIBLE !')
     finally:
-        sock.close()
+        sock.shutdown(socket.SHUT_RDWR)
 
     @bottle.route('/static/<filepath:path>')
     def server_static(filepath):
