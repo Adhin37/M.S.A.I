@@ -32,14 +32,15 @@ if __name__ == '__main__':
     try:
         sock.bind((ADRESS,PORT))
         if PORT == sock.getsockname()[1]:
-            print "Connected to %s on port %s" % (ADRESS, PORT)
+            print "The PORT %s for the address %s is not in use: %s" % (PORT,ADRESS, e)
         else:
-            print "Connection to %s on port %s failed: %s" % (ADRESS, PORT, e)
+            print "The PORT %s for the address %s is already in use: %s" % (PORT,ADRESS, e)
             raise ValueError('[ERROR]: SERVER PORT ALREADY IN USE !')
     except socket.error, e:
+        print "Binding to %s on port %s failed: %s" % (ADRESS, PORT, e)
         raise ValueError('[ERROR]: SERVER BIND IMPOSSIBLE !')
     finally:
-        sock.shutdown(socket.SHUT_RDWR)
+        sock.close()
 
     @bottle.route('/static/<filepath:path>')
     def server_static(filepath):
