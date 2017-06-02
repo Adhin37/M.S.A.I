@@ -3,7 +3,7 @@ This module is the main module in this package. It loads emotion recognition mod
 shows a webcam image, recognizes face and it's emotion and draw emotion on the image.
 """
 import cv2
-from face_detect import find_faces
+from face_detect import find_faces,_locate_faces
 from image_commons import nparray_as_image
 
 def _load_emoticons(emotions):
@@ -29,6 +29,8 @@ def emotions_present(model, emoticons, source, update_time):
     sadness = 0
     surprise = 0
     all_emotion = 0 
+    faces = 0
+    tab_faces = []
 
     vc = cv2.VideoCapture(source)
     if vc.isOpened():
@@ -36,7 +38,8 @@ def emotions_present(model, emoticons, source, update_time):
     else:
         print("Error Input")
         return
-
+    tab_faces = _locate_faces(webcam_image)
+    faces = len(tab_faces)
     while read_value:
         for normalized_face, (x, y, w, h) in find_faces(webcam_image):
             prediction = model.predict(normalized_face)
@@ -62,4 +65,4 @@ def emotions_present(model, emoticons, source, update_time):
         read_value, webcam_image = vc.read()
         key = cv2.waitKey(update_time)
 
-    return neutral,anger,disgust,happy,sadness,surprise,all_emotion
+    return neutral,anger,disgust,happy,sadness,surprise,all_emotion,faces

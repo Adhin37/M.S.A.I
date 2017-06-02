@@ -1,4 +1,5 @@
 % rebase('layout.tpl', title=title, year=year, list_filter=list_filter)
+% setdefault('faces',0)
 
 <script type="text/javascript">
 function toggle_div(bouton, id) {
@@ -82,8 +83,29 @@ function toggle_div(bouton, id) {
             </div>
 
 			<hr />
-			<p class="text-results">J'ai identifié { values } visage(s).</p>
-
+			<p class="text-results">Résultat :</p>
+			<p class="text-results">J'ai identifié {{faces}} visage(s).</p>
+			% if defined('emotion_all'):
+			<p class="text-results">Emotion prédiction :</p>
+			% end
+			% if defined('emotion_neutral'):
+			<p class="text-results">Neutre : {{emotion_neutral}}%.</p>
+			% end
+			% if defined('emotion_anger'):
+			<p class="text-results">Enervé : {{emotion_anger}}%.</p>
+			% end
+			% if defined('emotion_surprise'):
+			<p class="text-results">Surprise : {{emotion_surprise}}%.</p>
+			% end
+			% if defined('emotion_disgust'):
+			<p class="text-results">Dégoût : {{emotion_disgust}}%.</p>
+			% end
+			% if defined('emotion_happy'):
+			<p class="text-results">Joyeux : {{emotion_happy}}%.</p>
+			% end
+			% if defined('emotion_sadness'):
+			<p class="text-results">Triste : {{emotion_sadness}}%.</p>
+			% end
 			<hr />
 			<div class="content-results">
 			<p class="text-muted">Est-ce correct ?</p>

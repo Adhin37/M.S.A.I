@@ -113,7 +113,23 @@ def do_upload():
         fisher_face = cv2.createFisherFaceRecognizer()
     fisher_face.load('models/emotion_detection_model.xml')
 
-    neutral,anger,disgust,happy,sadness,surprise,all_emotion = emotions_present(fisher_face, emoticons, source, update_time=30)
+    neutral,anger,disgust,happy,sadness,surprise,all_emotion,faces = emotions_present(fisher_face, emoticons, source, update_time=30)
+    #définir les variables ci-dessous
+    emotion_neutral = 0
+    emotion_anger = 0
+    emotion_disgust = 0
+    emotion_happy = 0
+    emotion_sadness = 0
+    emotion_surprise = 0
+    emotion_all = 0
+    if all_emotion != 0 :
+    	emotion_neutral = neutral*100/all_emotion
+    	emotion_anger = anger*100/all_emotion
+    	emotion_disgust = disgust*100/all_emotion
+    	emotion_happy = happy*100/all_emotion
+    	emotion_sadness = sadness*100/all_emotion
+    	emotion_surprise = surprise*100/all_emotion
+    	emotion_all = all_emotion
 
     if os.path.isfile(file_path):
         os.remove(file_path)
@@ -123,7 +139,14 @@ def do_upload():
         year = my_utility.date.year,
         file = file_save,
         list_filter = list_filter,
-	emotion = all_emotion)
+	faces = faces,
+	emotion_neutral = emotion_neutral,
+	emotion_anger = emotion_anger,
+	emotion_disgust = emotion_disgust,
+	emotion_happy = emotion_happy,
+	emotion_sadness = emotion_sadness,
+	emotion_surprise = emotion_surprise,
+	emotion_all = all_emotion)
 
 @route('/manage_matrix')
 @view('manage_matrix')
