@@ -4,9 +4,9 @@
 function toggle_div(bouton, id) {
   var div = document.getElementById(id);
   if(div.style.display=="none") {
-    div.style.display = "block"; 
-  } else { 
-    div.style.display = "none"; 
+    div.style.display = "block";
+  } else {
+    div.style.display = "none";
   }
 }
 </script>
@@ -15,10 +15,10 @@ function toggle_div(bouton, id) {
 <div class="col-md-3 col-form">
 <form action="/test" method="post" enctype="multipart/form-data">
 	<div class="panel panel-default panel-submit">
-		<div class="panel-heading">Sélection Image :</div>
+		<div class="panel-heading">SÃ©lection Image :</div>
 			<div class="panel-body paddingPanel">
 				<input type="file" name="upload"/>
-				<button type="button" class="btn btn-sm btn-primary btn-submit-img" onclick="toggle_div(this,'zoneFiltre');">Options avancées</button> 
+				<button type="button" class="btn btn-sm btn-primary btn-submit-img" onclick="toggle_div(this,'zoneFiltre');">Options avancÃ©es</button>
 				<div id="zoneFiltre" style="display:none;">
 				<br />
 				<h4>Matrices <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
@@ -31,7 +31,6 @@ function toggle_div(bouton, id) {
 					</div>
 					<br/>
 					<% end %>
-					<!-- /input-group -->
 
 				<h4>Emotions <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
 				<div class="input-group">
@@ -45,14 +44,14 @@ function toggle_div(bouton, id) {
 					<span class="input-group-addon">
 						<input type="checkbox" id="1" value="0" aria-label="...">
 					</span>
-					<input type="text" class="form-control" aria-label="..." value="Enervé" readonly>
+					<input type="text" class="form-control" aria-label="..." value="EnervÃ©" readonly>
 				</div>
 				<br/>
 				<div class="input-group">
 					<span class="input-group-addon">
 						<input type="checkbox" id="2" value="0" aria-label="...">
 					</span>
-					<input type="text" class="form-control" aria-label="..." value="Dégoût" readonly>
+					<input type="text" class="form-control" aria-label="..." value="DÃ©goutÃ©" readonly>
 				</div>
 				<br/>
 				<div class="input-group">
@@ -76,13 +75,13 @@ function toggle_div(bouton, id) {
 					<input type="text" class="form-control" aria-label="..." value="Surpris" readonly>
 				</div>
 					<br/>
-				</div>				
-								
+				</div>
+
 				<input type="submit" class="btn btn-sm btn-primary btn-submit-img" value="Lancer l'analyse" />
             </div>
 
 			<hr />
-			<p class="text-results">J'ai identifié { value } visage(s).</p>
+			<p class="text-results">J'ai identifiÃ© { value } visage(s).</p>
 
 			<hr />
 			<div class="content-results">
@@ -92,12 +91,11 @@ function toggle_div(bouton, id) {
 			</div>
 
         </div>
-		<!--<span class="glyhicon glyphicon-minus glyphicon-hidden"></span>-->
 </form>
 </div>
 <div class="col-md-9">
 		<div class="panel panel-default">
-            <div class="panel-heading">Résultat :</div>
+            <div class="panel-heading">RÃ©sultat :</div>
             <div class="panel-body paddingPanel" >
 				<img src="static/pictures/{{file}}" style="width: 100%;"/>
 			</div>
@@ -105,4 +103,4 @@ function toggle_div(bouton, id) {
 </div>
 
 </div>
-</div> <!-- /container -->
+</div>
