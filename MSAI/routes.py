@@ -119,16 +119,16 @@ def manage_matrix():
 
     return dict(title='Management Matrice',
 
-        #"""Alert Zone"""
-        #Message and color - add picture to the matrix
+        #Gestions des alertes"""
+        #Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
         message_add_pic='',
         color_add_pic = "vide",
 
-        #Message and color - create new matrice
+        #Message affiché et couleur de l'alerte - création d'une nouvelle matrice
         message_create_matrix ='',
         color_add_matrix ='',
 
-        #Message and color - delete one matrice
+        #Message affiché et couleur de l'alerte - supression d'une matrice
         message_delete_matrix = '',
         color_suppr_matrix = '',
 
@@ -141,16 +141,16 @@ def add_matrix():
 
     return dict(title='Management Matrice',
 
-        #"""Alert Zone"""
-        #Message and color - add picture to the matrix
+        #Gestions des alertes"""
+        #Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
         message_add_pic='',
         color_add_pic = "vide",
 
-        #Message and color - create new matrice
+        #Message affiché et couleur de l'alerte - création d'une nouvelle matrice
         message_create_matrix = '',
         color_add_matrix = '',
 
-        #Message and color - delete one matrice
+        #Message affiché et couleur de l'alerte - supression d'une matrice
         message_delete_matrix = '',
         color_suppr_matrix = '',
 
@@ -171,16 +171,16 @@ def add_matrix():
 
     return dict(title = 'Resultat',
         
-        #"""Alert Zone"""
-        #Message and color - add picture to the matrix
+        #Gestions des alertes"""
+        #Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
         message_add_pic='',
         color_add_pic = "vide",
 
-        #Message and color - create new matrice
+        #Message affiché et couleur de l'alerte - création d'une nouvelle matrice
         message_create_matrix = message_create_matrix,
         color_add_matrix = color_status_matrix,
 
-        #Message and color - delete one matrice
+        #Message affiché et couleur de l'alerte - supression d'une matrice
         message_delete_matrix = '',
         color_suppr_matrix = '',
 
@@ -193,16 +193,16 @@ def add_pictures():
 
     return dict(title='Test',
 
-        #"""Alert Zone"""
-        #Message and color - add picture to the matrix
+        #Gestions des alertes"""
+        #Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
         message_add_pic='',
         color_add_pic = "vide",
 
-        #Message and color - create new matrice
+        #Message affiché et couleur de l'alerte - création d'une nouvelle matrice
         message_create_matrix = '',
         color_add_matrix = '',
 
-        #Message and color - delete one matrice
+        #Message affiché et couleur de l'alerte - supression d'une matrice
         message_delete_matrix = '',
         color_suppr_matrix = '',
 
@@ -229,16 +229,16 @@ def add_pictures():
 
     return dict(title = 'Resultat',
 
-        #"""Alert Zone"""
-        #Message and color - add picture to the matrix
+        #Gestions des alertes"""
+        #Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
         message_add_pic= message_add_pic,
         color_add_pic = color_add_pic,
 
-        #Message and color - create new matrice
+        #Message affiché et couleur de l'alerte - création d'une nouvelle matrice
         message_create_matrix = '',
         color_add_matrix = '',
 
-        #Message and color - delete one matrice
+        #Message affiché et couleur de l'alerte - supression d'une matrice
         message_delete_matrix = '',
         color_suppr_matrix = '',
 
@@ -251,16 +251,16 @@ def delete_matrix():
 
     return dict(title='Test',
 
-        #"""Alert Zone"""
-        #Message and color - add picture to the matrix
+        #Gestions des alertes"""
+        #Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
         message_add_pic= '',
         color_add_pic = "vide",
 
-        #Message and color - create new matrice
+        #Message affiché et couleur de l'alerte - création d'une nouvelle matrice
         message_create_matrix = '',
         color_add_matrix = '',
 
-        #Message and color - delete one matrice
+        #Message affiché et couleur de l'alerte - supression d'une matrice
         message_delete_matrix = '',
         color_suppr_matrix = '',
 
@@ -282,16 +282,16 @@ def delete_matrix():
 
     return dict(title = 'Resultat',
 
-        #"""Alert Zone"""
-        #Message and color - add picture to the matrix
+        #Gestions des alertes"""
+        #Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
         message_add_pic = '',
         color_add_pic = '',
 
-        #Message and color - create new matrice
+        #Message affiché et couleur de l'alerte - création d'une nouvelle matrice
         message_create_matrix = '',
         color_add_matrix = '',
 
-        #Message and color - delete one matrice
+        #Message affiché et couleur de l'alerte - supression d'une matrice
         message_delete_matrix = message_delete_matrix,
         color_suppr_matrix = color_suppr_matrix,
 
