@@ -208,8 +208,8 @@ def do_upload():
     for upload in uploads:        
     
         name, ext = os.path.splitext(upload.filename)
-        if ext not in ('.png'):
-            message_add_pic = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + ext + "."
+        if ext not in ('.png','.jpg'):
+            message_add_pic = "Attention ! Seules les images en .png ou .jpg sont acceptees, le format de votre image est en " + ext + "."
             color_add_pic = "alert alert-danger"
         else :
             file_path = os.path.abspath(my_matrix.dir_matrix +'/'+ select_list_matrix +'/'+ typeImage+'/'+ upload.filename)

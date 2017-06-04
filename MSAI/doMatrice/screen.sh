@@ -1,16 +1,11 @@
 #!/bin/bash
 matrix_path=$0
 
-echo $matrix_path
-cd $matrix_path
-
-pos=$(find ./positive_img -type f | wc -l)
-echo $pos
-find ./positive_img -iname "*.jpg" > positives.txt
-echo "neg:"
-neg=$(find ./negative_img -type f | wc -l)
-echo $neg
-find ./negative_img -iname "*.jpg" > negatives.txt
+echo "1: $matrix_path"
+#screen -dmS "generate_matrice" sh
+echo "2 : "`dirname $0`
+#screen -S "generate_matrice" -X stuff ". $PWD/doMatrice/generateClassifier.sh $matrix_path ;"
+screen -dmS "generate_matrice" "./$PWD/doMatrice/generateClassifier.sh $matrix_path ;"
 
 #neg2=$(($neg*3))
 #echo $neg2

@@ -32,13 +32,11 @@ class Matrix(object):
         self.UpdateMatrix()
     def Generate(self):
         current_matrix = os.path.join(self.dir_matrix, "test")
-        dir_script = os.path.abspath(self.my_utility.dir_path + "/doMatrice/generateClassifier.sh")
-        print "hbyubhj"+self.dir_matrix
+        dir_script = os.path.abspath(self.my_utility.dir_path + "/doMatrice/screen.sh")
         os.chmod(dir_script, 0777)
-        print "non : "
-        print dir_script
-        #Obliger d'utiliser une "," pour passer les paramètres
+        #Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
         subprocess.call(['. ' + dir_script, current_matrix], shell=True)
+        #subprocess.call(['screen -r -S "generate_matrice" exec ". '+dir_script'"', current_matrix, "test"], shell=True)
         return self.list_dir_matrix
 
     def AddDirectoryMatrix(self, name_matrix):
