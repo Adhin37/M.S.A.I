@@ -118,26 +118,43 @@ def manage_matrix():
     my_matrix.UpdateDirectoryMatrix()
 
     return dict(title='Management Matrice',
-        message_add_pic='',
-        message_create_matrix ='',
-        message_delete_matrix = '',
-        list_matrix=my_matrix.list_dir_matrix,
-        color_add_pic = "vide",
-        color_add_matrix ='',
-        year = my_utility.date.year)
 
+        #"""Alert Zone"""
+        #Message and color - add picture to the matrix
+        message_add_pic='',
+        color_add_pic = "vide",
+
+        #Message and color - create new matrice
+        message_create_matrix ='',
+        color_add_matrix ='',
+
+        #Message and color - delete one matrice
+        message_delete_matrix = '',
+        color_suppr_matrix = '',
+
+        list_matrix=my_matrix.list_dir_matrix,
+        year = my_utility.date.year)
 
 @route('/add_matrix')
 @view('manage_matrix')
 def add_matrix():
 
     return dict(title='Management Matrice',
+
+        #"""Alert Zone"""
+        #Message and color - add picture to the matrix
         message_add_pic='',
-        message_create_matrix = '',
-        message_delete_matrix = '',
-        list_matrix=list_matrix,
         color_add_pic = "vide",
+
+        #Message and color - create new matrice
+        message_create_matrix = '',
         color_add_matrix = '',
+
+        #Message and color - delete one matrice
+        message_delete_matrix = '',
+        color_suppr_matrix = '',
+
+        list_matrix=list_matrix,
         year = my_utility.date.year)
 
 @route('/add_matrix', method='POST')
@@ -153,12 +170,21 @@ def add_matrix():
     my_matrix.UpdateDirectoryMatrix()
 
     return dict(title = 'Resultat',
-        message_add_pic = '',
+        
+        #"""Alert Zone"""
+        #Message and color - add picture to the matrix
+        message_add_pic='',
+        color_add_pic = "vide",
+
+        #Message and color - create new matrice
         message_create_matrix = message_create_matrix,
-        message_delete_matrix = '',
-        list_matrix = my_matrix.list_dir_matrix,
-        color_add_pic = '',
         color_add_matrix = color_status_matrix,
+
+        #Message and color - delete one matrice
+        message_delete_matrix = '',
+        color_suppr_matrix = '',
+
+        list_matrix = my_matrix.list_dir_matrix,
         year = my_utility.date.year)
 
 @route('/add_pictures')
@@ -166,12 +192,21 @@ def add_matrix():
 def add_pictures():
 
     return dict(title='Test',
+
+        #"""Alert Zone"""
+        #Message and color - add picture to the matrix
         message_add_pic='',
-        message_create_matrix = '',
-        message_delete_matrix = '',
-        list_matrix = my_matrix.list_dir_matrix,
         color_add_pic = "vide",
+
+        #Message and color - create new matrice
+        message_create_matrix = '',
         color_add_matrix = '',
+
+        #Message and color - delete one matrice
+        message_delete_matrix = '',
+        color_suppr_matrix = '',
+
+        list_matrix = my_matrix.list_dir_matrix,
         year = my_utility.date.year)
 
 @route('/add_pictures', method='POST')
@@ -193,11 +228,20 @@ def add_pictures():
     my_matrix.UpdateDirectoryMatrix()
 
     return dict(title = 'Resultat',
-        message_add_pic = message_add_pic,
-        message_create_matrix = '',
-        message_delete_matrix = '',
-        color_add_matrix = '',
+
+        #"""Alert Zone"""
+        #Message and color - add picture to the matrix
+        message_add_pic= message_add_pic,
         color_add_pic = color_add_pic,
+
+        #Message and color - create new matrice
+        message_create_matrix = '',
+        color_add_matrix = '',
+
+        #Message and color - delete one matrice
+        message_delete_matrix = '',
+        color_suppr_matrix = '',
+
         list_matrix = my_matrix.list_dir_matrix,
         year = my_utility.date.year)
 
@@ -206,12 +250,21 @@ def add_pictures():
 def delete_matrix():
 
     return dict(title='Test',
-        message_add_pic='',
-        message_create_matrix = '',
-        message_delete_matrix = '',
-        list_matrix=my_matrix.list_dir_matrix,
+
+        #"""Alert Zone"""
+        #Message and color - add picture to the matrix
+        message_add_pic= '',
         color_add_pic = "vide",
+
+        #Message and color - create new matrice
+        message_create_matrix = '',
         color_add_matrix = '',
+
+        #Message and color - delete one matrice
+        message_delete_matrix = '',
+        color_suppr_matrix = '',
+
+        list_matrix=my_matrix.list_dir_matrix,
         year = my_utility.date.year)
 
 @route('/delete_matrix', method='POST')
@@ -220,17 +273,27 @@ def delete_matrix():
 def delete_matrix():
     name_matrix = request.POST.dict['selected_matrix'][0]
     message_delete_matrix = ''
+    color_suppr_matrix = ''
     color_status_matrix = '' 
     
     """Assignation des 2 valeurs de retour"""
-    message_delete_matrix, color_status_matrix = my_matrix.DeleteDirectoryMatrix(name_matrix)
+    message_delete_matrix, color_suppr_matrix = my_matrix.DeleteDirectoryMatrix(name_matrix)
     my_matrix.UpdateDirectoryMatrix()
 
     return dict(title = 'Resultat',
+
+        #"""Alert Zone"""
+        #Message and color - add picture to the matrix
         message_add_pic = '',
-        message_create_matrix = '',
-        message_delete_matrix = message_delete_matrix,
-        list_matrix = my_matrix.list_dir_matrix,
         color_add_pic = '',
+
+        #Message and color - create new matrice
+        message_create_matrix = '',
         color_add_matrix = '',
+
+        #Message and color - delete one matrice
+        message_delete_matrix = message_delete_matrix,
+        color_suppr_matrix = color_suppr_matrix,
+
+        list_matrix = my_matrix.list_dir_matrix,
         year = my_utility.date.year)

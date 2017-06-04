@@ -60,19 +60,19 @@ class Matrix(object):
 
     def DeleteDirectoryMatrix(self, name_matrix):
         message_delete_matrix = ''
-        color_status_matrix = ''
+        color_suppr_matrix = ''
 
         if name_matrix == '' or name_matrix is None :
             message_delete_matrix = 'Erreur, le nom de la matrice est vide !'
-            color_status_matrix = "alert alert-danger"
+            color_suppr_matrix = "alert alert-danger"
         elif os.path.isdir(os.path.join(self.dir_matrix, name_matrix)) == False :
             message_delete_matrix = 'Erreur, le répertoire de la matrice' + name_matrix + ' est introuvable !'
-            color_status_matrix = "alert alert-danger"
+            color_suppr_matrix = "alert alert-danger"
         else :
             shutil.rmtree(os.path.join(self.dir_matrix, name_matrix))
             message_delete_matrix = 'Le répertoire de la matrice ' + name_matrix + ' a bien été supprimé.'
-            color_status_matrix = "alert alert-success"
-        return message_delete_matrix, color_status_matrix
+            color_suppr_matrix = "alert alert-success"
+        return message_delete_matrix, color_suppr_matrix
 
     def UpdateMatrix(self):
         """Actualisation de la liste des matrices"""

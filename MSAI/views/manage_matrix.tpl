@@ -28,6 +28,10 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 
 					<form action="/delete_matrix" method="post" enctype="multipart/form-data">
 						<div class="form-group">
+							<div class="{{ color_suppr_matrix }}" role="alert">
+							<button type="button" class="close" data-dismiss="alert" ></button>
+							{{ message_delete_matrix }}
+							</div>
 							<label for="sel1">ou sélectionner une matrice existante :</label>
 								<select id="selected_matrix" name="selected_matrix" class="form-control" onchange="afficher(form);">
 									<% for l in list_matrix: %>
@@ -51,7 +55,7 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 					<div class="form-group">
 						<div class="{{ color_add_pic }}" role="alert">
 						<button type="button" class="close" data-dismiss="alert" ></button>
-						{{ message_add_pic }}
+						{{ matrix_alert_msg_addPicture }}
 						</div>
 					<label for="sel1">Ajouter une image à la matrice sélectionnée:</label>
 					<p> La format de l'image doit être en jpeg<p>
