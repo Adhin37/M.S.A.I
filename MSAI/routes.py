@@ -65,8 +65,13 @@ def do_upload():
     fisher_face = ''
     upload = request.files.get('upload')
 
+    format = ''
     name, ext = os.path.splitext(upload.filename)
-    if ext not in ('.png', '.jpg', '.jpeg', ".gif"):
+    if ext in ('.png', '.jpg', '.jpeg', ".gif"):
+        format = 'img'
+    elif ext in ('.mp4', '.wma', '.avi', '.mov', '.mpg', '.mkv'):
+        format = 'video'
+    else:
         return "File extension not allowed."
 
     save_path = os.path.abspath(MY_UTILITY.dir_path + '/tmp')
@@ -81,45 +86,74 @@ def do_upload():
     face_cascade = cv2.CascadeClassifier(MY_MATRIX.face)
     eye_cascade = cv2.CascadeClassifier(MY_MATRIX.eye)
 
-    img = cv2.imread(file_path, 1)
+    if format == 'img':
+        img = cv2.imread(file_path, 1)
 
-    faces = face_cascade.detectMultiScale(img, 1.3, 5)
-    for (x, y, w, h) in faces:
-        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-        roi_gray = img[y:y + h, x:x + w]
-        roi_color = img[y:y + h, x:x + w]
-        eyes = eye_cascade.detectMultiScale(roi_gray)
-        for (ex, ey, ew, eh) in eyes:
-            cv2.rectangle(roi_color, (ex, ey),
-                          (ex + ew, ey + eh), (0, 255, 0), 2)
-    file_save = upload.filename
+        faces = face_cascade.detectMultiScale(img, 1.3, 5)
+        for (x, y, w, h) in faces:
+            cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
+            roi_gray = img[y:y + h, x:x + w]
+            roi_color = img[y:y + h, x:x + w]
+            eyes = eye_cascade.detectMultiScale(roi_gray)
+            for (ex, ey, ew, eh) in eyes:
+                cv2.rectangle(roi_color, (ex, ey),
+                              (ex + ew, ey + eh), (0, 255, 0), 2)
+        file_save = upload.filename
 
-    if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
-        os.makedirs(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/'))
-    cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/' + file_save), img)
+        if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
+            os.makedirs(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/'))
+        cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/' + file_save), img)
 
-    emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
-    emoticons = load_emoticons(emotions)
-    source = os.path.abspath(MY_UTILITY.dir_path +
-                             '/static/pictures/' + file_save)
-    if cv2.__version__ == '3.1.0':
-        fisher_face = cv2.face.createFisherFaceRecognizer()
-    else:
-        fisher_face = cv2.createFisherFaceRecognizer()
-    fisher_face.load('models/emotion_detection_model.xml')
+        emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
+        emoticons = load_emoticons(emotions)
+        source = os.path.abspath(MY_UTILITY.dir_path +
+                                 '/static/pictures/' + file_save)
+        if cv2.__version__ == '3.1.0':
+            fisher_face = cv2.face.createFisherFaceRecognizer()
+        else:
+            fisher_face = cv2.createFisherFaceRecognizer()
+        fisher_face.load('models/emotion_detection_model.xml')
 
-    neutral, anger, disgust, happy, sadness, surprise, all_emotion = emotions_present(
-        fisher_face, emoticons, source, update_time=30)
+        neutral, anger, disgust, happy, sadness, surprise, all_emotion = emotions_present(
+            fisher_face, emoticons, source, update_time=30)
 
-    if os.path.isfile(file_path):
-        os.remove(file_path)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
 
-    return dict(title='Resultat',
-                message='Resultat OpenCV',
-                year=MY_UTILITY.date.year,
-                file=file_save,
-                list_filter=LIST_FILTER)
+        return dict(title='Resultat',
+                    message='Resultat OpenCV',
+                    year=MY_UTILITY.date.year,
+                    file=file_save,
+                    list_filter=LIST_FILTER)
+    elif format == 'video':
+        video = cv2.VideoCapture(file_path)
+        if not video.isOpened():
+            video.open()
 
+        count = 0
+        while video.isOpened():
+            rval, frame = video.read()
+
+            nameframe = 'frame %d.jpg' + count
+
+            if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/videoread/')):
+                os.makedirs(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/videoread/'))
+            cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/videoread/' + nameframe), frame)
+
+            return dict(title='Resultat',
+                        message='Resultat OpenCV',
+                        year=MY_UTILITY.date.year,
+                        file='/videoread/' + nameframe,
+                        list_filter=LIST_FILTER)
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        video.release()
+
+        # Supression des frames enregistrées en fin de traitement
+        if os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/videoread/')):
+            os.remove(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/videoread/'))
 
 @route('/manage_matrix')
 @view('manage_matrix')
