@@ -19,16 +19,16 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 							<div class="{{ color_add_matrix }}" role="alert">
 								<button type="button" class="close" data-dismiss="alert" ></button>
 								{{ message_create_matrix }}</div>
-								<label for="usr">Créer une nouvelle matrice :</label>
+								<label for="usr">CrÃ©er une nouvelle matrice :</label>
 								<input type="text" class="form-control" name="name_matrice" id="usr"> </br>
-								<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Créer matrice" />
+								<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="CrÃ©er matrice" />
 							</div>
 						</div>
 					</form>
 
 					<form action="/delete_matrix" method="post" enctype="multipart/form-data">
 						<div class="form-group">
-							<label for="sel1">ou sélectionner une matrice existante :</label>
+							<label for="sel1">ou sÃ©lectionner une matrice existante :</label>
 								<select id="selected_matrix" name="selected_matrix" class="form-control" onchange="afficher(form);">
 									<% for l in list_matrix: %>
 									<option>{{l}}</option>
@@ -53,12 +53,12 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 						<button type="button" class="close" data-dismiss="alert" ></button>
 						{{ message_add_pic }}
 						</div>
-					<label for="sel1">Ajouter une image à la matrice sélectionnée:</label>
-					<p> La format de l'image doit être en jpeg<p>
+					<label for="sel1">Ajouter une image Ã  la matrice sÃ©lectionnÃ©e:</label>
+					<p> La format de l'image doit Ãªtre en jpeg<p>
 					<input type="file" name="upload" multiple /><br />
 					<select class="form-control" id="typeImage" name="typeImage">
 					<option value="positive_img">Positive (avec l'objet sur l'image)</option>
-					<option value="negative_img">Négative (sans l'objet sur l'image)</option>
+					<option value="negative_img">NÃ©gative (sans l'objet sur l'image)</option>
 					</select>
 					</div>
 				<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix"> </br>
@@ -66,16 +66,38 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 				</form>
 				</div>
 		</div>
-		<div class="panel-heading">Géneration Classifier</div>
+	</div>
+	</div>
+	<div class="col-md-8">
+	<div class="panel panel-default panel-submit">
+		<div class="panel-heading">GÃ©neration Classifier</div>
 			<div class="panel-body paddingPanel">
 				<form action="/do_classifier" method="post" enctype="multipart/form-data">
 					<div class="form-group">
-					<label for="sel1">Lancer la génération du classifier de la matrice sélectionnée:</label>
-					<p> Une fois lancé, le script peut être très long (plusieurs jours en fonction du nombre d'images)<p>
+						<div class="{{ color_do_matrix }}" role="alert">
+								<button type="button" class="close" data-dismiss="alert" ></button>
+								{{ message_do_matrix }}
+						</div>
+					<label for="sel1">Lancer la gÃ©nÃ©ration du classifier de la matrice sÃ©lectionnÃ©e:</label>
+					<p> Une fois lancÃ©, le script peut Ã©tre trÃ©s long (plusieurs jours en fonction du nombre d'images)<p>
 					</div>
-				<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Lancer génération" />
+				<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Lancer gÃ©nÃ©ration" />
 				</form>
-				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<div class="col-md-4">
+	<div class="panel panel-default panel-submit">
+		<div class="panel-heading">Verification Ã©tat Matrice</div>
+			<div class="panel-body paddingPanel">
+					<form action="/check_classifier">
+						<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Check avancement gÃ©nÃ©ration" />
+						<div>
+							{{ message_check_matrix }}
+						</div>
+						</form>
+			</div>
 		</div>
 	</div>
 	</div>

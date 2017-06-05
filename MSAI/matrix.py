@@ -30,14 +30,39 @@ class Matrix(object):
 
         self.UpdateDirectoryMatrix()
         self.UpdateMatrix()
-    def Generate(self):
-        current_matrix = os.path.join(self.dir_matrix, "test")
-        dir_script = os.path.abspath(self.my_utility.dir_path + "/doMatrice/screen.sh")
-        os.chmod(dir_script, 0777)
-        #Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
-        subprocess.call(['. ' + dir_script, current_matrix], shell=True)
-        #subprocess.call(['screen -r -S "generate_matrice" exec ". '+dir_script'"', current_matrix, "test"], shell=True)
-        return self.list_dir_matrix
+
+    def Generate(self, name_matrix):
+        if name_matrix == '' or name_matrix is None:
+            message_create_matrix = "Erreur, vous n'avez pas selectionné de matrice !"
+            color_status_matrix = "alert alert-danger"
+        elif os.path.isfile(os.path.join(self.dir_models, name_matrix+"_classifier.xml")) == True :
+            message_create_matrix = "La matrice " + name_matrix + " a déjà été generé !"
+            color_status_matrix = "alert alert-danger"
+        else :
+            current_matrix = os.path.join(self.dir_matrix, name_matrix)
+            dir_script = os.path.abspath(self.my_utility.dir_path + "/doMatrice/screen.sh")
+            os.chmod(dir_script, 0777)
+            #Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
+            subprocess.call(['. ' + dir_script, current_matrix, name_matrix], shell=True)
+            message_create_matrix = "La est en cours de génération."
+            color_status_matrix = "alert alert-success"
+        return message_create_matrix, color_status_matrix
+
+    def Status(self, name_matrix):
+        #il faut regarder le repertoire classifier de la matrice
+        classifier_matrix = os.path.join(self.dir_matrix, name_matrix+"/classifier")
+        if os.path.isfile(classifier_matrix + "/cascade.xml") :
+            result= "La génération de la matrice "+ name_matrix +" est terminé"
+        else :
+            result= "encours"
+            i=19
+            fin=False
+            while (i >= 0 and fin!=True):
+                if os.path.isfile(classifier_matrix + "/stage"+str(i)+".xml") :
+                    fin=True
+                    result="Génération en cours : étape "+str(i)+"/19"
+                i = i-1
+        return result
 
     def AddDirectoryMatrix(self, name_matrix):
         message_create_matrix = ''
@@ -94,4 +119,3 @@ class Matrix(object):
             if os.path.isfile(full_file):
                 self.list_matrix.append(full_file)
         return self.list_matrix
-

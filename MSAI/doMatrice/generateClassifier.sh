@@ -1,71 +1,39 @@
 #!/bin/bash
-matrix_path=$0
+matrix_path=$1
+name_matrix=$2
+if cd $matrix_path ; then
+  pos=$(find ./positive_img -type f | wc -l)
+  find ./positive_img -iname "*.jpg" > positives.txt
+  neg=$(find ./negative_img -type f | wc -l)
+  find ./negative_img -iname "*.jpg" > negatives.txt
 
-echo $matrix_path
-cd $matrix_path
+  neg2=$(($neg*3))
 
-pos=$(find ./positive_img -type f | wc -l)
-echo $pos
-find ./positive_img -iname "*.jpg" > positives.txt
-echo "neg:"
-neg=$(find ./negative_img -type f | wc -l)
-echo $neg
-find ./negative_img -iname "*.jpg" > negatives.txt
+  #il genere autant de sample que d'image positive mais chaque samples contient plusieurs images negative
+  # pour $neg2= 200 et 10 images positives, cette commande genere 10 samples de 20 images negatives
+  perl ./../../doMatrice/createsamples.pl positives.txt negatives.txt samples $neg2\
+    "opencv_createsamples -bgcolor 0 -bgthresh 0 -maxxangle 1.1\
+    -maxyangle 1.1 maxzangle 0.5 -maxidev 40 -w 80 -h 40"
 
-#neg2=$(($neg*3))
-#echo $neg2
-#il genere autant de sample que d'image positive mais chaque samples contient plusieurs images negative
-# pour $neg2= 200 et 10 images positives, cette commande genere 10 samples de 20 images negatives
-#perl ./../../doMatrice/createsamples.pl positives.txt negatives.txt samples $neg2\
- # "opencv_createsamples -bgcolor 0 -bgthresh 0 -maxxangle 1.1\
- #-maxyangle 1.1 maxzangle 0.5 -maxidev 40 -w 100 -h 100"
+  #on rassemble tous les vecteurs dans un seul
+  python ./../../doMatrice/mergevec.py -v samples/ -o samples.vec
 
-#on rassemble tous les vecteurs dans un seul
-#python ./../../doMatrice/mergevec.py -v samples/ -o samples.vec
+  neg3=$(($neg*2))
+  # le numPos doit environ etre 2/3 des samples generé
+  opencv_traincascade -data classifier -vec samples.vec -bg negatives.txt\
+        -numStages 20 -minHitRate 0.999 -maxFalseAlarmRate 0.5 -numPos $neg3\
+        -numNeg $neg -w 80 -h 40 -mode ALL -precalcValBufSize 1024\
+        -precalcIdxBufSize 1024
 
-#neg3=$(($neg*2))
-#echo $neg3
-# le numPos doit environ $etre 3/4 des samples generé
-# opencv_traincascade -data classifier -vec samples.vec -bg negatives.txt\
-#    -numStages 20 -minHitRate 0.999 -maxFalseAlarmRate 0.5 -numPos $neg3\
-#    -numNeg $neg -w 100 -h 100 -mode ALL -precalcValBufSize 1024\
-#    -precalcIdxBufSize 1024
+  cp ./classifier/cascade.xml "./../../models/"$name_matrix"_classifier.xml"
 
-
-
-#screen -dmS "generate_matrice_$name_matrice" sh
-
-#screen -S "generate_matrice_$name_matrice" -X stuff "cd $matrix_path"
-#screen -S "generate_matrice_$name_matrice" -X stuff "pwd"
-#screen -S "generate_matrice_$name_matrice" -X stuff "find ./positive_img -type f | wc -l"
-
-#screen -S "generate_matrice_$name_matrice" -X stuff "$(find ./positive_img -type f | wc -l)"
-#screen -S "generate_matrice" -X stuff "find ./positive_img -iname \"*.jpg\" > positives.txt"
-
-#screen -S "generate_matrice" -X stuff "neg=$(find ./negative_img -type f | wc -l)"
-#screen -S "generate_matrice" -X stuff "find ./negative_img -iname "*.jpg" > negatives.txt"
+else
+  echo "Le chemin "$matrix_path" est incorecte"
+fi
 
 
 
 
-# pos=$(find positive_img -type f | wc -l)
-# find ./positive_img -iname "*.jpg" > positives.txt
-# neg=$(find negative_img -type f | wc -l)
-# find ./negative_img -iname "*.jpg" > negatives.txt
 
-# neg2=$(($neg*2))
-# #il genere autant de sample que d'image positive mais chaque samples contient plusieurs images negative
-# # pour $neg2= 200 et 10 images positives, cette commande genere 10 samples de 20 images negatives
-# perl bin/createsamples.pl positives.txt negatives.txt samples $neg2\
-  # "opencv_createsamples -bgcolor 0 -bgthresh 0 -maxxangle 1.1\
-# -maxyangle 1.1 maxzangle 0.5 -maxidev 40 -w 100 -h 100"
 
-# #on rassemble tous les vecteurs dans un seul
-# python ./tools/mergevec.py -v samples/ -o samples.vec
 
-# neg3=$(($neg2*0.75))
-# #le numPos doit environ $etre 3/4 des samples generé
-# opencv_traincascade -data classifier -vec samples.vec -bg negatives.txt\
-   # -numStages 20 -minHitRate 0.999 -maxFalseAlarmRate 0.5 -numPos $neg3\
-   # -numNeg $neg -w 100 -h 100 -mode ALL -precalcValBufSize 1024\
-   # -precalcIdxBufSize 1024
