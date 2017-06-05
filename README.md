@@ -29,3 +29,6 @@ Scipy :
 
 Sklearn : 
 - pip install sklearn
+
+Pylint:
+- pip install pylint
