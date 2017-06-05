@@ -5,7 +5,7 @@ Routes and views for the bottle application.
 """
 
 from bottle import route, view, request, run
-from emotion import emotions_present,_load_emoticons
+from emotion import emotions_present
 import os
 import numpy as np
 import cv2
@@ -82,7 +82,7 @@ def do_upload():
     file_path = os.path.abspath(save_path + '/' + upload.filename)
     if os.path.isfile(file_path):
         os.remove(file_path)
-            
+
     upload.save(file_path)
 
     face_cascade = cv2.CascadeClassifier(my_matrix.face)
@@ -98,14 +98,12 @@ def do_upload():
         eyes = eye_cascade.detectMultiScale(roi_gray)
         for (ex,ey,ew,eh) in eyes:
             cv2.rectangle(roi_color,(ex,ey),(ex + ew,ey + eh),(0,255,0),2)
-    file_save = upload.filename 
+    file_save = upload.filename
 
     if not os.path.exists(os.path.abspath(my_utility.dir_path + '/static/pictures/')):
         os.makedirs(os.path.abspath(my_utility.dir_path + '/static/pictures/'))
     cv2.imwrite(os.path.abspath(my_utility.dir_path + '/static/pictures/' + file_save), img)
 
-    emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
-    emoticons = _load_emoticons(emotions)
     source = os.path.abspath(my_utility.dir_path + '/static/pictures/' + file_save)
     if cv2.__version__ == '3.1.0':
         fisher_face = cv2.face.createFisherFaceRecognizer()
@@ -113,7 +111,7 @@ def do_upload():
         fisher_face = cv2.createFisherFaceRecognizer()
     fisher_face.load('models/emotion_detection_model.xml')
 
-    neutral,anger,disgust,happy,sadness,surprise,all_emotion,faces = emotions_present(fisher_face, emoticons, source, update_time=30)
+    neutral, anger, disgust, happy, sadness, surprise, all_emotion, faces = emotions_present(fisher_face, source)
     #définir les variables ci-dessous
     emotion_neutral = 0
     emotion_anger = 0
@@ -133,7 +131,7 @@ def do_upload():
 
     if os.path.isfile(file_path):
         os.remove(file_path)
-	
+
     return dict(title = 'Resultat',
         message = 'Resultat OpenCV',
         year = my_utility.date.year,
