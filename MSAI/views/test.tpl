@@ -16,10 +16,10 @@ function toggle_div(bouton, id) {
 <div class="col-md-3 col-form">
 <form action="/test" method="post" enctype="multipart/form-data">
 	<div class="panel panel-default panel-submit">
-		<div class="panel-heading">Sélection Image :</div>
+		<div class="panel-heading">SÃ©lection Image :</div>
 			<div class="panel-body paddingPanel">
 				<input type="file" name="upload"/>
-				<button type="button" class="btn btn-sm btn-primary btn-submit-img" onclick="toggle_div(this,'zoneFiltre');">Options avancées</button> 
+				<button type="button" class="btn btn-sm btn-primary btn-submit-img" onclick="toggle_div(this,'zoneFiltre');">Options avancÃ©es</button> 
 				<div id="zoneFiltre" style="display:none;">
 				<br />
 				<h4>Matrices <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
@@ -46,14 +46,14 @@ function toggle_div(bouton, id) {
 					<span class="input-group-addon">
 						<input type="checkbox" id="1" value="0" aria-label="...">
 					</span>
-					<input type="text" class="form-control" aria-label="..." value="Enervé" readonly>
+					<input type="text" class="form-control" aria-label="..." value="EnervÃ©" readonly>
 				</div>
 				<br/>
 				<div class="input-group">
 					<span class="input-group-addon">
 						<input type="checkbox" id="2" value="0" aria-label="...">
 					</span>
-					<input type="text" class="form-control" aria-label="..." value="Dégoût" readonly>
+					<input type="text" class="form-control" aria-label="..." value="DÃ©goÃ»t" readonly>
 				</div>
 				<br/>
 				<div class="input-group">
@@ -83,22 +83,22 @@ function toggle_div(bouton, id) {
             </div>
 
 			<hr />
-			<p class="text-results">Résultat :</p>
-			<p class="text-results">J'ai identifié {{faces}} visage(s).</p>
+			<p class="text-results">RÃ©sultat :</p>
+			<p class="text-results">J'ai identifiÃ© {{faces}} visage(s).</p>
 			% if defined('emotion_all'):
-			<p class="text-results">Emotion prédiction :</p>
+			<p class="text-results">Emotion prÃ©diction :</p>
 			% end
 			% if defined('emotion_neutral'):
 			<p class="text-results">Neutre : {{emotion_neutral}}%.</p>
 			% end
 			% if defined('emotion_anger'):
-			<p class="text-results">Enervé : {{emotion_anger}}%.</p>
+			<p class="text-results">EnervÃ© : {{emotion_anger}}%.</p>
 			% end
 			% if defined('emotion_surprise'):
 			<p class="text-results">Surprise : {{emotion_surprise}}%.</p>
 			% end
 			% if defined('emotion_disgust'):
-			<p class="text-results">Dégoût : {{emotion_disgust}}%.</p>
+			<p class="text-results">DÃ©goÃ»t : {{emotion_disgust}}%.</p>
 			% end
 			% if defined('emotion_happy'):
 			<p class="text-results">Joyeux : {{emotion_happy}}%.</p>
@@ -119,7 +119,7 @@ function toggle_div(bouton, id) {
 </div>
 <div class="col-md-9">
 		<div class="panel panel-default">
-            <div class="panel-heading">Résultat :</div>
+            <div class="panel-heading">RÃ©sultat :</div>
             <div class="panel-body paddingPanel">
 				<img src="static/pictures/{{file}}" style="width: 100%;"/>
 			</div>
