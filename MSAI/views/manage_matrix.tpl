@@ -55,7 +55,7 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 					<div class="form-group">
 						<div class="{{ color_add_pic }}" role="alert">
 						<button type="button" class="close" data-dismiss="alert" ></button>
-						{{ matrix_alert_msg_addPicture }}
+						{{ message_add_pic }}
 						</div>
 					<label for="sel1">Ajouter une image à la matrice sélectionnée:</label>
 					<p> La format de l'image doit être en jpeg<p>
