@@ -101,10 +101,13 @@ def do_upload():
         file_save = upload.filename
 
         if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
-            os.makedirs(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/'))
-        cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/' + file_save), img)
+            os.makedirs(os.path.abspath(
+                MY_UTILITY.dir_path + '/static/pictures/'))
+        cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path +
+                                    '/static/pictures/' + file_save), img)
 
-        emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
+        emotions = ['neutral', 'anger', 'disgust',
+                    'happy', 'sadness', 'surprise']
         emoticons = load_emoticons(emotions)
         source = os.path.abspath(MY_UTILITY.dir_path +
                                  '/static/pictures/' + file_save)
@@ -120,40 +123,51 @@ def do_upload():
         if os.path.isfile(file_path):
             os.remove(file_path)
 
-        return dict(title='Resultat',
-                    message='Resultat OpenCV',
-                    year=MY_UTILITY.date.year,
-                    file=file_save,
-                    list_filter=LIST_FILTER)
     elif format == 'video':
-        video = cv2.VideoCapture(file_path)
-        if not video.isOpened():
-            video.open()
+        MY_MATRIX.update_matrice()
+        classifier_name_found = []
+        while_continue = True
+        CAP = cv2.VideoCapture(file_path)
 
-        count = 0
-        while video.isOpened():
-            rval, frame = video.read()
+        while CAP.isOpened() and while_continue:
+            RET, IMG = CAP.read()
+            GRAY = cv2.cvtColor(IMG, cv2.COLOR_BGR2GRAY)
+            # KNIFES = knife_cascade.detectMultiScale(GRAY, 20, 50, minSize=(200, 100), maxSize=(800, 400))
+            cpt_classifier = 0
+            while(len(MY_MATRIX.list_matrix) > cpt_classifier and while_continue):
+                KNIFE_CASCADE = cv2.CascadeClassifier(MY_MATRIX.list_matrix[cpt_classifier])
+                #name_found = MY_MATRIX.nomclassifier(KNIFE_CASCADE)
+                if name_found:
+                    classifier_name_found.append(MY_MATRIX.list_matrix[cpt_classifier]) # return true/false de la matrice
+                #DANS l'objet ou fonction MY_CLASSIFIER
+                found = ''
+                KNIFES = KNIFE_CASCADE.detectMultiScale(GRAY, 20, 50)
+                if len(KNIFES):
+                    print 'FOUND'
+                    for (x, y, w, h) in KNIFES:
+                        cv2.rectangle(IMG, (x, y), (x + w, y + h), (125, 0, 255), 2)
+                        font = cv2.FONT_HERSHEY_SIMPLEX
+                        cv2.putText(IMG, 'Knife', (x + w / 2, y - h / 2),
+                                    font, 1, (100, 255, 255), 2, cv2.LINE_AA)
+                    found = True
+                else:
+                    found = False
+                #PAS DANS l'objet
+                cv2.imshow('img', IMG)
+                #if classifier_name_found == array_matrice_cocher_dans_ihm:
+                    #generer image file_save
+                    while_continue = False
+                cpt_classifier += 1
 
-            nameframe = 'frame %d.jpg' + count
+        CAP.release()
+        cv2.destroyAllWindows()
 
-            if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/videoread/')):
-                os.makedirs(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/videoread/'))
-            cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/videoread/' + nameframe), frame)
+    return dict(title='Resultat',
+                message='Resultat OpenCV',
+                year=MY_UTILITY.date.year,
+                file=file_save,
+                list_filter=LIST_FILTER)
 
-            return dict(title='Resultat',
-                        message='Resultat OpenCV',
-                        year=MY_UTILITY.date.year,
-                        file='/videoread/' + nameframe,
-                        list_filter=LIST_FILTER)
-
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-
-        video.release()
-
-        # Supression des frames enregistrées en fin de traitement
-        if os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/videoread/')):
-            os.remove(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/videoread/'))
 
 @route('/manage_matrix')
 @view('manage_matrix')
