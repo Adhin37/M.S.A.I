@@ -4,6 +4,7 @@ This script implement the matrix navigation tab.
 """
 import os
 import shutil
+from routes import cv2
 from utils import Utils
 
 
@@ -90,3 +91,21 @@ class Matrix(object):
             if os.path.isfile(full_file):
                 self.list_matrix.append(full_file)
         return self.list_matrix
+
+    def nom_classifier(self, knife_cascade, img, gray):
+        """Récupération du nom du classifier"""
+        found = ''
+
+        knifes = knife_cascade.detectMultiScale(gray, 20, 50)
+        if len(knifes):
+            print 'FOUND'
+            for (x, y, w, h) in knifes:
+                cv2.rectangle(img, (x, y), (x + w, y + h), (125, 0, 255), 2)
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                cv2.putText(img, 'Knife', (x + w / 2, y - h / 2),
+                            font, 1, (100, 255, 255), 2, cv2.LINE_AA)
+            found = True
+        else:
+            found = False
+
+        return found

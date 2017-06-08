@@ -127,39 +127,28 @@ def do_upload():
         MY_MATRIX.update_matrice()
         classifier_name_found = []
         while_continue = True
-        CAP = cv2.VideoCapture(file_path)
+        cap = cv2.VideoCapture(file_path)
 
-        while CAP.isOpened() and while_continue:
-            RET, IMG = CAP.read()
-            GRAY = cv2.cvtColor(IMG, cv2.COLOR_BGR2GRAY)
+        while cap.isOpened() and while_continue:
+            ret, img = cap.read()
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             # KNIFES = knife_cascade.detectMultiScale(GRAY, 20, 50, minSize=(200, 100), maxSize=(800, 400))
             cpt_classifier = 0
-            while(len(MY_MATRIX.list_matrix) > cpt_classifier and while_continue):
-                KNIFE_CASCADE = cv2.CascadeClassifier(MY_MATRIX.list_matrix[cpt_classifier])
-                #name_found = MY_MATRIX.nomclassifier(KNIFE_CASCADE)
+            while len(MY_MATRIX.list_matrix) > cpt_classifier and while_continue:
+                knife_cascade = cv2.CascadeClassifier(MY_MATRIX.list_matrix[cpt_classifier])
+                name_found = MY_MATRIX.nom_classifier(knife_cascade, img, gray)
                 if name_found:
                     classifier_name_found.append(MY_MATRIX.list_matrix[cpt_classifier]) # return true/false de la matrice
-                #DANS l'objet ou fonction MY_CLASSIFIER
-                found = ''
-                KNIFES = KNIFE_CASCADE.detectMultiScale(GRAY, 20, 50)
-                if len(KNIFES):
-                    print 'FOUND'
-                    for (x, y, w, h) in KNIFES:
-                        cv2.rectangle(IMG, (x, y), (x + w, y + h), (125, 0, 255), 2)
-                        font = cv2.FONT_HERSHEY_SIMPLEX
-                        cv2.putText(IMG, 'Knife', (x + w / 2, y - h / 2),
-                                    font, 1, (100, 255, 255), 2, cv2.LINE_AA)
-                    found = True
-                else:
-                    found = False
-                #PAS DANS l'objet
-                cv2.imshow('img', IMG)
+
+                # A modif pour recup dans une variable
+                #cv2.imshow('img', img)
+                # A voir avec Aurélien
                 #if classifier_name_found == array_matrice_cocher_dans_ihm:
                     #generer image file_save
-                    while_continue = False
+                    #while_continue = False
                 cpt_classifier += 1
 
-        CAP.release()
+        cap.release()
         cv2.destroyAllWindows()
 
     return dict(title='Resultat',
