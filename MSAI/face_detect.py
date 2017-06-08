@@ -3,11 +3,11 @@ This module contains face detections functions.
 """
 import cv2
 
-classifier_cascade = cv2.CascadeClassifier(
-    'models/haarcascade_frontalface_default.xml')
+classifier_cascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml') # pylint: disable=invalid-name
 
 
 def find_faces(source):
+    "Function to find faces on source"
     faces_coordinates = _locate_faces(source)
     cutted_faces = [source[y:y + h, x:x + w]
                     for (x, y, w, h) in faces_coordinates]

@@ -19,15 +19,14 @@ def emotions_present(model, source):
     surprise = 0
     all_emotion = 0
     faces = 0
-    tab_faces = []
 
     readsource = cv2.VideoCapture(source)
     if readsource.isOpened():
         read_value, webcam_image = readsource.read()
     else:
         return
-    tab_faces = _locate_faces(webcam_image)
-    faces = len(tab_faces)
+
+    faces = len(_locate_faces(webcam_image))
     while read_value:
         for normalized_face in find_faces(webcam_image):
             prediction = model.predict(normalized_face)

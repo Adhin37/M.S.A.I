@@ -85,26 +85,23 @@ def do_upload():
 
     upload.save(file_path)
 
-    #face_cascade = cv2.CascadeClassifier(my_matrix.face)
-    #eye_cascade = cv2.CascadeClassifier(my_matrix.eye)
+    face_cascade = cv2.CascadeClassifier(my_matrix.face)
 
     img = cv2.imread(file_path,1)
 
-    #faces = face_cascade.detectMultiScale(img, 1.3, 5)
-    #for (x,y,w,h) in faces:
-        #cv2.rectangle(img,(x,y),(x + w,y + h),(255,0,0),2)
-        #roi_gray = img[y:y + h, x:x + w]
-        #roi_color = img[y:y + h, x:x + w]
-        #eyes = eye_cascade.detectMultiScale(roi_gray)
-        #for (ex,ey,ew,eh) in eyes:
-            #cv2.rectangle(roi_color,(ex,ey),(ex + ew,ey + eh),(0,255,0),2)
+    faces = face_cascade.detectMultiScale(img, 1.3, 5)
+    for (x,y,w,h) in faces:
+        cv2.rectangle(img,(x,y),(x + w,y + h),(255,0,0),2)
+        roi_gray = img[y:y + h, x:x + w]
+        roi_color = img[y:y + h, x:x + w]
+
     file_save = upload.filename
 
     if not os.path.exists(os.path.abspath(my_utility.dir_path + '/static/pictures/')):
         os.makedirs(os.path.abspath(my_utility.dir_path + '/static/pictures/'))
     cv2.imwrite(os.path.abspath(my_utility.dir_path + '/static/pictures/' + file_save), img)
 
-    source = file_path
+    source = os.path.abspath(my_utility.dir_path + '/static/pictures/' + file_save)
     if cv2.__version__ == '3.1.0':
         fisher_face = cv2.face.createFisherFaceRecognizer()
     else:
