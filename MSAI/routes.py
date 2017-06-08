@@ -3,12 +3,13 @@
 """
 Routes and views for the bottle application.
 """
+
 import os
 import cv2
 from bottle import route, view, request, run
 from utils import Utils
 from matrix import Matrix
-from emotion import emotions_present, load_emoticons
+from emotion import emotions_present
 
 MY_UTILITY = Utils()
 MY_MATRIX = Matrix()
@@ -79,37 +80,47 @@ def do_upload():
     upload.save(file_path)
 
     face_cascade = cv2.CascadeClassifier(MY_MATRIX.face)
-    eye_cascade = cv2.CascadeClassifier(MY_MATRIX.eye)
 
     img = cv2.imread(file_path, 1)
 
     faces = face_cascade.detectMultiScale(img, 1.3, 5)
-    for (x, y, w, h) in faces:
-        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-        roi_gray = img[y:y + h, x:x + w]
-        roi_color = img[y:y + h, x:x + w]
-        eyes = eye_cascade.detectMultiScale(roi_gray)
-        for (ex, ey, ew, eh) in eyes:
-            cv2.rectangle(roi_color, (ex, ey),
-                          (ex + ew, ey + eh), (0, 255, 0), 2)
+    for (coord_x, coord_y, coord_w, coord_h) in faces:
+        cv2.rectangle(img, (coord_x, coord_y), (coord_x + coord_w, coord_y + coord_h), (255, 0, 0), 2)
+
     file_save = upload.filename
 
     if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
         os.makedirs(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/'))
-    cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/' + file_save), img)
+    cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path +
+                                '/static/pictures/' + file_save), img)
 
-    emotions = ['neutral', 'anger', 'disgust', 'happy', 'sadness', 'surprise']
-    emoticons = load_emoticons(emotions)
     source = os.path.abspath(MY_UTILITY.dir_path +
                              '/static/pictures/' + file_save)
+
     if cv2.__version__ == '3.1.0':
         fisher_face = cv2.face.createFisherFaceRecognizer()
     else:
         fisher_face = cv2.createFisherFaceRecognizer()
     fisher_face.load('models/emotion_detection_model.xml')
 
-    neutral, anger, disgust, happy, sadness, surprise, all_emotion = emotions_present(
-        fisher_face, emoticons, source, update_time=30)
+    neutral, anger, disgust, happy, sadness, surprise, all_emotion, faces = emotions_present(
+        fisher_face, source)
+    # définir les variables ci-dessous
+    emotion_neutral = 0
+    emotion_anger = 0
+    emotion_disgust = 0
+    emotion_happy = 0
+    emotion_sadness = 0
+    emotion_surprise = 0
+    emotion_all = 0
+    if all_emotion != 0:
+        emotion_neutral = neutral * 100 / all_emotion
+        emotion_anger = anger * 100 / all_emotion
+        emotion_disgust = disgust * 100 / all_emotion
+        emotion_happy = happy * 100 / all_emotion
+        emotion_sadness = sadness * 100 / all_emotion
+        emotion_surprise = surprise * 100 / all_emotion
+        emotion_all = all_emotion
 
     if os.path.isfile(file_path):
         os.remove(file_path)
@@ -118,7 +129,15 @@ def do_upload():
                 message='Resultat OpenCV',
                 year=MY_UTILITY.date.year,
                 file=file_save,
-                list_filter=LIST_FILTER)
+                list_filter=LIST_FILTER,
+                faces=faces,
+                emotion_neutral=emotion_neutral,
+                emotion_anger=emotion_anger,
+                emotion_disgust=emotion_disgust,
+                emotion_happy=emotion_happy,
+                emotion_sadness=emotion_sadness,
+                emotion_surprise=emotion_surprise,
+                emotion_all=emotion_all)
 
 
 @route('/manage_matrix')

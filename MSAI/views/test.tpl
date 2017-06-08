@@ -1,12 +1,13 @@
 % rebase('layout.tpl', title=title, year=year, list_filter=list_filter)
+% setdefault('faces',0)
 
 <script type="text/javascript">
 function toggle_div(bouton, id) {
   var div = document.getElementById(id);
   if(div.style.display=="none") {
-    div.style.display = "block";
-  } else {
-    div.style.display = "none";
+    div.style.display = "block"; 
+  } else { 
+    div.style.display = "none"; 
   }
 }
 </script>
@@ -18,7 +19,7 @@ function toggle_div(bouton, id) {
 		<div class="panel-heading">Sélection Image :</div>
 			<div class="panel-body paddingPanel">
 				<input type="file" name="upload"/>
-				<button type="button" class="btn btn-sm btn-primary btn-submit-img" onclick="toggle_div(this,'zoneFiltre');">Options avancées</button>
+				<button type="button" class="btn btn-sm btn-primary btn-submit-img" onclick="toggle_div(this,'zoneFiltre');">Options avancées</button> 
 				<div id="zoneFiltre" style="display:none;">
 				<br />
 				<h4>Matrices <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
@@ -31,6 +32,7 @@ function toggle_div(bouton, id) {
 					</div>
 					<br/>
 					<% end %>
+					<!-- /input-group -->
 
 				<h4>Emotions <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
 				<div class="input-group">
@@ -51,7 +53,7 @@ function toggle_div(bouton, id) {
 					<span class="input-group-addon">
 						<input type="checkbox" id="2" value="0" aria-label="...">
 					</span>
-					<input type="text" class="form-control" aria-label="..." value="Dégouté" readonly>
+					<input type="text" class="form-control" aria-label="..." value="Dégoût" readonly>
 				</div>
 				<br/>
 				<div class="input-group">
@@ -75,14 +77,35 @@ function toggle_div(bouton, id) {
 					<input type="text" class="form-control" aria-label="..." value="Surpris" readonly>
 				</div>
 					<br/>
-				</div>
-
+				</div>				
+								
 				<input type="submit" class="btn btn-sm btn-primary btn-submit-img" value="Lancer l'analyse" />
             </div>
 
 			<hr />
-			<p class="text-results">J'ai identifié { value } visage(s).</p>
-
+			<p class="text-results">Résultat :</p>
+			<p class="text-results">J'ai identifié {{faces}} visage(s).</p>
+			% if defined('emotion_all'):
+			<p class="text-results">Emotion prédiction :</p>
+			% end
+			% if defined('emotion_neutral'):
+			<p class="text-results">Neutre : {{emotion_neutral}}%.</p>
+			% end
+			% if defined('emotion_anger'):
+			<p class="text-results">Enervé : {{emotion_anger}}%.</p>
+			% end
+			% if defined('emotion_surprise'):
+			<p class="text-results">Surprise : {{emotion_surprise}}%.</p>
+			% end
+			% if defined('emotion_disgust'):
+			<p class="text-results">Dégoût : {{emotion_disgust}}%.</p>
+			% end
+			% if defined('emotion_happy'):
+			<p class="text-results">Joyeux : {{emotion_happy}}%.</p>
+			% end
+			% if defined('emotion_sadness'):
+			<p class="text-results">Triste : {{emotion_sadness}}%.</p>
+			% end
 			<hr />
 			<div class="content-results">
 			<p class="text-muted">Est-ce correct ?</p>
@@ -91,16 +114,17 @@ function toggle_div(bouton, id) {
 			</div>
 
         </div>
+		<!--<span class="glyhicon glyphicon-minus glyphicon-hidden"></span>-->
 </form>
 </div>
 <div class="col-md-9">
 		<div class="panel panel-default">
             <div class="panel-heading">Résultat :</div>
-            <div class="panel-body paddingPanel" >
+            <div class="panel-body paddingPanel">
 				<img src="static/pictures/{{file}}" style="width: 100%;"/>
 			</div>
         </div>
 </div>
 
 </div>
-</div>
+</div> <!-- /container -->

@@ -1,46 +1,33 @@
-# -*- coding: utf-8 -*-
 """
 This module contains face detections functions.
 """
 import cv2
 
-FACE_CASCADE = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
+CLASSIFIER_CASCADE = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
 
-
-def find_faces(image):
-    """Find faces on image"""
-    faces_coordinates = _locate_faces(image)
-    cutted_faces = [image[y:y + h, x:x + w]
+def find_faces(source):
+    "Function to find faces on source"
+    faces_coordinates = _locate_faces(source)
+    cutted_faces = [source[y:y + h, x:x + w]
                     for (x, y, w, h) in faces_coordinates]
-    normalized_faces = [_normalize_face(face) for face in cutted_faces]
-    return zip(normalized_faces, faces_coordinates)
+    normalized_faces = [_normalize_face(faceRecognize)
+                        for faceRecognize in cutted_faces]
+    return normalized_faces
 
 
-def _normalize_face(one_face):
-    """Resize frame """
-    one_face = cv2.cvtColor(one_face, cv2.COLOR_BGR2GRAY)
-    one_face = cv2.resize(one_face, (350, 350))
+def _normalize_face(facedetect):
+    facedetect = cv2.cvtColor(facedetect, cv2.COLOR_BGR2GRAY)
+    facedetect = cv2.resize(facedetect, (350, 350))
 
-    return one_face
+    return facedetect
 
 
-def _locate_faces(image):
-    """Detect face on image"""
-    faces = FACE_CASCADE.detectMultiScale(
-        image,
+def _locate_faces(imagesource):
+    faces = CLASSIFIER_CASCADE.detectMultiScale(
+        imagesource,
         scaleFactor=1.1,
         minNeighbors=15,
         minSize=(70, 70)
     )
 
     return faces  # list of (x, y, w, h)
-
-
-if __name__ == "__main__":
-    IMAGE = cv2.imread('test_data/test.jpg')
-    cv2.imshow("face", IMAGE)
-
-    for index, face in enumerate(find_faces(IMAGE)):
-        cv2.imshow("face %s" % index, face[0])
-
-    cv2.waitKey(0)
