@@ -3,8 +3,7 @@ This module contains face detections functions.
 """
 import cv2
 
-classifier_cascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml') # pylint: disable=invalid-name
-
+CLASSIFIER_CASCADE = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
 
 def find_faces(source):
     "Function to find faces on source"
@@ -24,7 +23,7 @@ def _normalize_face(facedetect):
 
 
 def _locate_faces(imagesource):
-    faces = classifier_cascade.detectMultiScale(
+    faces = CLASSIFIER_CASCADE.detectMultiScale(
         imagesource,
         scaleFactor=1.1,
         minNeighbors=15,
