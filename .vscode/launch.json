@@ -18,6 +18,25 @@
             ]
         },
         {
+            "name": "Bottle",
+            "type": "python",
+            "request": "launch",
+            "stopOnEntry": false,
+            "pythonPath": "${config:python.pythonPath}",
+            "windows": {
+                "program": "${workspaceRoot}\\MSAI\\app.py"
+            },
+            "linux": {
+                "program": "${workspaceRoot}/MSAI/app.py"
+            },
+            //"program": "${env:BOTTLE_APP}",
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput"
+            ]
+        },
+        {
             "name": "PySpark",
             "type": "python",
             "request": "launch",
@@ -196,7 +215,7 @@
             "request": "attach",
             "localRoot": "${workspaceRoot}",
             "remoteRoot": "${workspaceRoot}",
-            "port": 3000,
+            "port": 1854,
             "secret": "my_secret",
             "host": "localhost"
         }

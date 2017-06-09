@@ -158,21 +158,6 @@ def manage_matrix():
                 year=MY_UTILITY.date.year)
 
 
-@route('/add_matrix')
-@view('manage_matrix')
-def blank_add_matrix():
-    """
-    Blank function
-    """
-    return dict(title='Management Matrice',
-                message_add_pic='',
-                message_create_matrix='',
-                message_delete_matrix='',
-                list_matrix='',
-                color_add_pic="vide",
-                color_add_matrix='',
-                year=MY_UTILITY.date.year)
-
 
 @route('/add_matrix', method='POST')
 @view('manage_matrix')
@@ -196,22 +181,6 @@ def add_matrix():
                 list_matrix=MY_MATRIX.list_dir_matrix,
                 color_add_pic='',
                 color_add_matrix=color_status_matrix,
-                year=MY_UTILITY.date.year)
-
-
-@route('/add_pictures')
-@view('manage_matrix')
-def blank_add_pictures():
-    """
-    Blank function
-    """
-    return dict(title='Test',
-                message_add_pic='',
-                message_create_matrix='',
-                message_delete_matrix='',
-                list_matrix=MY_MATRIX.list_dir_matrix,
-                color_add_pic="vide",
-                color_add_matrix='',
                 year=MY_UTILITY.date.year)
 
 
@@ -257,22 +226,6 @@ def add_pictures():
                 color_add_matrix='',
                 color_add_pic=color_add_pic,
                 list_matrix=MY_MATRIX.list_dir_matrix,
-                year=MY_UTILITY.date.year)
-
-
-@route('/delete_matrix')
-@view('manage_matrix')
-def blank_delete_matrix():
-    """
-    Blank function
-    """
-    return dict(title='Test',
-                message_add_pic='',
-                message_create_matrix='',
-                message_delete_matrix='',
-                list_matrix=MY_MATRIX.list_dir_matrix,
-                color_add_pic="vide",
-                color_add_matrix='',
                 year=MY_UTILITY.date.year)
 
 
