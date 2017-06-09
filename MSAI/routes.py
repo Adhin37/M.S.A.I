@@ -5,6 +5,7 @@ Routes and views for the bottle application.
 """
 
 from bottle import route, view, request, run, redirect
+import bottle, bottlesession
 import os
 import numpy as np
 import cv2
@@ -18,6 +19,10 @@ my_utility = Utils()
 my_matrix = Matrix()
 my_database = Database()
 list_filter = []
+
+session_manager = bottlesession.PickleSession()
+session_manager = bottlesession.CookieSession()
+valid_user = bottlesession.authenticator(session_manager)
 
 @route('/')
 @route('/home')
@@ -35,6 +40,18 @@ def contact():
     """Renders the contact page."""
     return dict(title='Contact',
         year=my_utility.date.year)
+
+@route('/main')
+@view('main')
+def main():
+    """Renders the contact page."""
+    session = session_manager.get_session()
+    connectedUser = session['identifiant']
+    return dict(title='Page accueil',
+        user = connectedUser,
+        year=my_utility.date.year)
+    
+
 
 @route('/about')
 @view('about')
@@ -258,20 +275,38 @@ def delete_matrix():
         color_add_matrix = '',
         year = my_utility.date.year)
 
-@route('/connection', method='POST')
+@route('/connect', method='POST')
 @view('index')
 
-def connection():
+def connect():
 
     user_ID = request.POST.dict['inputIdentifiant'][0]
     password_ID = request.POST.dict['inputPassword'][0]
     message_connect_user, color_connect_user, connected = my_database.connectionUser(user_ID, password_ID)
 
     if connected == 'true':
-        redirect("/manage_matrix")
+        session = session_manager.get_session()
+        session['identifiant'] = user_ID
+        session['valid'] = True
+        session_manager.save(session)
+        redirect("/main")
 
     return dict(title = 'Resultat',
         message_connect_user = message_connect_user,
         color_connect_user = color_connect_user,
     )
 
+@route('/disconnect', method='POST')
+@view('index')
+
+def disconnect():
+   print 'Good1'
+   session = session_manager.get_session()
+   session['valid'] = False
+   session_manager.save(session)
+   print 'Good'
+
+   return dict(title = 'Resultat',
+        message_connect_user = '',
+        color_connect_user = '',
+    )

@@ -8,7 +8,8 @@ class Database(object):
 
     """Fonctions"""
     def __init__(self):
-        self.conn = sqlite3.connect('MSIA.db')    
+        self.conn = sqlite3.connect('MSIA.db')  
+        self.connectedUser = ''
 
     def createTable():
     
@@ -39,9 +40,11 @@ class Database(object):
             message_connect_user = "Connexion réussie"
             color_connect_user = "alert alert-success"
             connected = 'true'
+            connectedUser = identifiant
         else:
             message_connect_user = "Connexion échouée, identifiant ou mot de passe éronné."
             color_connect_user = "alert alert-danger"
             connected = 'false'
 
         return message_connect_user, color_connect_user, connected 
+

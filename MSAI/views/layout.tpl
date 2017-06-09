@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }} - Projet MSAI</title>
     <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
@@ -28,7 +28,15 @@
                     <li><a href="/about">A propos</a></li>
                     <li><a href="/contact">Contact</a></li>
                 </ul>
-            </div>
+				      <form action="/disconnect" method="post" id="signin" class="navbar-form navbar-right" role="form">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<span class="input-group-addon">{{user}}</i></span>&nbsp;
+                            <button type="submit" class="btn btn-primary">Se déconnecter</button>
+                                  
+                        </div>
+                   </form>
+			</div>
         </div>
     </div>
 
