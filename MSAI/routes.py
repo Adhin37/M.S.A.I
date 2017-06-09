@@ -6,7 +6,7 @@ Routes and views for the bottle application.
 
 import os
 import cv2
-from bottle import route, view, request, run
+from bottle import route, view, request, run #pylint: disable=no-name-in-module,unused-import
 from utils import Utils
 from matrix import Matrix
 from emotion import emotions_present
@@ -66,7 +66,7 @@ def do_upload():
     fisher_face = ''
     upload = request.files.get('upload')
 
-    name, ext = os.path.splitext(upload.filename)
+    ext = os.path.splitext(upload.filename)[1]
     if ext not in ('.png', '.jpg', '.jpeg', ".gif"):
         return "File extension not allowed."
 
@@ -203,7 +203,7 @@ def add_pictures():
     uploads = request.files.getall('upload')
 
     for upload in uploads:
-        name, ext = os.path.splitext(upload.filename)
+        ext = os.path.splitext(upload.filename)[1]
         if ext not in '.png':
             message_add_pic = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + ext + "."
             color_add_pic = "alert alert-danger"

@@ -23,6 +23,7 @@
             "request": "launch",
             "stopOnEntry": false,
             "pythonPath": "${config:python.pythonPath}",
+            "program": "",
             "windows": {
                 "program": "${workspaceRoot}\\MSAI\\app.py"
             },
@@ -70,6 +71,7 @@
             "cwd": "${workspaceRoot}",
             "env": {},
             "envFile": "${workspaceRoot}/.env",
+            "program": "{$file}",
             "debugOptions": [
                 "WaitOnAbnormalExit",
                 "WaitOnNormalExit",
@@ -178,6 +180,7 @@
             "cwd": "${workspaceRoot}",
             "env": {},
             "envFile": "${workspaceRoot}/.env",
+            "program": "{$file}",
             "args": [
                 "${workspaceRoot}/development.ini"
             ],
