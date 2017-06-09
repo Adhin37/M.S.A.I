@@ -4,16 +4,19 @@
 Routes and views for the bottle application.
 """
 
-from bottle import route, view, request, run
+from bottle import route, view, request, run, redirect
 import os
 import numpy as np
 import cv2
+import sqlite3
 import getpass
 from utils import Utils
 from matrix import Matrix
+from database import Database
 
 my_utility = Utils()
 my_matrix = Matrix()
+my_database = Database()
 list_filter = []
 
 @route('/')
@@ -21,7 +24,10 @@ list_filter = []
 @view('index')
 def home():
     """Renders the home page."""
-    return dict(year=my_utility.date.year)
+    return dict(title = 'Resultat',
+        message_connect_user = '',
+        color_connect_user = '',
+    )
 
 @route('/contact')
 @view('contact')
@@ -251,3 +257,21 @@ def delete_matrix():
         color_add_pic = '',
         color_add_matrix = '',
         year = my_utility.date.year)
+
+@route('/connection', method='POST')
+@view('index')
+
+def connection():
+
+    user_ID = request.POST.dict['inputIdentifiant'][0]
+    password_ID = request.POST.dict['inputPassword'][0]
+    message_connect_user, color_connect_user, connected = my_database.connectionUser(user_ID, password_ID)
+
+    if connected == 'true':
+        redirect("/manage_matrix")
+
+    return dict(title = 'Resultat',
+        message_connect_user = message_connect_user,
+        color_connect_user = color_connect_user,
+    )
+
