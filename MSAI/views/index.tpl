@@ -52,4 +52,10 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
   </body>
+      <div class="container-fluid body-content">
+        <hr />
+        <footer>
+            <p>2017 - MSAI</p>
+        </footer>
+    </div>
 </html>

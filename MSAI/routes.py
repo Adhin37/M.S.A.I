@@ -38,7 +38,13 @@ def home():
 @view('contact')
 def contact():
     """Renders the contact page."""
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        redirect("/home")
+    else:
+        connectedUser = session['identifiant']
     return dict(title='Contact',
+        user = connectedUser,
         year=my_utility.date.year)
 
 @route('/main')
@@ -46,7 +52,10 @@ def contact():
 def main():
     """Renders the contact page."""
     session = session_manager.get_session()
-    connectedUser = session['identifiant']
+    if session['valid'] == False:
+        redirect("/home")
+    else:
+        connectedUser = session['identifiant']
     return dict(title='Page accueil',
         user = connectedUser,
         year=my_utility.date.year)
@@ -57,13 +66,25 @@ def main():
 @view('about')
 def about():
     """Renders the about page."""
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        redirect("/home")
+    else:
+        connectedUser = session['identifiant']
     return dict(title='A propos',
         message='Application MSAI.',
+        user = connectedUser,
         year=my_utility.date.year)
 
 @route('/test')
 @view('test')
 def test():
+
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        redirect("/home")
+    else:
+        connectedUser = session['identifiant']
 
     path = my_matrix.dir_matrix
     print 'path:' + path + '\n'
@@ -133,12 +154,18 @@ def do_upload():
         message = 'Resultat OpenCV',
         year = my_utility.date.year,
         file = file_save,
+        user = connectedUser,
         list_filter = list_filter)
 
 @route('/manage_matrix')
 @view('manage_matrix')
 def manage_matrix():
-    my_matrix.UpdateDirectoryMatrix()
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        redirect("/home")
+    else:
+        connectedUser = session['identifiant']
+        my_matrix.UpdateDirectoryMatrix()
 
     return dict(title='Management Matrice',
         message_add_pic='',
@@ -147,6 +174,7 @@ def manage_matrix():
         list_matrix=my_matrix.list_dir_matrix,
         color_add_pic = "vide",
         color_add_matrix ='',
+        user = connectedUser,
         year = my_utility.date.year)
 
 
@@ -279,18 +307,19 @@ def delete_matrix():
 @view('index')
 
 def connect():
-
+    session = session_manager.get_session()
     user_ID = request.POST.dict['inputIdentifiant'][0]
     password_ID = request.POST.dict['inputPassword'][0]
     message_connect_user, color_connect_user, connected = my_database.connectionUser(user_ID, password_ID)
+    session['valid'] = False
 
     if connected == 'true':
-        session = session_manager.get_session()
         session['identifiant'] = user_ID
         session['valid'] = True
         session_manager.save(session)
         redirect("/main")
 
+    session_manager.save(session)
     return dict(title = 'Resultat',
         message_connect_user = message_connect_user,
         color_connect_user = color_connect_user,
@@ -300,12 +329,10 @@ def connect():
 @view('index')
 
 def disconnect():
-   print 'Good1'
    session = session_manager.get_session()
    session['valid'] = False
    session_manager.save(session)
-   print 'Good'
-
+   redirect("/home")
    return dict(title = 'Resultat',
         message_connect_user = '',
         color_connect_user = '',
