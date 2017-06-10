@@ -129,21 +129,19 @@ def manage_matrix():
         message_check_matrix='',
         year = my_utility.date.year)
 
-@route('/check_classifier')
+@route('/check_classifier', method='POST')
 @view('manage_matrix')
 def do_classifier():
 
-    name_matrix = "Revolver"
-    #il faut que une fois le clique sur generer la matrice on vérifie ou ça en est
-    #pour cela il faut juste regarder le repertire classifier
-    statusCheck=my_matrix.Status(name_matrix)
+    name_matrix = request.POST.dict['select_list_matrix'][0]
+    statusCheck = my_matrix.status(name_matrix)
     print statusCheck
 
     return dict(title='Management Matrice',
-        message_add_pic='',
+        message_add_pic = '',
         message_create_matrix = '',
         message_delete_matrix = '',
-        list_matrix=my_matrix.list_dir_matrix,
+        list_matrix = my_matrix.list_dir_matrix,
         color_add_pic = "vide",
         color_add_matrix = '',
         color_do_matrix ='',
@@ -154,14 +152,12 @@ def do_classifier():
 @route('/do_classifier', method='POST')
 @view('manage_matrix')
 def do_classifier():
-    #name_matrix = request.POST.dict['selected_matrix'][0]
-    #print name_matrix
-    name_matrix = "Revolver"
+    name_matrix = request.POST.dict['select_list_matrix'][0]
     print name_matrix
     """Assignation des 2 valeurs de retour"""
-    message_do_matrix, color_status_matrix= my_matrix.Generate(name_matrix)
+    message_do_matrix, color_status_matrix= my_matrix.generate(name_matrix)
 
-    return dict(title='Management Matrice2',
+    return dict(title='Management Matrice',
         message_add_pic='',
         message_create_matrix ='',
         message_delete_matrix = '',

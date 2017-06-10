@@ -31,36 +31,46 @@ class Matrix(object):
         self.UpdateDirectoryMatrix()
         self.UpdateMatrix()
 
-    def Generate(self, name_matrix):
+
+    def generate(self, name_matrix):
+        """
+        Permet de lancer la génération de la matrice name_matrix.
+        """
         if name_matrix == '' or name_matrix is None:
             message_create_matrix = "Erreur, vous n'avez pas selectionné de matrice !"
             color_status_matrix = "alert alert-danger"
-        elif os.path.isfile(os.path.join(self.dir_models, name_matrix+"_classifier.xml")) == True :
+        elif os.path.isfile(os.path.join(self.dir_models, name_matrix+"_classifier.xml")):
             message_create_matrix = "La matrice " + name_matrix + " a déjà été generé !"
             color_status_matrix = "alert alert-danger"
-        else :
+        else:
             current_matrix = os.path.join(self.dir_matrix, name_matrix)
             dir_script = os.path.abspath(self.my_utility.dir_path + "/doMatrice/screen.sh")
             os.chmod(dir_script, 0777)
             #Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
             subprocess.call(['. ' + dir_script, current_matrix, name_matrix], shell=True)
-            message_create_matrix = "La est en cours de génération."
+            message_create_matrix = "La matrice est en cours de génération, vous pouvez consulter son avancement par le check."
             color_status_matrix = "alert alert-success"
         return message_create_matrix, color_status_matrix
 
-    def Status(self, name_matrix):
+    def status(self, name_matrix):
+        """
+        Permet de check le statut de génération d'une matrice.
+        """
         #il faut regarder le repertoire classifier de la matrice
         classifier_matrix = os.path.join(self.dir_matrix, name_matrix+"/classifier")
-        if os.path.isfile(classifier_matrix + "/cascade.xml") :
-            result= "La génération de la matrice "+ name_matrix +" est terminé"
-        else :
-            result= "encours"
-            i=19
-            fin=False
+        matrix_path = os.path.join(self.dir_matrix, name_matrix)
+        if os.path.isfile(classifier_matrix + "/cascade.xml"):
+            result = "La génération de la matrice "+ name_matrix +" est terminé"
+        else:
+            result = "Aucune génération en cours pour la matrice "+name_matrix
+            i = 19
+            fin = False
+            if os.path.isfile(matrix_path + "/samples.vec"):
+                result = "Génération en cours : Fichier vectoriel géneré"
             while (i >= 0 and fin!=True):
-                if os.path.isfile(classifier_matrix + "/stage"+str(i)+".xml") :
-                    fin=True
-                    result="Génération en cours : étape "+str(i)+"/19"
+                if os.path.isfile(classifier_matrix + "/stage"+str(i)+".xml"):
+                    fin = True
+                    result = "Génération en cours : étape "+str(i)+"/19"
                 i = i-1
         return result
 

@@ -4,6 +4,9 @@
 
 function afficher() {
 document.getElementById("select_list_matrix").value = document.getElementById("selected_matrix").value;
+document.getElementById("select_list_matrix_classi").value = document.getElementById("selected_matrix").value;
+document.getElementById("select_list_matrix_check").value = document.getElementById("selected_matrix").value;
+
 } </script>
 
 <body onLoad="afficher();">
@@ -81,6 +84,7 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 					<label for="sel1">Lancer la génération du classifier de la matrice sélectionnée:</label>
 					<p> Une fois lancé, le script peut étre trés long (plusieurs jours en fonction du nombre d'images)<p>
 					</div>
+				<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix_classi"> </br>
 				<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Lancer génération" />
 				</form>
 			</div>
@@ -91,8 +95,9 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 	<div class="panel panel-default panel-submit">
 		<div class="panel-heading">Verification état Matrice</div>
 			<div class="panel-body paddingPanel">
-					<form action="/check_classifier">
+					<form action="/check_classifier" method="post" enctype="multipart/form-data">
 						<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Check avancement génération" />
+						<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix_check"> </br>
 						<div>
 							{{ message_check_matrix }}
 						</div>
