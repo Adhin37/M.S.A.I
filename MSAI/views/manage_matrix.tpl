@@ -11,8 +11,20 @@ document.getElementById("select_list_matrix_check").value = document.getElementB
 
 <body onLoad="afficher();">
 <div class="row">
-
-<div class="col-md-3 col-form">
+	<div class="col-md-offset-3 col-md-6">
+		<div class="panel panel-default panel-submit">
+			<div class="panel-heading">Etat Matrice</div>
+				<div class="panel-body paddingPanel">
+					<div>
+								{{ message_check_matrix }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+<div class="col-md-offset-2 col-md-4 col-form">
 	<div class="panel panel-default panel-submit">
 		<div class="panel-heading">Les matrices</div>
 			<div class="panel-body paddingPanel">
@@ -46,7 +58,7 @@ document.getElementById("select_list_matrix_check").value = document.getElementB
 		</div>
 	</div>
 
-	<div class="col-md-9">
+	<div class="col-md-4">
 	<div class="panel panel-default panel-submit">
 		<div class="panel-heading">Les images</div>
 			<div class="panel-body paddingPanel">
@@ -71,7 +83,9 @@ document.getElementById("select_list_matrix_check").value = document.getElementB
 		</div>
 	</div>
 	</div>
-	<div class="col-md-8">
+</div>
+<div class="row">
+	<div class="col-md-offset-3 col-md-6">
 	<div class="panel panel-default panel-submit">
 		<div class="panel-heading">Géneration Classifier</div>
 			<div class="panel-body paddingPanel">
@@ -84,24 +98,9 @@ document.getElementById("select_list_matrix_check").value = document.getElementB
 					<label for="sel1">Lancer la génération du classifier de la matrice sélectionnée:</label>
 					<p> Une fois lancé, le script peut étre trés long (plusieurs jours en fonction du nombre d'images)<p>
 					</div>
-				<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix_classi"> </br>
+				<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix_classi">
 				<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Lancer génération" />
 				</form>
-			</div>
-		</div>
-	</div>
-	</div>
-	<div class="col-md-4">
-	<div class="panel panel-default panel-submit">
-		<div class="panel-heading">Verification état Matrice</div>
-			<div class="panel-body paddingPanel">
-					<form action="/check_classifier" method="post" enctype="multipart/form-data">
-						<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Check avancement génération" />
-						<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix_check"> </br>
-						<div>
-							{{ message_check_matrix }}
-						</div>
-						</form>
 			</div>
 		</div>
 	</div>

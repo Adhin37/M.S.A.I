@@ -117,6 +117,14 @@ def do_upload():
 def manage_matrix():
     my_matrix.UpdateDirectoryMatrix()
 
+    name_matrix = ""
+    statusCheck = "Aucune matrice sélectionnée"
+    if len(my_matrix.list_dir_matrix) > 0:
+        name_matrix = my_matrix.list_dir_matrix[0]
+        if name_matrix != "":
+            statusCheck = my_matrix.status(name_matrix)
+
+    print statusCheck
     return dict(title='Management Matrice',
         message_add_pic='',
         message_create_matrix ='',
@@ -126,7 +134,7 @@ def manage_matrix():
         color_add_matrix ='',
         color_do_matrix ='',
         message_do_matrix = '',
-        message_check_matrix='',
+        message_check_matrix=statusCheck,
         year = my_utility.date.year)
 
 @route('/check_classifier', method='POST')
@@ -153,9 +161,10 @@ def do_classifier():
 @view('manage_matrix')
 def do_classifier():
     name_matrix = request.POST.dict['select_list_matrix'][0]
-    print name_matrix
     """Assignation des 2 valeurs de retour"""
     message_do_matrix, color_status_matrix= my_matrix.generate(name_matrix)
+
+    statusCheck = my_matrix.status(name_matrix)
 
     return dict(title='Management Matrice',
         message_add_pic='',
@@ -166,7 +175,7 @@ def do_classifier():
         color_add_pic = "vide",
         color_add_matrix ='',
         color_do_matrix =color_status_matrix,
-        message_check_matrix='',
+        message_check_matrix=statusCheck,
         year = my_utility.date.year)
 
 @route('/add_matrix')

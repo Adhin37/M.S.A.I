@@ -44,12 +44,19 @@ class Matrix(object):
             color_status_matrix = "alert alert-danger"
         else:
             current_matrix = os.path.join(self.dir_matrix, name_matrix)
-            dir_script = os.path.abspath(self.my_utility.dir_path + "/doMatrice/screen.sh")
-            os.chmod(dir_script, 0777)
-            #Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
-            subprocess.call(['. ' + dir_script, current_matrix, name_matrix], shell=True)
-            message_create_matrix = "La matrice est en cours de génération, vous pouvez consulter son avancement par le check."
-            color_status_matrix = "alert alert-success"
+            #cmd="ps -aef | grep generate_matrice_"+name_matrix+" | grep -v grep | wc -l"
+            cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
+            in_progress = subprocess.check_output([cmd], shell=True)
+            if format(in_progress) >= 1:
+                message_create_matrix = "La matrice "+name_matrix+" est déjà cours de génération. "
+                color_status_matrix = "alert alert-danger"
+            else:
+                dir_script = os.path.abspath(self.my_utility.dir_path + "/doMatrice/screen.sh")
+                os.chmod(dir_script, 0777)
+                #Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
+                subprocess.call(['. ' + dir_script, current_matrix, name_matrix], shell=True)
+                message_create_matrix = "La matrice est désormais cours de génération, vous pouvez consulter son avancement par le check."
+                color_status_matrix = "alert alert-success"
         return message_create_matrix, color_status_matrix
 
     def status(self, name_matrix):
@@ -63,15 +70,21 @@ class Matrix(object):
             result = "La génération de la matrice "+ name_matrix +" est terminé"
         else:
             result = "Aucune génération en cours pour la matrice "+name_matrix
-            i = 19
-            fin = False
-            if os.path.isfile(matrix_path + "/samples.vec"):
-                result = "Génération en cours : Fichier vectoriel géneré"
-            while (i >= 0 and fin!=True):
-                if os.path.isfile(classifier_matrix + "/stage"+str(i)+".xml"):
-                    fin = True
-                    result = "Génération en cours : étape "+str(i)+"/19"
-                i = i-1
+            #commande pour recuperer si un proc generate_matrice est en marche
+            #cmd="ps -aef | grep generate_matrice_"+name_matrix+" | grep -v grep | wc -l"
+            cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
+            in_progress = subprocess.check_output([cmd], shell=True)
+            if format(in_progress) >= 1:
+                result = "La matrice "+name_matrix+" est en cours de génération. "
+                i = 19
+                fin = False
+                while (i >= 0 and fin is False):
+                    if os.path.isfile(classifier_matrix + "/stage"+str(i)+".xml"):
+                        fin = True
+                        result = result + os.linesep +"Génération en cours : étape "+str(i)+"/19"
+                    i = i-1
+                if fin is False:
+                    result = result + os.linesep + "Génération en cours : étape 0/19"
         return result
 
     def AddDirectoryMatrix(self, name_matrix):
@@ -101,6 +114,8 @@ class Matrix(object):
         dirs = os.listdir(self.dir_matrix)
         for dir in dirs:
             if os.path.isdir(os.path.join(self.dir_matrix, dir)):
+                #juste pour les test
+                #if dir!='balle':
                 self.list_dir_matrix.append(dir)
         return self.list_dir_matrix
 
