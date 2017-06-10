@@ -25,9 +25,11 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/test">Test OpenCV</a></li>
 					<li><a href="/manage_matrix">Gestion des matrices</a></li>
-                    <li><a href="/about">A propos</a></li>
-                    <li><a href="/contact">Contact</a></li>
                 </ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/about">FAQ</a></li>
+                    <li><a href="/contact">Contact</a></li>
+				</ul>
             </div>
         </div>
     </div>
