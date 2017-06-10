@@ -67,19 +67,27 @@ class Matrix(object):
     def delete_directory_matrix(self, name_matrix):
         """Delete one matrix directory from matrix directory list"""
         message_delete_matrix = ''
-        color_status_matrix = ''
+        color_suppr_matrix = ''
 
         if name_matrix == '' or name_matrix is None:
             message_delete_matrix = 'Erreur, le nom de la matrice est vide !'
+<<<<<<< HEAD
             color_status_matrix = "alert alert-danger"
         elif os.path.isdir(os.path.join(self.dir_matrix, name_matrix)) is False:
             message_delete_matrix = 'Erreur, le répertoire de la matrice' + name_matrix + ' est introuvable !'
             color_status_matrix = "alert alert-danger"
         else:
+=======
+            color_suppr_matrix = "alert alert-danger"
+        elif os.path.isdir(os.path.join(self.dir_matrix, name_matrix)) == False :
+            message_delete_matrix = 'Erreur, le répertoire de la matrice' + name_matrix + ' est introuvable !'
+            color_suppr_matrix = "alert alert-danger"
+        else :
+>>>>>>> 1944483cbe96442afbc4c06c3d749e175c7377ac
             shutil.rmtree(os.path.join(self.dir_matrix, name_matrix))
             message_delete_matrix = 'Le répertoire de la matrice ' + name_matrix + ' a bien été supprimé.'
-            color_status_matrix = "alert alert-success"
-        return message_delete_matrix, color_status_matrix
+            color_suppr_matrix = "alert alert-success"
+        return message_delete_matrix, color_suppr_matrix
 
     def update_matrix(self):
         """Actualisation de la liste des matrices"""
@@ -90,3 +98,24 @@ class Matrix(object):
             if os.path.isfile(full_file):
                 self.list_matrix.append(full_file)
         return self.list_matrix
+<<<<<<< HEAD
+=======
+
+    def AddObject(self, name_matrix, picture_pos_neg, picture_ext, picture_filename):
+        """Ajout objet dans la matrice sélectionnée via la liste"""
+        message_add_pic = ''
+        color_add_pic = ''
+    
+        if picture_ext not in ('.png'):
+            message_add_pic = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + picture_ext + "."
+            color_add_pic = "alert alert-danger"
+        else :
+            file_path = os.path.abspath(self.dir_matrix +'/'+ name_matrix +'/'+ picture_pos_neg+'/'+ picture_filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+            
+            message_add_pic = "L'objet a bien été ajouté dans la base de connaissance."
+            color_add_pic = "alert alert-success"
+
+        return message_add_pic, color_add_pic, file_path
+>>>>>>> 1944483cbe96442afbc4c06c3d749e175c7377ac
