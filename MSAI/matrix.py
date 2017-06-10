@@ -59,7 +59,7 @@ class Matrix(object):
         """Refresh matrix directory list"""
         self.list_dir_matrix = []
         dirs = os.listdir(self.dir_matrix)
-        for one_dir in dirs:
+        for one_dir in sorted(dirs):
             if os.path.isdir(os.path.join(self.dir_matrix, one_dir)):
                 self.list_dir_matrix.append(one_dir)
         return self.list_dir_matrix
@@ -87,7 +87,7 @@ class Matrix(object):
         """Actualisation de la liste des matrices"""
         self.list_matrix = []
         files = os.listdir(self.dir_models)
-        for matrix_file in files:
+        for matrix_file in sorted(files):
             full_file = os.path.join(self.dir_models, matrix_file)
             if os.path.isfile(full_file):
                 self.list_matrix.append(full_file)
@@ -97,6 +97,7 @@ class Matrix(object):
         """Ajout objet dans la matrice sélectionnée via la liste"""
         message_add_pic = ''
         color_add_pic = ''
+        file_path = ''
 
         if picture_ext not in '.png':
             message_add_pic = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + picture_ext + "."
