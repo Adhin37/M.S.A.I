@@ -53,6 +53,7 @@ def test():
         LIST_FILTER.append(one_dir)
     return dict(title='Test',
                 message='Test OPENCV.',
+                file='',
                 year=MY_UTILITY.date.year,
                 list_filter=LIST_FILTER)
 
@@ -65,7 +66,8 @@ def do_upload():
     """
     fisher_face = ''
     upload = request.files.get('upload')
-
+    if not upload:
+        return "No file uploaded."
     ext = os.path.splitext(upload.filename)[1]
     if ext not in ('.png', '.jpg', '.jpeg', ".gif"):
         return "File extension not allowed."
