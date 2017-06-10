@@ -150,45 +150,18 @@ def manage_matrix():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Management Matrice',
-
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
                 color_add_pic="vide",
-
                 # Message affiché et couleur de l'alerte - création d'une nouvelle matrice
                 message_create_matrix='',
                 color_add_matrix='',
-
                 # Message affiché et couleur de l'alerte - supression d'une matrice
                 message_delete_matrix='',
                 color_suppr_matrix='',
-
                 list_matrix=MY_MATRIX.list_dir_matrix,
-                year=my_utility.date.year)
-
-
-@route('/add_matrix')
-@view('manage_matrix')
-def add_matrix():
-
-    return dict(title='Management Matrice',
-
-                # Gestions des alertes"""
-                # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
-                message_add_pic='',
-                color_add_pic="vide",
-
-                # Message affiché et couleur de l'alerte - création d'une nouvelle matrice
-                message_create_matrix='',
-                color_add_matrix='',
-
-                # Message affiché et couleur de l'alerte - supression d'une matrice
-                message_delete_matrix='',
-                color_suppr_matrix='',
-
-                list_matrix=list_matrix,
-                year=my_utility.date.year)
+                year=MY_UTILITY.date.year)
 
 
 @route('/add_matrix', method='POST')
@@ -201,63 +174,39 @@ def add_matrix():
     message_create_matrix = ''
     color_status_matrix = ''
 
-    """Assignation des 2 valeurs de retour"""
-    message_create_matrix, color_status_matrix = MY_MATRIX.AddDirectoryMatrix(
+    # Assignation des 2 valeurs de retour
+    message_create_matrix, color_status_matrix = MY_MATRIX.add_directory_matrix(
         name_matrix)
-    MY_MATRIX.UpdateDirectoryMatrix()
+    MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
-
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
                 color_add_pic="vide",
-
                 # Message affiché et couleur de l'alerte - création d'une nouvelle matrice
                 message_create_matrix=message_create_matrix,
                 color_add_matrix=color_status_matrix,
-
                 # Message affiché et couleur de l'alerte - supression d'une matrice
                 message_delete_matrix='',
                 color_suppr_matrix='',
-
                 list_matrix=MY_MATRIX.list_dir_matrix,
-                year=my_utility.date.year)
-
-
-@route('/add_pictures')
-@view('manage_matrix')
-def add_pictures():
-
-    return dict(title='Test',
-
-                # Gestions des alertes"""
-                # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
-                message_add_pic='',
-                color_add_pic="vide",
-
-                # Message affiché et couleur de l'alerte - création d'une nouvelle matrice
-                message_create_matrix='',
-                color_add_matrix='',
-
-                # Message affiché et couleur de l'alerte - supression d'une matrice
-                message_delete_matrix='',
-                color_suppr_matrix='',
-
-                list_matrix=MY_MATRIX.list_dir_matrix,
-                year=my_utility.date.year)
+                year=MY_UTILITY.date.year)
 
 
 @route('/add_pictures', method='POST')
 @view('manage_matrix')
 def add_pictures():
+    """
+    Add new images for matrix generation
+    """
     name_matrix = request.POST.dict['select_list_matrix'][0]
     picture_type = request.POST.dict['typeImage'][0]
     uploads = request.files.getall('upload')
 
     for upload in uploads:
-        name, ext = os.path.splitext(upload.filename)
-        message_add_pic, color_add_pic, filepath = MY_MATRIX.AddObject(
+        ext = os.path.splitext(upload.filename)[1]
+        message_add_pic, color_add_pic, filepath = MY_MATRIX.add_object(
             name_matrix, picture_type, ext, upload.filename)
 
         if color_add_pic == "alert alert-danger":
@@ -268,45 +217,18 @@ def add_pictures():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
-
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic=message_add_pic,
                 color_add_pic=color_add_pic,
-
                 # Message affiché et couleur de l'alerte - création d'une nouvelle matrice
                 message_create_matrix='',
                 color_add_matrix='',
-
                 # Message affiché et couleur de l'alerte - supression d'une matrice
                 message_delete_matrix='',
                 color_suppr_matrix='',
-
                 list_matrix=MY_MATRIX.list_dir_matrix,
-                year=my_utility.date.year)
-
-
-@route('/delete_matrix')
-@view('manage_matrix')
-def delete_matrix():
-
-    return dict(title='Test',
-
-                # Gestions des alertes"""
-                # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
-                message_add_pic='',
-                color_add_pic="vide",
-
-                # Message affiché et couleur de l'alerte - création d'une nouvelle matrice
-                message_create_matrix='',
-                color_add_matrix='',
-
-                # Message affiché et couleur de l'alerte - supression d'une matrice
-                message_delete_matrix='',
-                color_suppr_matrix='',
-
-                list_matrix=MY_MATRIX.list_dir_matrix,
-                year=my_utility.date.year)
+                year=MY_UTILITY.date.year)
 
 
 @route('/delete_matrix', method='POST')
@@ -320,25 +242,21 @@ def delete_matrix():
     color_suppr_matrix = ''
     color_status_matrix = ''
 
-    """Assignation des 2 valeurs de retour"""
-    message_delete_matrix, color_suppr_matrix = MY_MATRIX.DeleteDirectoryMatrix(
+    # Assignation des 2 valeurs de retour
+    message_delete_matrix, color_suppr_matrix = MY_MATRIX.delete_directory_matrix(
         name_matrix)
-    MY_MATRIX.UpdateDirectoryMatrix()
+    MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
-
-                # Gestions des alertes"""
+                # Gestions des alertes
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
                 color_add_pic='',
-
                 # Message affiché et couleur de l'alerte - création d'une nouvelle matrice
                 message_create_matrix='',
                 color_add_matrix='',
-
                 # Message affiché et couleur de l'alerte - supression d'une matrice
                 message_delete_matrix=message_delete_matrix,
                 color_suppr_matrix=color_suppr_matrix,
-
                 list_matrix=MY_MATRIX.list_dir_matrix,
-                year=my_utility.date.year)
+                year=MY_UTILITY.date.year)

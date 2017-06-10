@@ -5,7 +5,7 @@
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
     "python.formatting.provider": "autopep8",
-    "python.unitTest.unittestEnabled": true,
+    "python.unitTest.unittestEnabled": false,
     "python.unitTest.pyTestEnabled": false,
     "python.unitTest.nosetestsEnabled": false,
     "python.linting.pylintArgs": [
@@ -22,5 +22,6 @@
         ".vs": true,
         "**/__pycache__": true,
         "**/**/*.pyc": true
-    }
+    },
+    "python.unitTest.promptToConfigure": false
 }
