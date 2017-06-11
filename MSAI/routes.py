@@ -12,6 +12,7 @@ import sqlite3
 import getpass
 from utils import Utils
 from matrix import Matrix
+from database import Database
 from emotion import emotions_present
 
 MY_UTILITY = Utils()
@@ -29,10 +30,15 @@ valid_user = bottlesession.authenticator(session_manager)
 @view('index')
 def home():
     """Renders the home page."""
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        connectedUser = ''
+        redirect("/login")
+    else:
+        connectedUser = session['identifiant']
     return dict(title = 'Resultat',
-        message_connect_user = '',
-        color_connect_user = '',
-    )
+        user = connectedUser,
+        year=MY_UTILITY.date.year)
 
 @route('/contact')
 @view('contact')
@@ -40,12 +46,20 @@ def contact():
     """Renders the contact page."""
     session = session_manager.get_session()
     if session['valid'] == False:
-        redirect("/home")
+        redirect("/login")
     else:
         connectedUser = session['identifiant']
     return dict(title='Contact',
         user = connectedUser,
         year=MY_UTILITY.date.year)
+
+@route('/login')
+@view('login')
+def contact():
+    """Renders the contact page."""
+    return dict(title='Contact',
+        message_connect_user = '',
+        color_connect_user = '')
 
 @route('/main')
 @view('main')
@@ -53,7 +67,7 @@ def main():
     """Renders the contact page."""
     session = session_manager.get_session()
     if session['valid'] == False:
-        redirect("/home")
+        redirect("/login")
     else:
         connectedUser = session['identifiant']
     return dict(title='Page accueil',
@@ -67,7 +81,7 @@ def about():
     """Renders the about page."""
     session = session_manager.get_session()
     if session['valid'] == False:
-        redirect("/home")
+        redirect("/login")
     else:
         connectedUser = session['identifiant']
     return dict(title='A propos',
@@ -80,7 +94,7 @@ def about():
 def manage_matrix():
     session = session_manager.get_session()
     if session['valid'] == False:
-        redirect("/home")
+        redirect("/login")
     else:
         connectedUser = session['identifiant']
 
@@ -102,7 +116,7 @@ def test():
     """Renders the test page."""
     session = session_manager.get_session()
     if session['valid'] == False:
-        redirect("/home")
+        redirect("/login")
     else:
         connectedUser = session['identifiant']
 
@@ -214,7 +228,7 @@ def manage_matrix():
     """
     session = session_manager.get_session()
     if session['valid'] == False:
-        redirect("/home")
+        redirect("/login")
     else:
         connectedUser = session['identifiant']
         MY_MATRIX.update_directory_matrix()
@@ -347,7 +361,7 @@ def connect():
         session['identifiant'] = user_ID
         session['valid'] = True
         session_manager.save(session)
-        redirect("/main")
+        redirect("/home")
 
     session_manager.save(session)
     return dict(title = 'Resultat',
@@ -362,7 +376,7 @@ def disconnect():
    session = session_manager.get_session()
    session['valid'] = False
    session_manager.save(session)
-   redirect("/home")
+   redirect("/login")
    return dict(title = 'Resultat',
         message_connect_user = '',
         color_connect_user = '',
