@@ -26,12 +26,9 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/test">Test OpenCV</a></li>
 					<li><a href="/manage_matrix">Gestion des matrices</a></li>
-<<<<<<< HEAD
-=======
                     <li><a href="/about">A propos</a></li>
                     <li><a href="/contact">Contact</a></li>
 					<li><a href="/manage_database">Administration</a></li>
->>>>>>> f293074a636bd52d547ae8a53e6af311e33f5e41
                 </ul>
 				      <form action="/disconnect" method="post" id="signin" class="navbar-form navbar-right" role="form">
                         <div class="input-group">
