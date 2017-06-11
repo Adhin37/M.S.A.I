@@ -132,7 +132,9 @@ def test():
                 message='Test OPENCV.',
                 file='',
                 year=MY_UTILITY.date.year,
-                list_filter=LIST_FILTER)
+                user = connectedUser,
+                list_filter=LIST_FILTER
+                )
 
 
 @route('/test', method='POST')
