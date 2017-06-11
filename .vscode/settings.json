@@ -1,0 +1,27 @@
+// Placez vos paramètres dans ce fichier pour remplacer les paramètres par défaut et les paramètres utilisateur.
+{
+    "workbench.iconTheme": "vscode-icons",
+    "terminal.integrated.shell.windows": "C:\\WINDOWS\\Sysnative\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.formatting.provider": "autopep8",
+    "python.unitTest.unittestEnabled": false,
+    "python.unitTest.pyTestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false,
+    "python.linting.pylintArgs": [
+        "--disable=C0301,E0401, E1101"
+    ],
+    "python.linting.maxNumberOfProblems": 100,
+    "files.associations": {
+        "*.tpl": "html"
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.DS_Store": true,
+        ".vscode": false,
+        ".vs": true,
+        "**/__pycache__": true,
+        "**/**/*.pyc": true
+    },
+    "python.unitTest.promptToConfigure": false
+}

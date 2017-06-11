@@ -1,6 +1,6 @@
 % rebase('layout.tpl', title=title, year=year, list_matrix=list_matrix)
 
-<script type="text/javascript"> 
+<script type="text/javascript">
 
 function afficher() {
 document.getElementById("select_list_matrix").value = document.getElementById("selected_matrix").value;
@@ -19,16 +19,20 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 							<div class="{{ color_add_matrix }}" role="alert">
 								<button type="button" class="close" data-dismiss="alert" ></button>
 								{{ message_create_matrix }}</div>
-								<label for="usr">Créer une nouvelle matrice :</label>
+								<label for="usr">CrÃ©er une nouvelle matrice :</label>
 								<input type="text" class="form-control" name="name_matrice" id="usr"> </br>
-								<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Créer matrice" />
+								<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="CrÃ©er matrice" />
 							</div>
 						</div>
 					</form>
 
 					<form action="/delete_matrix" method="post" enctype="multipart/form-data">
 						<div class="form-group">
-							<label for="sel1">ou sélectionner une matrice existante :</label>
+							<div class="{{ color_suppr_matrix }}" role="alert">
+							<button type="button" class="close" data-dismiss="alert" ></button>
+							{{ message_delete_matrix }}
+							</div>
+							<label for="sel1">ou sÃ©lectionner une matrice existante :</label>
 								<select id="selected_matrix" name="selected_matrix" class="form-control" onchange="afficher(form);">
 									<% for l in list_matrix: %>
 									<option>{{l}}</option>
@@ -53,12 +57,12 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 						<button type="button" class="close" data-dismiss="alert" ></button>
 						{{ message_add_pic }}
 						</div>
-					<label for="sel1">Ajouter une image à la matrice sélectionnée:</label>
-					<p> La format de l'image doit être en jpeg<p>
+					<label for="sel1">Ajouter une image Ã  la matrice sÃ©lectionnÃ©e:</label>
+					<p> La format de l'image doit Ã©tre en jpeg<p>
 					<input type="file" name="upload" multiple /><br />
 					<select class="form-control" id="typeImage" name="typeImage">
 					<option value="positive_img">Positive (avec l'objet sur l'image)</option>
-					<option value="negative_img">Négative (sans l'objet sur l'image)</option>
+					<option value="negative_img">NÃ©gative (sans l'objet sur l'image)</option>
 					</select>
 					</div>
 				<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix"> </br>
@@ -68,5 +72,5 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
 		</div>
 	</div>
 	</div>
-</div> <!-- /container -->
+</div>
 

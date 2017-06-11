@@ -25,15 +25,12 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/test">Test OpenCV</a></li>
 					<li><a href="/manage_matrix">Gestion des matrices</a></li>
-                    <li><a href="/about">A propos</a></li>
-                    <li><a href="/contact">Contact</a></li>
                 </ul>
 				      <form action="/disconnect" method="post" id="signin" class="navbar-form navbar-right" role="form">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 							<span class="input-group-addon">{{user}}</i></span>&nbsp;
-                            <button type="submit" class="btn btn-primary">Se déconnecter</button>
-                                  
+                            <button type="submit" class="btn btn-primary">Se dÃ©connecter</button>
                         </div>
                    </form>
 			</div>

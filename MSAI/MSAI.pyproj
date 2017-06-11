@@ -43,8 +43,6 @@
     <Compile Include="ObjectDetector.py" />
     <Compile Include="objectMatriceCouteau.py" />
     <Compile Include="routes.py" />
-    <Compile Include="webcam.py" />
-    <Compile Include="webcam_emotion.py" />
     <Compile Include="utils.py">
       <SubType>Code</SubType>
     </Compile>
