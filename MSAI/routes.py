@@ -75,6 +75,27 @@ def about():
         user = connectedUser,
         year = MY_UTILITY.date.year)
 
+@route('/manage_database')
+@view('manage_database')
+def manage_matrix():
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        redirect("/home")
+    else:
+        connectedUser = session['identifiant']
+
+    return dict(title='Management Matrice',
+        message_add_pic='',
+        message_create_matrix ='',
+        message_delete_matrix = '',
+        list_matrix='',
+        color_add_pic = "vide",
+        color_add_matrix ='',
+        user = connectedUser,
+        year = my_utility.date.year)
+
+
+
 @route('/test')
 @view('test')
 def test():

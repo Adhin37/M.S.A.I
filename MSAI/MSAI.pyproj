@@ -57,6 +57,7 @@
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="views\manage_database.tpl" />
     <Content Include="models\emotion_detection_model.xml" />
     <Content Include="models\haarcascade_eye.xml" />
     <Content Include="models\haarcascade_frontalface_default.xml" />

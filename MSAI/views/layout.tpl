@@ -6,6 +6,7 @@
     <title>{{ title }} - Projet MSAI</title>
     <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
+	<link rel="stylesheet" type="text/css" href="/static/content/Admin.css" />
     <script src="/static/scripts/modernizr-2.6.2.js"></script>
 
 </head>
@@ -25,6 +26,12 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/test">Test OpenCV</a></li>
 					<li><a href="/manage_matrix">Gestion des matrices</a></li>
+<<<<<<< HEAD
+=======
+                    <li><a href="/about">A propos</a></li>
+                    <li><a href="/contact">Contact</a></li>
+					<li><a href="/manage_database">Administration</a></li>
+>>>>>>> f293074a636bd52d547ae8a53e6af311e33f5e41
                 </ul>
 				      <form action="/disconnect" method="post" id="signin" class="navbar-form navbar-right" role="form">
                         <div class="input-group">
