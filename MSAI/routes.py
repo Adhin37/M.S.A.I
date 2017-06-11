@@ -59,7 +59,8 @@ def contact():
     """Renders the contact page."""
     return dict(title='Contact',
         message_connect_user = '',
-        color_connect_user = '')
+        color_connect_user = '',
+        year=MY_UTILITY.date.year)
 
 @route('/main')
 @view('main')
@@ -106,7 +107,7 @@ def manage_matrix():
         color_add_pic = "vide",
         color_add_matrix ='',
         user = connectedUser,
-        year = my_utility.date.year)
+        year = MY_UTILITY.date.year)
 
 
 
@@ -348,7 +349,7 @@ def delete_matrix():
 
 
 @route('/connect', method='POST')
-@view('index')
+@view('login')
 
 def connect():
     session = session_manager.get_session()
@@ -366,7 +367,7 @@ def connect():
     session_manager.save(session)
     return dict(title = 'Resultat',
         message_connect_user = message_connect_user,
-        color_connect_user = color_connect_user,
+        color_connect_user = color_connect_user
     )
 
 @route('/disconnect', method='POST')
