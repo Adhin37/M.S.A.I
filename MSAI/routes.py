@@ -64,23 +64,26 @@ def do_upload():
     """
     Upload file for processing
     """
+    # définir les variables ci-dessous
+    emotion_neutral = 0
+    emotion_anger = 0
+    emotion_disgust = 0
+    emotion_happy = 0
+    emotion_sadness = 0
+    emotion_surprise = 0
+    emotion_all = 0
     fisher_face = ''
     upload = request.files.get('upload')
-<<<<<<< HEAD
 
-    format = ''
-    name, ext = os.path.splitext(upload.filename)
-    if ext in ('.png', '.jpg', '.jpeg', ".gif"):
-        format = 'img'
-    elif ext in ('.mp4', '.wma', '.avi', '.mov', '.mpg', '.mkv'):
-        format = 'video'
-    else:
-=======
+    file_format = ''
     if not upload:
         return "No file uploaded."
     ext = os.path.splitext(upload.filename)[1]
-    if ext not in ('.png', '.jpg', '.jpeg', ".gif"):
->>>>>>> 477f3e899144facdbaadf88ffe990d6dd5656687
+    if ext in ('.png', '.jpg', '.jpeg', ".gif"):
+        file_format = 'img'
+    elif ext in ('.mp4', '.wma', '.avi', '.mov', '.mpg', '.mkv'):
+        file_format = 'video'
+    else:
         return "File extension not allowed."
 
     save_path = os.path.abspath(MY_UTILITY.dir_path + '/tmp')
@@ -92,21 +95,14 @@ def do_upload():
 
     upload.save(file_path)
 
-    face_cascade = cv2.CascadeClassifier(MY_MATRIX.face)
-
-<<<<<<< HEAD
-    if format == 'img':
+    if file_format == 'img':
         img = cv2.imread(file_path, 1)
-
+        face_cascade = cv2.CascadeClassifier(MY_MATRIX.face)
         faces = face_cascade.detectMultiScale(img, 1.3, 5)
-        for (x, y, w, h) in faces:
-            cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-            roi_gray = img[y:y + h, x:x + w]
-            roi_color = img[y:y + h, x:x + w]
-            eyes = eye_cascade.detectMultiScale(roi_gray)
-            for (ex, ey, ew, eh) in eyes:
-                cv2.rectangle(roi_color, (ex, ey),
-                              (ex + ew, ey + eh), (0, 255, 0), 2)
+        for (coord_x, coord_y, coord_w, coord_h) in faces:
+            cv2.rectangle(img, (coord_x, coord_y), (coord_x +
+                                                    coord_w, coord_y + coord_h), (255, 0, 0), 2)
+
         file_save = upload.filename
 
         if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
@@ -115,96 +111,47 @@ def do_upload():
         cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path +
                                     '/static/pictures/' + file_save), img)
 
-        emotions = ['neutral', 'anger', 'disgust',
-                    'happy', 'sadness', 'surprise']
-        emoticons = load_emoticons(emotions)
         source = os.path.abspath(MY_UTILITY.dir_path +
                                  '/static/pictures/' + file_save)
+
         if cv2.__version__ == '3.1.0':
             fisher_face = cv2.face.createFisherFaceRecognizer()
         else:
             fisher_face = cv2.createFisherFaceRecognizer()
         fisher_face.load('models/emotion_detection_model.xml')
 
-        neutral, anger, disgust, happy, sadness, surprise, all_emotion = emotions_present(
-            fisher_face, emoticons, source, update_time=30)
+        neutral, anger, disgust, happy, sadness, surprise, all_emotion, faces = emotions_present(
+            fisher_face, source)
+
+        if all_emotion != 0:
+            emotion_neutral = neutral * 100 / all_emotion
+            emotion_anger = anger * 100 / all_emotion
+            emotion_disgust = disgust * 100 / all_emotion
+            emotion_happy = happy * 100 / all_emotion
+            emotion_sadness = sadness * 100 / all_emotion
+            emotion_surprise = surprise * 100 / all_emotion
+            emotion_all = all_emotion
 
         if os.path.isfile(file_path):
             os.remove(file_path)
 
-    elif format == 'video':
+    elif file_format == 'video':
         MY_MATRIX.update_matrice()
         classifier_name_found = []
         while_continue = True
         cap = cv2.VideoCapture(file_path)
 
         while cap.isOpened() and while_continue:
-            ret, img = cap.read()
+            img = cap.read()[1]
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             # KNIFES = knife_cascade.detectMultiScale(GRAY, 20, 50, minSize=(200, 100), maxSize=(800, 400))
             cpt_classifier = 0
             while len(MY_MATRIX.list_matrix) > cpt_classifier and while_continue:
-                knife_cascade = cv2.CascadeClassifier(MY_MATRIX.list_matrix[cpt_classifier])
-                name_found = MY_MATRIX.nom_classifier(knife_cascade, img, gray)
-                if name_found:
-                    classifier_name_found.append(MY_MATRIX.list_matrix[cpt_classifier]) # return true/false de la matrice
-
-                # A modif pour recup dans une variable
-                #cv2.imshow('img', img)
-                # A voir avec Aurélien
-                #if classifier_name_found == array_matrice_cocher_dans_ihm:
-                    #generer image file_save
-                    #while_continue = False
+                while_continue == False
                 cpt_classifier += 1
 
         cap.release()
         cv2.destroyAllWindows()
-=======
-    img = cv2.imread(file_path, 1)
-
-    faces = face_cascade.detectMultiScale(img, 1.3, 5)
-    for (coord_x, coord_y, coord_w, coord_h) in faces:
-        cv2.rectangle(img, (coord_x, coord_y), (coord_x +
-                                                coord_w, coord_y + coord_h), (255, 0, 0), 2)
-
-    file_save = upload.filename
-
-    if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
-        os.makedirs(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/'))
-    cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path +
-                                '/static/pictures/' + file_save), img)
-
-    source = os.path.abspath(MY_UTILITY.dir_path +
-                             '/static/pictures/' + file_save)
-
-    if cv2.__version__ == '3.1.0':
-        fisher_face = cv2.face.createFisherFaceRecognizer()
-    else:
-        fisher_face = cv2.createFisherFaceRecognizer()
-    fisher_face.load('models/emotion_detection_model.xml')
-
-    neutral, anger, disgust, happy, sadness, surprise, all_emotion, faces = emotions_present(
-        fisher_face, source)
-    # définir les variables ci-dessous
-    emotion_neutral = 0
-    emotion_anger = 0
-    emotion_disgust = 0
-    emotion_happy = 0
-    emotion_sadness = 0
-    emotion_surprise = 0
-    emotion_all = 0
-    if all_emotion != 0:
-        emotion_neutral = neutral * 100 / all_emotion
-        emotion_anger = anger * 100 / all_emotion
-        emotion_disgust = disgust * 100 / all_emotion
-        emotion_happy = happy * 100 / all_emotion
-        emotion_sadness = sadness * 100 / all_emotion
-        emotion_surprise = surprise * 100 / all_emotion
-        emotion_all = all_emotion
-
-    if os.path.isfile(file_path):
-        os.remove(file_path)
->>>>>>> 477f3e899144facdbaadf88ffe990d6dd5656687
 
     return dict(title='Resultat',
                 message='Resultat OpenCV',
