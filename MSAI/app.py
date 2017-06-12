@@ -6,7 +6,7 @@ import os
 import sys
 import socket
 # routes contains the HTTP handlers for our server and must be imported.
-import routes
+import routes #pylint: disable=unused-import
 import bottle
 
 
@@ -19,24 +19,26 @@ if '--debug' in sys.argv[1:] or 'SERVER_DEBUG' in os.environ:
 def check_server_port(serv_address, serv_port):
     """Return if a port is used or not"""
     # Create a TCP socket
+    socket_return = False
     sock = socket.socket()
-    print("Attempting to connect to %s on port %s" % (serv_address, serv_port))
+    print "Attempting to connect to %s on port %s" % (serv_address, serv_port)
     try:
         sock.bind((serv_address, serv_port))
         if serv_port == sock.getsockname()[1]:
             print("The port %s for the address %s is not in use" %
                   (serv_port, serv_address))
-            return True
+            socket_return = True
         else:
             print("The port %s for the address %s is already in use" %
                   (serv_port, serv_address))
-            return False
+            socket_return = False
     except socket.error as error:
         print("Connection to %s on port %s failed: %s" %
               (serv_address, serv_port, error))
         return False
     finally:
         sock.close()
+    return socket_return
 
 
 def wsgi_app():

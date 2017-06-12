@@ -15,7 +15,10 @@ Matplotlib :
 - pip install matplotlib
 - https://sourceforge.net/projects/matplotlib/files/matplotlib/matplotlib-1.3.0/matplotlib-1.3.0.win32-py2.7.exe/download?use_mirror=superb-dca2
 
-Open CV : 
+Bottle:
+- pip install bottle
+
+Open CV :
 - Dernière Release (3.2.0)
 - https://sourceforge.net/projects/opencvlibrary/files/opencv-win/
 
@@ -24,10 +27,10 @@ Visual Studio :
 - https://www.microsoft.com/france/visual-studio/essayez/telecharger/visual-studio.aspx
 - Installer les modules complémentaires Python Tools + Git
 
-Scipy : 
+Scipy :
 - https://sourceforge.net/projects/scipy/files/scipy/0.15.1/
 
-Sklearn : 
+Sklearn :
 - pip install sklearn
 
 Pylint:

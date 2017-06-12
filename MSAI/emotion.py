@@ -1,29 +1,15 @@
-# -*- coding: utf-8 -*-
 """
 This module is the main module in this package. It loads emotion recognition model from a file,
 shows a webcam image, recognizes face and it's emotion and draw emotion on the image.
 """
 import cv2
-from face_detect import find_faces
-from image_commons import nparray_as_image
+from face_detect import find_faces, _locate_faces
 
-
-def load_emoticons(emotions):
-    """
-    Loads emotions images from graphics folder.
-    :param emotions: Array of emotions names.
-    :return: Array of emotions graphics.
-    """
-    return [nparray_as_image(cv2.imread('graphics/%s.png' % emotion, -1), mode=None) for emotion in emotions]
-
-
-def emotions_present(model, emoticons, source, update_time):
+def emotions_present(model, source):
     """
     Shows webcam image, detects faces and its emotions in real time and draw emoticons over those faces.
     :param model: Learnt emotion detection model.
-    :param emoticons: List of emotions images.
-    :param source: Source of folder.
-    :param update_time: Image update time interval.
+    :param source: Source of folder
     """
     neutral = 0
     anger = 0
@@ -32,20 +18,21 @@ def emotions_present(model, emoticons, source, update_time):
     sadness = 0
     surprise = 0
     all_emotion = 0
+    faces = 0
 
-    video_capture = cv2.VideoCapture(source)
-    if video_capture.isOpened():
-        read_value, webcam_image = video_capture.read()
+    readsource = cv2.VideoCapture(source)
+    if readsource.isOpened():
+        read_value, webcam_image = readsource.read()
     else:
-        print("Error Input")
         return
 
+    faces = len(_locate_faces(webcam_image))
     while read_value:
-        for normalized_face, (x, y, w, h) in find_faces(webcam_image):
+        for normalized_face in find_faces(webcam_image):
             prediction = model.predict(normalized_face)
             if cv2.__version__ != '3.1.0':
                 prediction = prediction[0]
-            # print(prediction)
+
             all_emotion += 1
             if prediction == 0:
                 neutral += 1
@@ -59,9 +46,7 @@ def emotions_present(model, emoticons, source, update_time):
                 sadness += 1
             if prediction == 5:
                 surprise += 1
-            #image_to_draw = emoticons[prediction]
 
-        read_value, webcam_image = video_capture.read()
-        cv2.waitKey(update_time)
+        read_value, webcam_image = readsource.read()
 
-    return neutral, anger, disgust, happy, sadness, surprise, all_emotion
+        return neutral, anger, disgust, happy, sadness, surprise, all_emotion, faces
