@@ -84,9 +84,6 @@
 				<hr />
 				<p class="text-results">Résultat :</p>
 				<p class="text-results">J'ai identifié {{faces}} visage(s).</p>
-				%if defined('emotion_all'):
-				<p class="text-results">Emotion prédiction :</p>
-				%end
 				%if defined('emotion_neutral'):
 				<p class="text-results">Neutre : {{emotion_neutral}}%.</p>
 				%end

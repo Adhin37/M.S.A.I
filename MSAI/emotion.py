@@ -1,23 +1,22 @@
 """
-This module is the main module in this package. It loads emotion recognition model from a file,
-shows a webcam image, recognizes face and it's emotion and draw emotion on the image.
+Ce module permet de reconnaitre les emotions sur une image ou une video
 """
 import cv2
 from face_detect import find_faces, _locate_faces
 
 def emotions_present(model, source):
     """
-    Shows webcam image, detects faces and its emotions in real time and draw emoticons over those faces.
-    :param model: Learnt emotion detection model.
-    :param source: Source of folder
+    Cette fonction permet de recuperer les emotions presentes
+    :param model: Matrice XML des emotions
+    :param source: Source du fichier
     """
-    neutral = 0
-    anger = 0
-    disgust = 0
-    happy = 0
-    sadness = 0
-    surprise = 0
-    all_emotion = 0
+    dict_emotion = {}
+    dict_emotion = {"neutral":0}
+    dict_emotion = {"anger":0}
+    dict_emotion = {"disgust":0}
+    dict_emotion = {"happy":0}
+    dict_emotion = {"sadness":0}
+    dict_emotion = {"surprise":0}
     faces = 0
 
     readsource = cv2.VideoCapture(source)
@@ -33,20 +32,19 @@ def emotions_present(model, source):
             if cv2.__version__ != '3.1.0':
                 prediction = prediction[0]
 
-            all_emotion += 1
             if prediction == 0:
-                neutral += 1
+                dict_emotion["neutral"] += 1
             if prediction == 1:
-                anger += 1
+                dict_emotion["anger"] += 1
             if prediction == 2:
-                disgust += 1
+                dict_emotion["disgust"] += 1
             if prediction == 3:
-                happy += 1
+                dict_emotion["happy"] += 1
             if prediction == 4:
-                sadness += 1
+                dict_emotion["sadness"] += 1
             if prediction == 5:
-                surprise += 1
+                dict_emotion["surprise"] += 1
 
         read_value, webcam_image = readsource.read()
 
-        return neutral, anger, disgust, happy, sadness, surprise, all_emotion, faces
+        return dict_emotion, faces
