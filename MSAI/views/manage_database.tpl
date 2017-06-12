@@ -1,10 +1,12 @@
-% rebase('layout.tpl', title=title, year=year, list_matrix=list_matrix)
+% rebase('layout.tpl', title=title, year=year, listUser=listUser)
 
 <script type="text/javascript"> 
 
-function afficher() {
-document.getElementById("select_list_matrix").value = document.getElementById("selected_matrix").value;
-} </script>
+function updateForm(id) {
+document.getElementById("updateZone"+id).style.display = "";
+document.getElementById("afficheUpdate").style.display = "none";
+} 
+</script>
 
 
 <body>
@@ -20,142 +22,74 @@ document.getElementById("select_list_matrix").value = document.getElementById("s
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Panel d'administration</h1>
-
             <div class="col-xs-6 col-sm-3 placeholder">
+			<form class="form-signin" action="/createUser" method="post" enctype="multipart/form-data">
 			 <div class="form-group">
+					<div class="{{ color_database_action }}" role="alert">
+					<button type="button" class="close" data-dismiss="alert" ></button>
+					{{ message_database_action }}
+					</div>
 			  <label for="usr">Identifiant:</label>
-			  <input type="text" class="form-control" id="usr">
+			  <input type="text" class="form-control" id="usr" name="inputIdentifiant">
 			</div>
 			<div class="form-group">
 			  <label for="pwd">Mot de passe:</label>
-			  <input type="password" class="form-control" id="pwd">
+			  <input type="password" class="form-control" id="pwd" name ="inputPassword">
 			</div> 
-			<button type="button" class="btn btn-success">Ajouter un utilisateur</button>
+
+			<div class="form-group">
+			  <label for="role">Role:</label>
+			  <select class="form-control" id="role" name ="inputRole">
+				<option>Utilisateur</option>
+				<option>Administrateur</option>
+			  </select>
+			</div> 
+			<button type="submit" class="btn btn-success">Ajouter un utilisateur</button>
             </div>
+			</form>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>ID</th>
                   <th>Identifiant</th>
                   <th>Mot de passe</th>
-                  <th>Header</th>
-                  <th>Header</th>
+				  <th>Role</th>
+				  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1,001</td>
-                  <td>Lorem</td>
-                  <td>ipsum</td>
-                  <td>dolor</td>
-                  <td>sit</td>
+				<% for l in listUser: %>
+				<form class="form-signin" action="/deleteUser" method="post" enctype="multipart/form-data">
+				<tr>
+				  <td>{{l[0]}}
+				  <div class="form-group">
+				  <input type="hidden" class="form-control" id="usr" name="idUser" value={{l[0]}}>
+				  </td>
+                  <td>{{l[1]}}</td>
+                  <td>{{l[2]}}</td>
+				  <td>{{l[3]}}</td>
+				  <td><button class="btn btn-primary" type="button" id="afficheUpdate" onclick="updateForm({{l[0]}})">Modifier</button>
+				  <button type="submit" class="btn btn-danger">Supprimer</button></td>
+				  </div>
+				  </form>
                 </tr>
-                <tr>
-                  <td>1,002</td>
-                  <td>amet</td>
-                  <td>consectetur</td>
-                  <td>adipiscing</td>
-                  <td>elit</td>
+				<form class="form-signin" action="/updateUser" method="post" enctype="multipart/form-data">
+				<tr id="updateZone{{l[0]}}" style="display:none;">
+				<td><div class="form-group">
+				<input type="hidden" class="form-control" id="usr" name="idMajUser" value={{l[0]}}>
+				</td>
+				<td><input type="text" class="form-control" id="majIdentifiant" name="majIdentifiant" value={{l[1]}} required></td>
+                <td></td>
+				<td><select class="form-control" id=majRole" name ="majRole">
+					<option>Utilisateur</option>
+					<option>Administrateur</option>
+					</select></td>
+				  <td><button type="submit" class="btn btn-primary" id="btnMaj">Modifier</button></td>
+				  </div>
                 </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>Integer</td>
-                  <td>nec</td>
-                  <td>odio</td>
-                  <td>Praesent</td>
-                </tr>
-                <tr>
-                  <td>1,003</td>
-                  <td>libero</td>
-                  <td>Sed</td>
-                  <td>cursus</td>
-                  <td>ante</td>
-                </tr>
-                <tr>
-                  <td>1,004</td>
-                  <td>dapibus</td>
-                  <td>diam</td>
-                  <td>Sed</td>
-                  <td>nisi</td>
-                </tr>
-                <tr>
-                  <td>1,005</td>
-                  <td>Nulla</td>
-                  <td>quis</td>
-                  <td>sem</td>
-                  <td>at</td>
-                </tr>
-                <tr>
-                  <td>1,006</td>
-                  <td>nibh</td>
-                  <td>elementum</td>
-                  <td>imperdiet</td>
-                  <td>Duis</td>
-                </tr>
-                <tr>
-                  <td>1,007</td>
-                  <td>sagittis</td>
-                  <td>ipsum</td>
-                  <td>Praesent</td>
-                  <td>mauris</td>
-                </tr>
-                <tr>
-                  <td>1,008</td>
-                  <td>Fusce</td>
-                  <td>nec</td>
-                  <td>tellus</td>
-                  <td>sed</td>
-                </tr>
-                <tr>
-                  <td>1,009</td>
-                  <td>augue</td>
-                  <td>semper</td>
-                  <td>porta</td>
-                  <td>Mauris</td>
-                </tr>
-                <tr>
-                  <td>1,010</td>
-                  <td>massa</td>
-                  <td>Vestibulum</td>
-                  <td>lacinia</td>
-                  <td>arcu</td>
-                </tr>
-                <tr>
-                  <td>1,011</td>
-                  <td>eget</td>
-                  <td>nulla</td>
-                  <td>Class</td>
-                  <td>aptent</td>
-                </tr>
-                <tr>
-                  <td>1,012</td>
-                  <td>taciti</td>
-                  <td>sociosqu</td>
-                  <td>ad</td>
-                  <td>litora</td>
-                </tr>
-                <tr>
-                  <td>1,013</td>
-                  <td>torquent</td>
-                  <td>per</td>
-                  <td>conubia</td>
-                  <td>nostra</td>
-                </tr>
-                <tr>
-                  <td>1,014</td>
-                  <td>per</td>
-                  <td>inceptos</td>
-                  <td>himenaeos</td>
-                  <td>Curabitur</td>
-                </tr>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
+				</form>
+				<% end %>                
               </tbody>
             </table>
           </div>

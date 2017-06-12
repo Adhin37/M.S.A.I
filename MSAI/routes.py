@@ -17,7 +17,7 @@ from emotion import emotions_present
 
 MY_UTILITY = Utils()
 MY_MATRIX = Matrix()
-my_database = Database()
+MY_DATABASE = Database()
 LIST_FILTER = []
 
 
@@ -93,23 +93,20 @@ def about():
 @route('/manage_database')
 @view('manage_database')
 def manage_matrix():
+    listUser =[]
     session = session_manager.get_session()
     if session['valid'] == False:
         redirect("/login")
     else:
         connectedUser = session['identifiant']
+        listUser = MY_DATABASE.getUser()
 
     return dict(title='Management Matrice',
-        message_add_pic='',
-        message_create_matrix ='',
-        message_delete_matrix = '',
-        list_matrix='',
-        color_add_pic = "vide",
-        color_add_matrix ='',
+        color_database_action = '',
+        message_database_action = '',
         user = connectedUser,
+        listUser = listUser,
         year = MY_UTILITY.date.year)
-
-
 
 @route('/test')
 @view('test')
@@ -357,7 +354,7 @@ def connect():
     session = session_manager.get_session()
     user_ID = request.POST.dict['inputIdentifiant'][0]
     password_ID = request.POST.dict['inputPassword'][0]
-    message_connect_user, color_connect_user, connected = my_database.connectionUser(user_ID, password_ID)
+    message_connect_user, color_connect_user, connected = MY_DATABASE.connectionUser(user_ID, password_ID)
     session['valid'] = False
 
     if connected == 'true':
@@ -384,3 +381,103 @@ def disconnect():
         message_connect_user = '',
         color_connect_user = '',
     )
+
+@route('/createUser', method='POST')
+@view('manage_database')
+def createUser():
+    """
+    Create one user
+    """
+    listUser= [];
+    message_create_user = ''
+    color_create_user= ''
+
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        connectedUser = ''
+        redirect("/login")
+    else:
+        connectedUser = session['identifiant']
+
+    user_ID = request.POST.dict['inputIdentifiant'][0]
+    password_ID = request.POST.dict['inputPassword'][0]
+    role_ID = request.POST.dict['inputRole'][0]
+
+    # Assignation des 2 valeurs de retour
+    message_create_user, color_create_user = MY_DATABASE.createUser(user_ID, password_ID, role_ID)
+    listUser = MY_DATABASE.getUser()
+
+    return dict(title='Resultat',
+                # Gestions des alertes
+                # Message affiché et couleur de l'alerte - ajout d'un utilisateur
+                color_database_action = color_create_user,
+                message_database_action = message_create_user,
+                user = connectedUser,
+                listUser = listUser,
+                year=MY_UTILITY.date.year)
+
+@route('/deleteUser', method='POST')
+@view('manage_database')
+def deleteUser():
+    """
+    Create one user
+    """
+    listUser= [];
+    message_delete_user = ''
+    color_delete_user= ''
+
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        connectedUser = ''
+        redirect("/login")
+    else:
+        connectedUser = session['identifiant']
+
+    user_ID = request.POST.dict['idUser'][0]
+
+    # Assignation des 2 valeurs de retour
+    message_delete_user, color_delete_user = MY_DATABASE.deleteUser(user_ID)
+    listUser = MY_DATABASE.getUser()
+
+    return dict(title='Resultat',
+                # Gestions des alertes
+                # Message affiché et couleur de l'alerte - ajout d'un utilisateur
+                color_database_action = color_delete_user,
+                message_database_action = message_delete_user,
+                user = connectedUser,
+                listUser = listUser,
+                year=MY_UTILITY.date.year)
+
+@route('/updateUser', method='POST')
+@view('manage_database')
+def updateUser():
+    """
+    Create one user
+    """
+    listUser= [];
+    message_update_user = ''
+    color_update_user= ''
+
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        connectedUser = ''
+        redirect("/login")
+    else:
+        connectedUser = session['identifiant']
+
+    user_ID = request.POST.dict['idMajUser'][0]
+    user_Identifiant = request.POST.dict['majIdentifiant'][0]
+    user_Role = request.POST.dict['majRole'][0]
+
+    # Assignation des 2 valeurs de retour
+    message_update_user, color_update_user = MY_DATABASE.updateUser(user_ID, user_Identifiant, user_Role)
+    listUser = MY_DATABASE.getUser()
+
+    return dict(title='Resultat',
+                # Gestions des alertes
+                # Message affiché et couleur de l'alerte - ajout d'un utilisateur
+                color_database_action = color_update_user,
+                message_database_action = message_update_user,
+                user = connectedUser,
+                listUser = listUser,
+                year=MY_UTILITY.date.year)
