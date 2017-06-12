@@ -4,6 +4,7 @@ This script implement the matrix navigation tab.
 """
 import os
 import shutil
+from routes import cv2
 from utils import Utils
 
 
@@ -59,7 +60,7 @@ class Matrix(object):
         """Refresh matrix directory list"""
         self.list_dir_matrix = []
         dirs = os.listdir(self.dir_matrix)
-        for one_dir in dirs:
+        for one_dir in sorted(dirs):
             if os.path.isdir(os.path.join(self.dir_matrix, one_dir)):
                 self.list_dir_matrix.append(one_dir)
         return self.list_dir_matrix
@@ -67,26 +68,66 @@ class Matrix(object):
     def delete_directory_matrix(self, name_matrix):
         """Delete one matrix directory from matrix directory list"""
         message_delete_matrix = ''
-        color_status_matrix = ''
+        color_suppr_matrix = ''
 
         if name_matrix == '' or name_matrix is None:
             message_delete_matrix = 'Erreur, le nom de la matrice est vide !'
-            color_status_matrix = "alert alert-danger"
+            color_suppr_matrix = "alert alert-danger"
         elif os.path.isdir(os.path.join(self.dir_matrix, name_matrix)) is False:
-            message_delete_matrix = 'Erreur, le répertoire de la matrice' + name_matrix + ' est introuvable !'
-            color_status_matrix = "alert alert-danger"
+            message_delete_matrix = 'Erreur, le répertoire de la matrice' + \
+                name_matrix + ' est introuvable !'
+            color_suppr_matrix = "alert alert-danger"
         else:
             shutil.rmtree(os.path.join(self.dir_matrix, name_matrix))
-            message_delete_matrix = 'Le répertoire de la matrice ' + name_matrix + ' a bien été supprimé.'
-            color_status_matrix = "alert alert-success"
-        return message_delete_matrix, color_status_matrix
+            message_delete_matrix = 'Le répertoire de la matrice ' + \
+                name_matrix + ' a bien été supprimé.'
+            color_suppr_matrix = "alert alert-success"
+        return message_delete_matrix, color_suppr_matrix
 
     def update_matrix(self):
         """Actualisation de la liste des matrices"""
         self.list_matrix = []
         files = os.listdir(self.dir_models)
-        for file in files:
-            full_file = os.path.join(self.dir_models, file)
+        for matrix_file in sorted(files):
+            full_file = os.path.join(self.dir_models, matrix_file)
             if os.path.isfile(full_file):
                 self.list_matrix.append(full_file)
         return self.list_matrix
+
+    def add_object(self, name_matrix, picture_pos_neg, picture_ext, picture_filename):
+        """Ajout objet dans la matrice sélectionnée via la liste"""
+        message_add_pic = ''
+        color_add_pic = ''
+        file_path = ''
+
+        if picture_ext not in '.png':
+            message_add_pic = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + picture_ext + "."
+            color_add_pic = "alert alert-danger"
+        else:
+            file_path = os.path.abspath(
+                self.dir_matrix + '/' + name_matrix + '/' + picture_pos_neg + '/' + picture_filename)
+            if os.path.isfile(file_path):
+                os.remove(file_path)
+
+            message_add_pic = "L'objet a bien été ajouté dans la base de connaissance."
+            color_add_pic = "alert alert-success"
+
+        return message_add_pic, color_add_pic, file_path
+
+    def nom_classifier(self, knife_cascade, img, gray):
+        """Récupération du nom du classifier"""
+        found = ''
+
+        knifes = knife_cascade.detectMultiScale(gray, 20, 50)
+        if len(knifes):
+            print 'FOUND'
+            for (x, y, w, h) in knifes:
+                cv2.rectangle(img, (x, y), (x + w, y + h), (125, 0, 255), 2)
+                font = cv2.FONT_HERSHEY_SIMPLEX
+                cv2.putText(img, 'Knife', (x + w / 2, y - h / 2),
+                            font, 1, (100, 255, 255), 2, cv2.LINE_AA)
+            found = True
+        else:
+            found = False
+
+        return found
