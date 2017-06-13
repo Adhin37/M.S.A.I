@@ -38,42 +38,42 @@
 					<h4>Emotions <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="0" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="neutral" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Neutre" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="1" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="anger" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Enervé" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="2" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="disgust" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Dégoût" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="3" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="happy" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Joyeux" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="4" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="sadness" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Triste" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="5" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="surprise" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Surpris" readonly>
 					</div>

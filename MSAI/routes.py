@@ -9,7 +9,7 @@ import cv2
 from bottle import route, view, request, run  # pylint: disable=no-name-in-module,unused-import
 from utils import Utils
 from matrix import Matrix
-from emotion import emotions_present
+from emotion import emotions_present, emotions_match
 
 MY_UTILITY = Utils()
 MY_MATRIX = Matrix()
@@ -66,6 +66,9 @@ def do_upload():
     """
     # définir les variables ci-dessous
     dict_emotion = {}
+    filter_emotion = {}
+    filter_emotion = request.POST.getall('emotion_filter')
+    print filter_emotion
     fisher_face = ''
     upload = request.files.get('upload')
 
@@ -116,7 +119,7 @@ def do_upload():
 
         dict_emotion, faces = emotions_present(
             fisher_face, source)
-
+        emotions_match(dict_emotion, 0)
         # if all_emotion != 0:
         #emotion_neutral = neutral * 100 / all_emotion
         #emotion_anger = anger * 100 / all_emotion
