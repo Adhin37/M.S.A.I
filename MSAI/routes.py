@@ -9,7 +9,7 @@ import cv2
 from bottle import route, view, request, run  # pylint: disable=no-name-in-module,unused-import
 from utils import Utils
 from matrix import Matrix
-from emotion import emotions_present, emotions_match
+from emotion import emotions_present, emotions_match, emotions_count
 
 MY_UTILITY = Utils()
 MY_MATRIX = Matrix()
@@ -94,11 +94,11 @@ def do_upload():
 
     if file_format == 'img':
         img = cv2.imread(file_path, 1)
-        face_cascade = cv2.CascadeClassifier(MY_MATRIX.face)
-        faces = face_cascade.detectMultiScale(img, 1.3, 5)
-        for (coord_x, coord_y, coord_w, coord_h) in faces:
-            cv2.rectangle(img, (coord_x, coord_y), (coord_x +
-                                                    coord_w, coord_y + coord_h), (255, 0, 0), 2)
+        #face_cascade = cv2.CascadeClassifier(MY_MATRIX.face)
+        #faces = face_cascade.detectMultiScale(img, 1.3, 5)
+        #for (coord_x, coord_y, coord_w, coord_h) in faces:
+            #cv2.rectangle(img, (coord_x, coord_y), (coord_x +
+                                                    #coord_w, coord_y + coord_h), (255, 0, 0), 2)
 
         file_save = upload.filename
 
@@ -161,7 +161,8 @@ def do_upload():
                 emotion_disgust=dict_emotion.get("disgust", 0),
                 emotion_happy=dict_emotion.get("happy", 0),
                 emotion_sadness=dict_emotion.get("sadness", 0),
-                emotion_surprise=dict_emotion.get("surprise", 0))
+                emotion_surprise=dict_emotion.get("surprise", 0),
+                emotion_all=emotions_count(dict_emotion))
 
 
 @route('/manage_matrix')

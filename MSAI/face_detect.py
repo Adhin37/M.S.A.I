@@ -12,7 +12,7 @@ def find_faces(source):
                     for (x, y, w, h) in faces_coordinates]
     normalized_faces = [_normalize_face(faceRecognize)
                         for faceRecognize in cutted_faces]
-    return normalized_faces
+    return zip(normalized_faces, faces_coordinates)
 
 
 def _normalize_face(facedetect):

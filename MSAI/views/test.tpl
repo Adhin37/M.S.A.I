@@ -85,22 +85,22 @@
 				<p class="text-results">Résultat :</p>
 				<p class="text-results">J'ai identifié {{faces}} visage(s).</p>
 				%if defined('emotion_neutral'):
-				<p class="text-results">Neutre : {{emotion_neutral}}%.</p>
+				<p class="text-results">Neutre : {{emotion_neutral*100/emotion_all}}%.</p>
 				%end
 				%if defined('emotion_anger'):
-				<p class="text-results">Enervé : {{emotion_anger}}%.</p>
+				<p class="text-results">Enervé : {{emotion_anger*100/emotion_all}}%.</p>
 				%end
 				%if defined('emotion_surprise'):
-				<p class="text-results">Surprise : {{emotion_surprise}}%.</p>
+				<p class="text-results">Surprise : {{emotion_surprise*100/emotion_all}}%.</p>
 				%end
 				%if defined('emotion_disgust'):
-				<p class="text-results">Dégoût : {{emotion_disgust}}%.</p>
+				<p class="text-results">Dégoût : {{emotion_disgust*100/emotion_all}}%.</p>
 				%end
 				%if defined('emotion_happy'):
-				<p class="text-results">Joyeux : {{emotion_happy}}%.</p>
+				<p class="text-results">Joyeux : {{emotion_happy*100/emotion_all}}%.</p>
 				%end
 				%if defined('emotion_sadness'):
-				<p class="text-results">Triste : {{emotion_sadness}}%.</p>
+				<p class="text-results">Triste : {{emotion_sadness*100/emotion_all}}%.</p>
 				%end
 				<hr />
 				<div class="content-results">
