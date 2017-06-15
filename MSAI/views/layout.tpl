@@ -8,10 +8,21 @@
     <link rel="stylesheet" type="text/css" href="/static/content/site.css" />
 	<link rel="stylesheet" type="text/css" href="/static/content/Admin.css" />
     <script src="/static/scripts/modernizr-2.6.2.js"></script>
+	</head>
 
-</head>
+<script type="text/javascript">
 
-<body>
+function afficher() {
+if (document.getElementById("role").value == 'Administrateur') {
+	document.getElementById("zoneAdmin").style.display = "";
+	}
+else{
+	document.getElementById("zoneAdmin").style.display = "none";
+}
+
+} </script>
+
+<body onLoad="afficher();">
     <div class="navbar navbar-inverse">
         <div class="container">
             <div class="navbar-header">
@@ -28,15 +39,19 @@
 					<li><a href="/manage_matrix">Gestion des matrices</a></li>
                     <li><a href="/about">A propos</a></li>
                     <li><a href="/contact">Contact</a></li>
-					<li><a href="/manage_database">Administration</a></li>
                 </ul>
-				      <form action="/disconnect" method="post" id="signin" class="navbar-form navbar-right" role="form">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-							<span class="input-group-addon">{{user}}</i></span>&nbsp;
-                            <button type="submit" class="btn btn-primary">Se déconnecter</button>
-                        </div>
-                   </form>
+				    <ul class="nav navbar-nav navbar-right">
+					 <div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle" onClick="afficher()" type="button"  style="margin-top:9px;" data-toggle="dropdown"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user}} 
+						<input type="hidden" class="form-control" id="role" name="idMajUser" value={{role}}>
+						<span class="glyphicon glyphicon-chevron-down" style="color:white;"></span></button>
+						<ul class="dropdown-menu">
+							<li><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profil</a></li>
+							<li id="zoneAdmin" style="display:none;"><a href="/manage_database"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Panneau administration</a></li>
+							<li><a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editer configuration</a></li>
+							<li><a href="/disconnect"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Déconnexion</a></li>
+						</ul>
+					</div> 				
 			</div>
         </div>
     </div>

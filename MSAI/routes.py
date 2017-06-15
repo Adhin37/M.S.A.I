@@ -36,8 +36,10 @@ def home():
         redirect("/login")
     else:
         connectedUser = session['identifiant']
+        connectedUserRole = session['role']
     return dict(title = 'Resultat',
         user = connectedUser,
+        role =connectedUserRole,
         year=MY_UTILITY.date.year)
 
 @route('/contact')
@@ -49,8 +51,10 @@ def contact():
         redirect("/login")
     else:
         connectedUser = session['identifiant']
+        connectedUserRole = session['role']
     return dict(title='Contact',
         user = connectedUser,
+        role =connectedUserRole,
         year=MY_UTILITY.date.year)
 
 @route('/login')
@@ -71,8 +75,10 @@ def main():
         redirect("/login")
     else:
         connectedUser = session['identifiant']
+        connectedUserRole = session['role']
     return dict(title='Page accueil',
         user = connectedUser,
+        role =connectedUserRole,
         year=MY_UTILITY.date.year)
 
 
@@ -85,9 +91,11 @@ def about():
         redirect("/login")
     else:
         connectedUser = session['identifiant']
+        connectedUserRole = session['role']
     return dict(title='A propos',
         message='Application MSAI.',
         user = connectedUser,
+        role =connectedUserRole,
         year = MY_UTILITY.date.year)
 
 @route('/manage_database')
@@ -97,14 +105,18 @@ def manage_matrix():
     session = session_manager.get_session()
     if session['valid'] == False:
         redirect("/login")
+    elif session['role'] != False and session['role'] != 'Administrateur':
+        redirect("/home")
     else:
         connectedUser = session['identifiant']
+        connectedUserRole = session['role']
         listUser = MY_DATABASE.getUser()
 
     return dict(title='Management Matrice',
         color_database_action = '',
         message_database_action = '',
         user = connectedUser,
+        role =connectedUserRole,
         listUser = listUser,
         year = MY_UTILITY.date.year)
 
@@ -117,6 +129,7 @@ def test():
         redirect("/login")
     else:
         connectedUser = session['identifiant']
+        connectedUserRole = session['role']
 
     path = MY_MATRIX.dir_matrix
     print 'path:' + path + '\n'
@@ -130,6 +143,7 @@ def test():
                 file='',
                 year=MY_UTILITY.date.year,
                 user = connectedUser,
+                role =connectedUserRole,
                 list_filter=LIST_FILTER
                 )
 
@@ -231,6 +245,7 @@ def manage_matrix():
         redirect("/login")
     else:
         connectedUser = session['identifiant']
+        connectedUserRole = session['role']
         MY_MATRIX.update_directory_matrix()
 
     return dict(title='Management Matrice',
@@ -245,6 +260,7 @@ def manage_matrix():
                 message_delete_matrix='',
                 color_suppr_matrix='',
                 user = connectedUser,
+                role =connectedUserRole,
                 list_matrix=MY_MATRIX.list_dir_matrix,
                 year=MY_UTILITY.date.year)
 
@@ -370,7 +386,7 @@ def connect():
         color_connect_user = color_connect_user
     )
 
-@route('/disconnect', method='POST')
+@route('/disconnect')
 @view('index')
 
 def disconnect():
@@ -399,6 +415,7 @@ def createUser():
         redirect("/login")
     else:
         connectedUser = session['identifiant']
+        connectedUserRole = session['role']
 
     user_ID = request.POST.dict['inputIdentifiant'][0]
     password_ID = request.POST.dict['inputPassword'][0]
@@ -414,6 +431,7 @@ def createUser():
                 color_database_action = color_create_user,
                 message_database_action = message_create_user,
                 user = connectedUser,
+                role =connectedUserRole,
                 listUser = listUser,
                 year=MY_UTILITY.date.year)
 
@@ -433,6 +451,7 @@ def deleteUser():
         redirect("/login")
     else:
         connectedUser = session['identifiant']
+        connectedUserRole = session['role']
 
     user_ID = request.POST.dict['idUser'][0]
 
@@ -446,6 +465,7 @@ def deleteUser():
                 color_database_action = color_delete_user,
                 message_database_action = message_delete_user,
                 user = connectedUser,
+                role =connectedUserRole,
                 listUser = listUser,
                 year=MY_UTILITY.date.year)
 
@@ -465,6 +485,7 @@ def updateUser():
         redirect("/login")
     else:
         connectedUser = session['identifiant']
+        connectedUserRole = session['role']
 
     user_ID = request.POST.dict['idMajUser'][0]
     user_Identifiant = request.POST.dict['majIdentifiant'][0]
@@ -480,5 +501,6 @@ def updateUser():
                 color_database_action = color_update_user,
                 message_database_action = message_update_user,
                 user = connectedUser,
+                role =connectedUserRole,
                 listUser = listUser,
                 year=MY_UTILITY.date.year)

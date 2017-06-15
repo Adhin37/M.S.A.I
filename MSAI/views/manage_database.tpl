@@ -30,11 +30,11 @@ document.getElementById("afficheUpdate").style.display = "none";
 					{{ message_database_action }}
 					</div>
 			  <label for="usr">Identifiant:</label>
-			  <input type="text" class="form-control" id="usr" name="inputIdentifiant">
+			  <input type="text" class="form-control" id="usr" name="inputIdentifiant" required>
 			</div>
 			<div class="form-group">
 			  <label for="pwd">Mot de passe:</label>
-			  <input type="password" class="form-control" id="pwd" name ="inputPassword">
+			  <input type="password" class="form-control" id="pwd" name ="inputPassword" required>
 			</div> 
 
 			<div class="form-group">
