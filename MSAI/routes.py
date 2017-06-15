@@ -6,7 +6,7 @@ Routes and views for the bottle application.
 
 import os
 import cv2
-from bottle import route, view, request, run  # pylint: disable=no-name-in-module,unused-import
+from bottle import route, view, request, run, abort  # pylint: disable=no-name-in-module,unused-import
 from utils import Utils
 from matrix import Matrix
 from emotion import emotions_present, emotions_match, emotions_count
@@ -94,12 +94,8 @@ def do_upload():
 
     if file_format == 'img':
         img = cv2.imread(file_path, 1)
-        #face_cascade = cv2.CascadeClassifier(MY_MATRIX.face)
-        #faces = face_cascade.detectMultiScale(img, 1.3, 5)
-        #for (coord_x, coord_y, coord_w, coord_h) in faces:
-            #cv2.rectangle(img, (coord_x, coord_y), (coord_x +
-                                                    #coord_w, coord_y + coord_h), (255, 0, 0), 2)
 
+        # Voir fonction rectangle
         file_save = upload.filename
 
         if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
@@ -111,23 +107,18 @@ def do_upload():
         source = os.path.abspath(MY_UTILITY.dir_path +
                                  '/static/pictures/' + file_save)
 
-        if cv2.__version__ == '3.1.0':
-            fisher_face = cv2.face.createFisherFaceRecognizer()
-        else:
-            fisher_face = cv2.createFisherFaceRecognizer()
-        fisher_face.load('models/emotion_detection_model.xml')
+        try:
+            if cv2.__version__ == '3.1.0':
+                fisher_face = cv2.face.createFisherFaceRecognizer()
+            else:
+                fisher_face = cv2.createFisherFaceRecognizer()
+            fisher_face.load('models/emotion_detection_model.xml')
+        except AttributeError as error:
+            abort(error.value, error.message)
 
         dict_emotion, faces = emotions_present(
             fisher_face, source)
         emotions_match(dict_emotion, 0)
-        # if all_emotion != 0:
-        #emotion_neutral = neutral * 100 / all_emotion
-        #emotion_anger = anger * 100 / all_emotion
-        #emotion_disgust = disgust * 100 / all_emotion
-        #emotion_happy = happy * 100 / all_emotion
-        #emotion_sadness = sadness * 100 / all_emotion
-        #emotion_surprise = surprise * 100 / all_emotion
-        #emotion_all = all_emotion
 
         if os.path.isfile(file_path):
             os.remove(file_path)

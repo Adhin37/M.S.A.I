@@ -3,6 +3,7 @@ Ce module permet de reconnaitre les emotions sur une image ou une video
 """
 import cv2
 from face_detect import find_faces, _locate_faces
+import operator
 
 
 def emotions_present(model, source_filepath):
@@ -52,8 +53,8 @@ def emotions_match(dict_emotion, index_choose):
     :param dict_emotion: Liste des emotions
     :param index_choose: Index des emotions choisis
     """
-    #dict_emotion = sorted(dict_emotion.iteritems(), key=operator.itemgetter(1), reverse=True)
-    dict_emotion = sorted(dict_emotion, key=dict_emotion.get, reverse=True)
+    dict_emotion = sorted(dict_emotion.iteritems(), key=operator.itemgetter(1), reverse=True)
+    #dict_emotion = sorted(dict_emotion, key=dict_emotion.get, reverse=True)
     print dict_emotion
     # for i in len(index_choose):
     # if i == dict_emotion[i]:
