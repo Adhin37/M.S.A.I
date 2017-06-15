@@ -6,7 +6,7 @@ Routes and views for the bottle application.
 
 import os
 import cv2
-from bottle import route, view, request, run, abort  # pylint: disable=no-name-in-module,unused-import
+from bottle import route, view, request, run  # pylint: disable=no-name-in-module,unused-import
 from utils import Utils
 from matrix import Matrix
 from emotion import emotions_present, emotions_match, emotions_count
@@ -40,6 +40,14 @@ def about():
                 message='Application MSAI.',
                 year=MY_UTILITY.date.year)
 
+@route('/handler')
+@view('handler')
+def handler(errormessage):
+    """Renders the handler page."""
+    return dict(title='Erreur',
+                message='Erreur Application',
+                year=MY_UTILITY.date.year,
+                error=errormessage)
 
 @route('/test')
 @view('test')
@@ -65,10 +73,7 @@ def do_upload():
     Upload file for processing
     """
     # définir les variables ci-dessous
-    dict_emotion = {}
-    filter_emotion = {}
     filter_emotion = request.POST.getall('emotion_filter')
-    print filter_emotion
     fisher_face = ''
     upload = request.files.get('upload')
 
@@ -114,11 +119,10 @@ def do_upload():
                 fisher_face = cv2.createFisherFaceRecognizer()
             fisher_face.load('models/emotion_detection_model.xml')
         except AttributeError as error:
-            abort(error.value, error.message)
+            handler(error)
 
         dict_emotion, faces = emotions_present(
-            fisher_face, source)
-        emotions_match(dict_emotion, 0)
+            fisher_face, source, filter_emotion)
 
         if os.path.isfile(file_path):
             os.remove(file_path)
