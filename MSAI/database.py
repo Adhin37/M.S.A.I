@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
+import bcrypt
 
 class Database(object):
     """description of class"""
@@ -30,22 +31,28 @@ class Database(object):
         return message_connect_user, color_connect_user
     
     def connectionUser(self, identifiant, password):
-        message_connect_user = ''
-        color_connect_user = ''
-        connected = ''
-        cursor = self.conn.cursor()
-        cursor.execute("""SELECT id_user FROM users WHERE identifiant=? AND password=?""", (identifiant,password,))
-        user = cursor.fetchone()
+        if identifiant is not None and password is not None:
+            message_connect_user = ''
+            color_connect_user = ''
+            connected = ''
+            cursor = self.conn.cursor()
+            cursor.execute("""SELECT password FROM users WHERE identifiant=?""", (identifiant,))
+            user = cursor.fetchone()
 
-        if str(user) != "None" :
-            message_connect_user = "Connexion réussie"
-            color_connect_user = "alert alert-success"
-            connected = 'true'
-            connectedUser = identifiant
-        else:
-            message_connect_user = "Connexion échouée, identifiant ou mot de passe éronné."
-            color_connect_user = "alert alert-danger"
-            connected = 'false'
+            if (str(user[0])) != "None" :
+                if bcrypt.checkpw(password, str(user[0])):
+                    message_connect_user = "Connexion réussie"
+                    color_connect_user = "alert alert-success"
+                    connected = 'true'
+                    connectedUser = identifiant
+                else:
+                    message_connect_user = "Connexion échouée, identifiant ou mot de passe éronné."
+                    color_connect_user = "alert alert-danger"
+                    connected = 'false'
+            else:
+                message_connect_user = "Connexion échouée, identifiant ou mot de passe éronné."
+                color_connect_user = "alert alert-danger"
+                connected = 'false'
 
         return message_connect_user, color_connect_user, connected 
 
@@ -53,8 +60,10 @@ class Database(object):
         message_create_user = ''
         color_create_user = ''
         if identifiant is not None and password is not None:
+            hashed = bcrypt.hashpw(password, bcrypt.gensalt())
+            print hashed
             cursor = self.conn.cursor()
-            cursor.execute("""INSERT INTO users(identifiant, password, role) VALUES(?, ?, ?)""", (identifiant, password, role))
+            cursor.execute("""INSERT INTO users(identifiant, password, role) VALUES(?, ?, ?)""", (identifiant, hashed, role))
             self.conn.commit()
             message_create_user = "L'utilisateur " + identifiant + " a bien été créé dans la base de données."
             color_create_user = "alert alert-success"
