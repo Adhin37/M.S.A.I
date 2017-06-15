@@ -353,12 +353,13 @@ def delete_matrix():
 def connect():
     session = session_manager.get_session()
     user_ID = request.POST.dict['inputIdentifiant'][0]
-    password_ID = request.POST.dict['inputPassword'][0]
-    message_connect_user, color_connect_user, connected = MY_DATABASE.connectionUser(user_ID, password_ID)
+    user_Password = request.POST.dict['inputPassword'][0]
+    message_connect_user, color_connect_user, connected, user_Role = MY_DATABASE.connectionUser(user_ID, user_Password)
     session['valid'] = False
 
     if connected == 'true':
         session['identifiant'] = user_ID
+        session['role'] = user_Role
         session['valid'] = True
         session_manager.save(session)
         redirect("/home")

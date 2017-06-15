@@ -34,17 +34,19 @@ class Database(object):
         if identifiant is not None and password is not None:
             message_connect_user = ''
             color_connect_user = ''
+            role = ''
             connected = ''
             cursor = self.conn.cursor()
-            cursor.execute("""SELECT password FROM users WHERE identifiant=?""", (identifiant,))
+            cursor.execute("""SELECT password, role FROM users WHERE identifiant=?""", (identifiant,))
             user = cursor.fetchone()
 
-            if (str(user[0])) != "None" :
+            if (str(user)) != "None" :
                 if bcrypt.checkpw(password, str(user[0])):
                     message_connect_user = "Connexion réussie"
                     color_connect_user = "alert alert-success"
                     connected = 'true'
-                    connectedUser = identifiant
+                    role = str(user[1])
+
                 else:
                     message_connect_user = "Connexion échouée, identifiant ou mot de passe éronné."
                     color_connect_user = "alert alert-danger"
@@ -54,7 +56,7 @@ class Database(object):
                 color_connect_user = "alert alert-danger"
                 connected = 'false'
 
-        return message_connect_user, color_connect_user, connected 
+        return message_connect_user, color_connect_user, connected, role 
 
     def createUser(self, identifiant, password, role):
         message_create_user = ''
