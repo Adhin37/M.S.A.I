@@ -58,17 +58,33 @@ def emotions_match(dict_emotion, index_choose):
     :param dict_emotion: Liste des emotions
     :param index_choose: Index des emotions choisis
     """
-    # dict_emotion = sorted(dict_emotion.iteritems(),
-    #                      key=operator.itemgetter(1), reverse=True)
-    dict_emotion = sorted(dict_emotion, key=dict_emotion.get, reverse=True)
+    dict_emotions = sorted(dict_emotion.iteritems(),
+                           key=operator.itemgetter(1), reverse=True)
+    #position_1, position_2, position_3, position_4, position_5, position_6 = position_emotion(
+        #dict_emotion)
+    position_1 = position_emotion(dict_emotion)
 
-    print dict_emotion
+    #dict_emotion = sorted(dict_emotion, key=dict_emotion.get, reverse=True)
+    print dict_emotions
+   # position_1 = {}
     for index in index_choose:
-        print index
-        if len(index_choose) == 1:
-            for emotion in dict_emotion:
-                if emotion == index:
-                    print emotion
+        for emotion in dict_emotions:
+            #position_1[emotion[0]] = emotion[1]
+            if emotion[0] == index[0]:
+                del dict_emotions[emotion[0]]
+        # print emotion
+        #position_1.update({emotion[0]: emotion[1]})
+    # print position_1
+
+    # print dict_emotion
+    # for index in index_choose:
+        # print index
+        # if len(index_choose) == 1:
+            # for emotion in dict_emotion:
+                # emotion[1]
+                # print emotion
+                # if emotion == index:
+                # print emotion
             # if dict_emotion[0]
         # if len(index_choose) == 2:
             #
@@ -88,6 +104,27 @@ def emotions_match(dict_emotion, index_choose):
     # return True
     # if index_choose:
     # return True
+
+
+def position_emotion(dict_emotion):
+    """
+    Cette fonction permet de determiner les position des emotions presentes
+    :param dict_emotion: Liste des emotions
+    """
+    position_1 = {}
+    position_2 = {}
+    position_3 = {}
+    position_4 = {}
+    position_5 = {}
+    position_6 = {}
+
+    for emotion in dict_emotion:
+        if len(position_1) == 0:
+            position_1.update({emotion[0]: emotion[1]})
+            del dict_emotion[emotion[0]]
+
+
+    return position_1 #, position_2, position_3, position_4, position_5, position_6
 
 
 def emotions_count(dict_emotion):
