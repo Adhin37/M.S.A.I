@@ -42,26 +42,30 @@ class Matrix(object):
         if name_matrix == '' or name_matrix is None:
             message_create_matrix = "Erreur, vous n'avez pas selectionné de matrice !"
             color_status_matrix = "alert alert-danger"
-        elif os.path.isfile(os.path.join(self.dir_models, name_matrix+"_classifier.xml")):
+        elif os.path.isfile(os.path.join(self.dir_models, name_matrix + "_classifier.xml")):
             message_create_matrix = "La matrice " + name_matrix + " a déjà été generé !"
             color_status_matrix = "alert alert-danger"
         else:
             current_matrix = os.path.join(self.dir_matrix, name_matrix)
-            cmd="ps -aef | grep generate_matrice_"+name_matrix+" | grep -v grep | wc -l"
+            cmd = "ps -aef | grep generate_matrice_" + \
+                name_matrix + " | grep -v grep | wc -l"
             #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
             in_progress = subprocess.check_output([cmd], shell=True)
-            print "test :"+format(in_progress)
-            print in_progress==format(0)
+            print "test :" + format(in_progress)
+            print in_progress == format(0)
             print "test"
             if format(in_progress) >= 1:
-                #print format(in_progress)>0
-                message_create_matrix = "La matrice "+name_matrix+" est déjà cours de génération. "
+                # print format(in_progress)>0
+                message_create_matrix = "La matrice " + \
+                    name_matrix + " est déjà cours de génération. "
                 color_status_matrix = "alert alert-danger"
             else:
-                dir_script = os.path.abspath(self.my_utility.dir_path + "/doMatrice/screen.sh")
+                dir_script = os.path.abspath(
+                    self.my_utility.dir_path + "/doMatrice/screen.sh")
                 os.chmod(dir_script, 0777)
-                #Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
-                subprocess.call(['. ' + dir_script, current_matrix, name_matrix], shell=True)
+                # Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
+                subprocess.call(
+                    ['. ' + dir_script, current_matrix, name_matrix], shell=True)
                 print "blablalba"
                 message_create_matrix = "La matrice est désormais cours de génération, vous pouvez consulter son avancement par le check."
                 color_status_matrix = "alert alert-success"
@@ -71,28 +75,34 @@ class Matrix(object):
         """
         Permet de check le statut de génération d'une matrice.
         """
-        #il faut regarder le repertoire classifier de la matrice
-        classifier_matrix = os.path.join(self.dir_matrix, name_matrix+"/classifier")
+        # il faut regarder le repertoire classifier de la matrice
+        classifier_matrix = os.path.join(
+            self.dir_matrix, name_matrix + "/classifier")
         matrix_path = os.path.join(self.dir_matrix, name_matrix)
         if os.path.isfile(classifier_matrix + "/cascade.xml"):
-            result = "La génération de la matrice "+ name_matrix +" est terminé"
+            result = "La génération de la matrice " + name_matrix + " est terminé"
         else:
-            result = "Aucune génération en cours pour la matrice "+name_matrix
-            #commande pour recuperer si un proc generate_matrice est en marche
-            #cmd="ps -aef | grep generate_matrice_"+name_matrix+" | grep -v grep | wc -l"
-            cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
-            in_progress = subprocess.check_output([cmd], shell=True)
-            if format(in_progress) >= 1:
-                result = "La matrice "+name_matrix+" est en cours de génération. "
-                i = 19
-                fin = False
-                while (i >= 0 and fin is False):
-                    if os.path.isfile(classifier_matrix + "/stage"+str(i)+".xml"):
-                        fin = True
-                        result = result + os.linesep +"Génération en cours : étape "+str(i)+"/19"
-                    i = i-1
-                if fin is False:
-                    result = result + os.linesep + "Génération en cours : étape 0/19"
+            result = "Aucune génération en cours pour la matrice " + name_matrix
+            # commande pour recuperer si un proc generate_matrice est en marche
+            if self.my_utility.os_name == 'linux':
+                cmd="ps -aef | grep generate_matrice_"+name_matrix+" | grep -v grep | wc -l"
+                #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
+                in_progress = subprocess.check_output([cmd], shell=True)
+                if format(in_progress) >= 1:
+                    result = "La matrice " + name_matrix + " est en cours de génération. "
+                    i = 19
+                    fin = False
+                    while (i >= 0 and fin is False):
+                        if os.path.isfile(classifier_matrix + "/stage" + str(i) + ".xml"):
+                            fin = True
+                            result = result + os.linesep + \
+                                "Génération en cours : étape " + str(i) + "/19"
+                        i = i - 1
+                    if fin is False:
+                        result = result + os.linesep + "Génération en cours : étape 0/19"
+            else:
+                # TODO
+                print 'windows'
         return result
 
     def add_directory_matrix(self, name_matrix):
@@ -108,10 +118,14 @@ class Matrix(object):
             color_status_matrix = "alert alert-danger"
         else:
             os.mkdir(os.path.join(self.dir_matrix, name_matrix))
-            os.mkdir(os.path.abspath(self.dir_matrix + '/' + name_matrix + '/' + "positive_img"))
-            os.mkdir(os.path.abspath(self.dir_matrix + '/' + name_matrix + '/' + "negative_img"))
-            os.mkdir(os.path.abspath(self.dir_matrix + '/' + name_matrix + '/' + "classifier"))
-            os.mkdir(os.path.abspath(self.dir_matrix + '/' + name_matrix + '/' + "samples"))
+            os.mkdir(os.path.abspath(self.dir_matrix + '/' +
+                                     name_matrix + '/' + "positive_img"))
+            os.mkdir(os.path.abspath(self.dir_matrix + '/' +
+                                     name_matrix + '/' + "negative_img"))
+            os.mkdir(os.path.abspath(self.dir_matrix +
+                                     '/' + name_matrix + '/' + "classifier"))
+            os.mkdir(os.path.abspath(self.dir_matrix +
+                                     '/' + name_matrix + '/' + "samples"))
 
             message_create_matrix = "La matrice a bien été créée."
             color_status_matrix = "alert alert-success"
