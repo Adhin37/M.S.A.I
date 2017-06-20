@@ -79,9 +79,9 @@ def do_upload():
     if not upload:
         return "No file uploaded."
     ext = os.path.splitext(upload.filename)[1]
-    if ext in ('.png', '.jpg', '.jpeg', ".gif"):
+    if ext in ('.png', '.jpg', '.jpeg', '.gif', '.PNG', '.JPG', '.JPEG', '.GIF'):
         file_format = 'img'
-    elif ext in ('.mp4', '.wma', '.avi', '.mov', '.mpg', '.mkv'):
+    elif ext in ('.mp4', '.wma', '.avi', '.mov', '.mpg', '.mkv', '.MP4', '.WMA', '.AVI', '.MOV', '.MPG', '.MKV'):
         file_format = 'video'
     else:
         return "File extension not allowed."
@@ -96,9 +96,9 @@ def do_upload():
     upload.save(file_path)
 
     if file_format == 'img':
+
         img = cv2.imread(file_path, 1)
 
-        # Voir fonction rectangle
         file_save = upload.filename
 
         if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):

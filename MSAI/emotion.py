@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 """
-Ce module permet de reconnaitre les emotions sur une image ou une video
+Ce module permet de reconnaitre les émotions sur une image ou une vidéo
 """
 import operator
 import cv2
@@ -7,12 +8,12 @@ from face_detect import findfaces, locatefaces
 
 def emotionspresent(model, sourcefilepath, filteremotion):
     """
-    Cette fonction permet de recuperer les emotions presentes
-    :param model: Matrice XML des emotions
+    Cette fonction permet de récupérer les émotions présentes
+    :param model: Matrice XML des émotions
     :param sourcefilepath: Source du fichier
-    :param filteremotion: Filtre des emotions selectionnes
+    :param filteremotion: Filtre des émotions sélectionnés
     """
-    dict_emotion = {"Neutre": 0, "Enerve": 0, "Degout": 0,
+    dict_emotion = {"Neutre": 0, "Enervé": 0, "Dégoût": 0,
                     "Joyeux": 0, "Triste": 0, "Surpris": 0}
     bmatch = False
 
@@ -32,9 +33,9 @@ def emotionspresent(model, sourcefilepath, filteremotion):
             if prediction == 0:
                 dict_emotion["Neutre"] += 1
             if prediction == 1:
-                dict_emotion["Enerve"] += 1
+                dict_emotion["Enervé"] += 1
             if prediction == 2:
-                dict_emotion["Degout"] += 1
+                dict_emotion["Dégoût"] += 1
             if prediction == 3:
                 dict_emotion["Joyeux"] += 1
             if prediction == 4:
@@ -57,9 +58,9 @@ def emotionspresent(model, sourcefilepath, filteremotion):
 
 def emotionsmatch(dictemotion, indexchoose):
     """
-    Cette fonction permet de determiner si les emotions presentes sont celles selectionnees
-    :param dictemotion: Liste des emotions
-    :param indexchoose: Index des emotions choisis
+    Cette fonction permet de déterminer si les émotions présentes sont celles sélectionnées
+    :param dictemotion: Liste des émotions
+    :param indexchoose: Index des émotions choisis
     """
     position_1, position_2, position_3, position_4, position_5, position_6 = positionemotion(
         dictemotion)
@@ -111,8 +112,8 @@ def emotionsmatch(dictemotion, indexchoose):
 
 def positionemotion(dictemotion):
     """
-    Cette fonction permet de determiner les position des emotions presentes
-    :param dictemotion: Liste des emotions
+    Cette fonction permet de déterminer les position des émotions présentes
+    :param dictemotion: Liste des émotions
     """
     position_1 = {}
     position_2 = {}
@@ -191,8 +192,8 @@ def positionemotion(dictemotion):
 
 def emotionscount(dictemotion):
     """
-    Cette fonction permet de retourner le nombre d'emotion detecte
-    :param dictemotion: Liste des emotions
+    Cette fonction permet de retourner le nombre d'émotion détecté
+    :param dictemotion: Liste des émotions
     """
     emotion_count = 0
     for emotion in dictemotion:
@@ -206,8 +207,8 @@ def drawrectangle(sourceimage, coordinatesface, sourcefilepath):
     """
     Cette fonction dessine un rectangle sur un visage.
     :param sourceimage: Source de l'image.
-    :param coordinatesface: Coordonnees du visage.
-    :param sourcefilepath: chemin du fichier
+    :param coordinatesface: Coordonnées du visage.
+    :param sourcefilepath: Chemin du fichier
     """
     x_coord, y_coord, w_coord, h_coord = coordinatesface
     cv2.rectangle(sourceimage, (x_coord, y_coord),
