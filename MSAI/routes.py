@@ -72,10 +72,9 @@ def do_upload():
     """
     Upload file for processing
     """
-    fisher_face = ''
     upload = request.files.get('upload')
-
     file_format = ''
+
     if not upload:
         return "No file uploaded."
     ext = os.path.splitext(upload.filename)[1]
@@ -96,52 +95,10 @@ def do_upload():
     upload.save(file_path)
 
     if file_format == 'img':
-
-        img = cv2.imread(file_path, 1)
-
-        file_save = upload.filename
-
-        if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
-            os.makedirs(os.path.abspath(
-                MY_UTILITY.dir_path + '/static/pictures/'))
-        cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path +
-                                    '/static/pictures/' + file_save), img)
-
-        source = os.path.abspath(MY_UTILITY.dir_path +
-                                 '/static/pictures/' + file_save)
-
-        try:
-            if cv2.__version__ == '3.1.0':
-                fisher_face = cv2.face.createFisherFaceRecognizer()
-            else:
-                fisher_face = cv2.createFisherFaceRecognizer()
-            fisher_face.load('models/emotion_detection_model.xml')
-        except AttributeError as error:
-            handler(error)
-
-        dict_emotion, faces, bmatch = emotionspresent(
-            fisher_face, source, request.POST.getall('emotion_filter'))
-
-        if os.path.isfile(file_path):
-            os.remove(file_path)
+        dict_emotion, faces, bmatch, file_save = launchimage(file_path, upload.filename)
 
     elif file_format == 'video':
-        MY_MATRIX.update_matrice()
-        classifier_name_found = []
-        while_continue = True
-        cap = cv2.VideoCapture(file_path)
-
-        while cap.isOpened() and while_continue:
-            img = cap.read()[1]
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            # KNIFES = knife_cascade.detectMultiScale(GRAY, 20, 50, minSize=(200, 100), maxSize=(800, 400))
-            cpt_classifier = 0
-            while len(MY_MATRIX.list_matrix) > cpt_classifier and while_continue:
-                while_continue == False
-                cpt_classifier += 1
-
-        cap.release()
-        cv2.destroyAllWindows()
+        dict_emotion, faces, bmatch, file_save = launchvideo(file_path, upload.filename)
 
     return dict(title='Resultat',
                 message='Resultat OpenCV',
@@ -273,3 +230,95 @@ def delete_matrix():
                 color_suppr_matrix=color_suppr_matrix,
                 list_matrix=MY_MATRIX.list_dir_matrix,
                 year=MY_UTILITY.date.year)
+
+def launchimage(filepath, filename):
+    """
+    Cette fonction permet de lancer le traitement image
+    :param filepath: Chemin du fichier
+    :param filename: Nom du fichier
+    """
+    img = cv2.imread(filepath, 1)
+
+    file_save = filename
+
+    if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
+        os.makedirs(os.path.abspath(
+            MY_UTILITY.dir_path + '/static/pictures/'))
+    cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path +
+                                '/static/pictures/' + file_save), img)
+
+    source = os.path.abspath(MY_UTILITY.dir_path +
+                             '/static/pictures/' + file_save)
+
+    try:
+        if cv2.__version__ == '3.1.0':
+            fisher_face = cv2.face.createFisherFaceRecognizer()
+        else:
+            fisher_face = cv2.createFisherFaceRecognizer()
+        fisher_face.load('models/emotion_detection_model.xml')
+    except AttributeError as error:
+        handler(error)
+
+    dict_emotion, faces, bmatch = emotionspresent(
+        fisher_face, source, request.POST.getall('emotion_filter'))
+
+    if os.path.isfile(filepath):
+        os.remove(filepath)
+
+    return dict_emotion, faces, bmatch, file_save
+
+def launchvideo(filepath, filename):
+    """
+    Cette fonction permet de lancer le traitement vidéo
+    :param filepath: Chemin du fichier
+    :param filename: Nom du fichier
+    """
+    bmatch = False
+    base = os.path.basename(filename)
+    file_save = os.path.splitext(base)[0] + '.jpg'
+    try:
+        if cv2.__version__ == '3.1.0':
+            fisher_face = cv2.face.createFisherFaceRecognizer()
+        else:
+            fisher_face = cv2.createFisherFaceRecognizer()
+        fisher_face.load('models/emotion_detection_model.xml')
+    except AttributeError as error:
+        handler(error)
+
+    cap = cv2.VideoCapture(filepath)
+    if cap.isOpened():
+        read_value, img = cap.read()
+    else:
+        return
+
+    while read_value and not bmatch:
+        if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
+            os.makedirs(os.path.abspath(
+                MY_UTILITY.dir_path + '/static/pictures/'))
+
+        cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path +
+                                    '/static/pictures/' + file_save), img)
+
+        source = os.path.abspath(MY_UTILITY.dir_path +
+                                 '/static/pictures/' + file_save)
+
+        dict_emotion, faces, bmatch = emotionspresent(fisher_face, source, request.POST.getall('emotion_filter'))
+
+        read_value, img = cap.read()
+
+    #MY_MATRIX.update_matrice()
+    #classifier_name_found = []
+    #while_continue = True
+
+    #while cap.isOpened() and while_continue:
+        #img = cap.read()[1]
+        #gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        ## KNIFES = knife_cascade.detectMultiScale(GRAY, 20, 50, minSize=(200, 100), maxSize=(800, 400))
+        #cpt_classifier = 0
+        #while len(MY_MATRIX.list_matrix) > cpt_classifier and while_continue:
+           #while_continue == False
+            #cpt_classifier += 1
+
+    #cap.release()
+    #cv2.destroyAllWindows()
+    return dict_emotion, faces, bmatch, file_save
