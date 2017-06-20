@@ -1,6 +1,6 @@
 % rebase('layout.tpl', title=title, year=year, list_matrix=list_matrix)
 
-<script type="text/javascript"> 
+<script type="text/javascript">
 
 function afficher() {
 document.getElementById("select_list_matrix").value = document.getElementById("selected_matrix").value;
@@ -43,6 +43,10 @@ document.getElementById("select_list_matrix_check").value = document.getElementB
 
 					<form action="/delete_matrix" method="post" enctype="multipart/form-data">
 						<div class="form-group">
+							<div class="{{ color_suppr_matrix }}" role="alert">
+							<button type="button" class="close" data-dismiss="alert" ></button>
+							{{ message_delete_matrix }}
+							</div>
 							<label for="sel1">ou sélectionner une matrice existante :</label>
 								<select id="selected_matrix" name="selected_matrix" class="form-control" onchange="afficher(form);">
 									<% for l in list_matrix: %>

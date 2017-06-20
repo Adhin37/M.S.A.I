@@ -1,37 +1,44 @@
 """
-This module contains face detections functions.
+Ce module permet de detecter les visages
 """
 import cv2
 
-faceCascade = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
+CLASSIFIER_CASCADE = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
 
-def find_faces(image):
-    faces_coordinates = _locate_faces(image)
-    cutted_faces = [image[y:y + h, x:x + w] for (x, y, w, h) in faces_coordinates]
-    normalized_faces = [_normalize_face(face) for face in cutted_faces]
+def findfaces(sourcefilepath):
+    """
+    Cette fonction permet de trouver le visage et nous retourne ces coordonnees ainsi que le visage decoupee
+    :param sourcefilepath: Source du fichier
+    """
+    faces_coordinates = locatefaces(sourcefilepath)
+    cutted_faces = [sourcefilepath[y:y + h, x:x + w]
+                    for (x, y, w, h) in faces_coordinates]
+    normalized_faces = [normalizeface(faceRecognize)
+                        for faceRecognize in cutted_faces]
     return zip(normalized_faces, faces_coordinates)
 
-def _normalize_face(face):
-    face = cv2.cvtColor(face, cv2.COLOR_BGR2GRAY)
-    face = cv2.resize(face, (350, 350))
 
-    return face;
+def normalizeface(facedetect):
+    """
+    Cette fonction permet de retourner seulement le visage
+    :param facedetect: Visage detectee
+    """
+    facedetect = cv2.cvtColor(facedetect, cv2.COLOR_BGR2GRAY)
+    facedetect = cv2.resize(facedetect, (350, 350))
 
-def _locate_faces(image):
-    faces = faceCascade.detectMultiScale(
-        image,
+    return facedetect
+
+
+def locatefaces(sourcefilepath):
+    """
+    Cette fonction permet de localiser les visages et retourne ces coordonnees
+    :param sourcefilepath: Source du fichier
+    """
+    faces = CLASSIFIER_CASCADE.detectMultiScale(
+        sourcefilepath,
         scaleFactor=1.1,
         minNeighbors=15,
         minSize=(70, 70)
     )
 
-    return faces  # list of (x, y, w, h)
-
-if __name__ == "__main__":
-    image = cv2.imread('test_data/test.jpg')
-    cv2.imshow("face", image)
-
-    for index, face in enumerate(find_faces(image)):
-        cv2.imshow("face %s" %index, face[0])
-
-    cv2.waitKey(0)
+    return faces
