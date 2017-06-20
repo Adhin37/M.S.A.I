@@ -59,7 +59,7 @@
 					</div>
 				</div>
 			</div>
-	</div>
+		</div>
 
 		<div class="col-md-4">
 			<div class="panel panel-default panel-submit">
@@ -79,34 +79,33 @@
 								<option value="negative_img">Négative (sans l'objet sur l'image)</option>
 							</select>
 						</div>
-					<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix"> </br>
-					<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Ajouter l'image" />
+						<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix"> </br>
+						<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Ajouter l'image" />
 					</form>
 				</div>
 			</div>
 		</div>
-	</div>
-		<div class="row">
-			<div class="col-md-offset-3 col-md-6">
+	</div> <!--fin de row-->
+	<div class="row">
+		<div class="col-md-offset-3 col-md-6">
 			<div class="panel panel-default panel-submit">
 				<div class="panel-heading">Géneration Classifier</div>
-					<div class="panel-body paddingPanel">
-						<form action="/do_classifier" method="post" enctype="multipart/form-data">
-							<div class="form-group">
-								<div class="{{ color_do_matrix }}" role="alert">
-									<button type="button" class="close" data-dismiss="alert" ></button>
-									{{ message_do_matrix }}
-								</div>
+				<div class="panel-body paddingPanel">
+					<form action="/do_classifier" method="post" enctype="multipart/form-data">
+						<div class="form-group">
+							<div class="{{ color_do_matrix }}" role="alert">
+								<button type="button" class="close" data-dismiss="alert" ></button>
+								{{ message_do_matrix }}
+							</div>
 							<label for="sel1">Lancer la génération du classifier de la matrice sélectionnée:</label>
 							<p> Une fois lancé, le script peut étre trés long (plusieurs jours en fonction du nombre d'images)<p>
-							</div>
+						</div>
 						<input type="hidden" class="form-control" name="select_list_matrix" id="select_list_matrix_classi">
 						<input type="submit" class="btn btn-sm btn-primary btn btn-primary" value="Lancer génération" />
-						</form>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
-	</div> <!-- /container -->
+	</div> <!-- /fin row -->
 </body>
 

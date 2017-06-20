@@ -206,6 +206,7 @@ def check_classifier():
                 color_add_pic="vide",
                 color_add_matrix='',
                 color_do_matrix='',
+                color_suppr_matrix='',
                 message_do_matrix='',
                 message_check_matrix=statusCheck,
                 year=MY_UTILITY.date.year)
@@ -229,6 +230,7 @@ def do_classifier():
                 color_add_pic="vide",
                 color_add_matrix='',
                 color_do_matrix=color_status_matrix,
+                color_suppr_matrix='',
                 message_check_matrix=statusCheck,
                 year=MY_UTILITY.date.year)
 

@@ -51,10 +51,7 @@ class Matrix(object):
                 name_matrix + " | grep -v grep | wc -l"
             #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
             in_progress = subprocess.check_output([cmd], shell=True)
-            print "test :" + format(in_progress)
-            print in_progress == format(0)
-            print "test"
-            if format(in_progress) >= 1:
+            if int(in_progress) >= 1:
                 # print format(in_progress)>0
                 message_create_matrix = "La matrice " + \
                     name_matrix + " est déjà cours de génération. "
@@ -66,7 +63,7 @@ class Matrix(object):
                 # Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
                 subprocess.call(
                     ['. ' + dir_script, current_matrix, name_matrix], shell=True)
-                print "blablalba"
+
                 message_create_matrix = "La matrice est désormais cours de génération, vous pouvez consulter son avancement par le check."
                 color_status_matrix = "alert alert-success"
         return message_create_matrix, color_status_matrix
@@ -84,8 +81,9 @@ class Matrix(object):
         else:
             result = "Aucune génération en cours pour la matrice " + name_matrix
             # commande pour recuperer si un proc generate_matrice est en marche
-            if self.my_utility.os_name == 'linux':
-                cmd="ps -aef | grep generate_matrice_"+name_matrix+" | grep -v grep | wc -l"
+            if self.my_utility.os_name == 'Linux':
+                cmd = "ps -aef | grep generate_matrice_" + \
+                    name_matrix + " | grep -v grep | wc -l"
                 #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
                 in_progress = subprocess.check_output([cmd], shell=True)
                 if format(in_progress) >= 1:
@@ -101,8 +99,9 @@ class Matrix(object):
                     if fin is False:
                         result = result + os.linesep + "Génération en cours : étape 0/19"
             else:
-                # TODO
-                print 'windows'
+                # TODO windows
+                print self.my_utility.os_name
+                result = "Non pris en compte, cause environnement :" + self.my_utility.os_name
         return result
 
     def add_directory_matrix(self, name_matrix):
