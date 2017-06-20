@@ -44,10 +44,14 @@ class Matrix(object):
             color_status_matrix = "alert alert-danger"
         else:
             current_matrix = os.path.join(self.dir_matrix, name_matrix)
-            #cmd="ps -aef | grep generate_matrice_"+name_matrix+" | grep -v grep | wc -l"
-            cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
+            cmd="ps -aef | grep generate_matrice_"+name_matrix+" | grep -v grep | wc -l"
+            #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
             in_progress = subprocess.check_output([cmd], shell=True)
+            print "test :"+format(in_progress)
+            print in_progress==format(0)
+            print "test"
             if format(in_progress) >= 1:
+                #print format(in_progress)>0
                 message_create_matrix = "La matrice "+name_matrix+" est déjà cours de génération. "
                 color_status_matrix = "alert alert-danger"
             else:
@@ -55,6 +59,7 @@ class Matrix(object):
                 os.chmod(dir_script, 0777)
                 #Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
                 subprocess.call(['. ' + dir_script, current_matrix, name_matrix], shell=True)
+                print "blablalba"
                 message_create_matrix = "La matrice est désormais cours de génération, vous pouvez consulter son avancement par le check."
                 color_status_matrix = "alert alert-success"
         return message_create_matrix, color_status_matrix
