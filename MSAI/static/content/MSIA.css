@@ -7,8 +7,6 @@
 body, html {
     height: 100%;
 	position: relative;
-    background-repeat: no-repeat;
-    background-image: linear-gradient(rgb(104, 145, 162), rgb(206, 236, 213));
 }
 
 .card-container.card {
@@ -130,7 +128,7 @@ body, html {
 .btn.btn-signin:hover,
 .btn.btn-signin:active,
 .btn.btn-signin:focus {
-    background-color: rgb(12, 97, 33);
+    background-color: rgb(78, 113, 126);
 }
 
 .forgot-password {
@@ -140,15 +138,15 @@ body, html {
 .forgot-password:hover,
 .forgot-password:active,
 .forgot-password:focus{
-    color: rgb(12, 97, 33);
+    color: rgb(78, 113, 126);
 }
 
 footer {
-	position: absolute: 0;
+	position: absolute;
     text-align: center;
 }
 
-.card card-container(
+.card .card-container{
 	position:absolute;
     left: 50%;
     top: 50%;
@@ -158,3 +156,7 @@ footer {
     margin-top: -100px; /* Cette valeur doit être la moitié négative de la valeur du height */
 }
 
+.alert {
+    padding: 0 5px 10px 15px;
+    margin-bottom: 10px;
+}
