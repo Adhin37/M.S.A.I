@@ -38,42 +38,42 @@
 					<h4>Emotions <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="0" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="Neutre" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Neutre" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="1" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="Enerve" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Enervé" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="2" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="Degout" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Dégoût" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="3" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="Joyeux" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Joyeux" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="4" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="Triste" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Triste" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id="5" value="0" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="Surpris" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Surpris" readonly>
 					</div>
@@ -82,28 +82,21 @@
 				</div>
 
 				<hr />
-				<p class="text-results">Résultat :</p>
-				<p class="text-results">J'ai identifié {{faces}} visage(s).</p>
-				%if defined('emotion_all'):
-				<p class="text-results">Emotion prédiction :</p>
+				%if defined('bmatch'):
+					<p class="text-results">Résultat :</p>
+					%if bmatch is True:
+					<p class="text-results">Situation anormale détectée !</p>
+					%else:
+					<p class="text-results">Situation normale.</p>
+					%end
 				%end
-				%if defined('emotion_neutral'):
-				<p class="text-results">Neutre : {{emotion_neutral}}%.</p>
-				%end
-				%if defined('emotion_anger'):
-				<p class="text-results">Enervé : {{emotion_anger}}%.</p>
-				%end
-				%if defined('emotion_surprise'):
-				<p class="text-results">Surprise : {{emotion_surprise}}%.</p>
-				%end
-				%if defined('emotion_disgust'):
-				<p class="text-results">Dégoût : {{emotion_disgust}}%.</p>
-				%end
-				%if defined('emotion_happy'):
-				<p class="text-results">Joyeux : {{emotion_happy}}%.</p>
-				%end
-				%if defined('emotion_sadness'):
-				<p class="text-results">Triste : {{emotion_sadness}}%.</p>
+				%if faces != 0:
+					</br>
+					<p class="text-results">Prédiction :</p>
+					<p class="text-results">J'ai identifié {{faces}} visage(s).</p>
+					%for emotion in dict_emotion:
+						<p class="text-results"> {{emotion[0]}} : {{emotion[1]*100/emotion_all}}%.</p>
+					%end
 				%end
 				<hr />
 				<div class="content-results">

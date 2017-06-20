@@ -13,7 +13,7 @@ import getpass
 from utils import Utils
 from matrix import Matrix
 from database import Database
-from emotion import emotions_present
+from emotion import emotions_present, emotionscount
 
 MY_UTILITY = Utils()
 MY_MATRIX = Matrix()
@@ -120,6 +120,16 @@ def manage_matrix():
         listUser = listUser,
         year = MY_UTILITY.date.year)
 
+@route('/handler')
+@view('handler')
+def handler(errormessage):
+    """Renders the handler page."""
+    return dict(title='Erreur',
+                message='Erreur Application',
+                year=MY_UTILITY.date.year,
+                error=errormessage)
+
+
 @route('/test')
 @view('test')
 def test():
@@ -156,10 +166,16 @@ def do_upload():
     """
     fisher_face = ''
     upload = request.files.get('upload')
+
+    file_format = ''
     if not upload:
         return "No file uploaded."
     ext = os.path.splitext(upload.filename)[1]
-    if ext not in ('.png', '.jpg', '.jpeg', ".gif"):
+    if ext in ('.png', '.jpg', '.jpeg', ".gif"):
+        file_format = 'img'
+    elif ext in ('.mp4', '.wma', '.avi', '.mov', '.mpg', '.mkv'):
+        file_format = 'video'
+    else:
         return "File extension not allowed."
 
     save_path = os.path.abspath(MY_UTILITY.dir_path + '/tmp')
@@ -171,52 +187,53 @@ def do_upload():
 
     upload.save(file_path)
 
-    face_cascade = cv2.CascadeClassifier(MY_MATRIX.face)
+    if file_format == 'img':
+        img = cv2.imread(file_path, 1)
 
-    img = cv2.imread(file_path, 1)
+        # Voir fonction rectangle
+        file_save = upload.filename
 
-    faces = face_cascade.detectMultiScale(img, 1.3, 5)
-    for (coord_x, coord_y, coord_w, coord_h) in faces:
-        cv2.rectangle(img, (coord_x, coord_y), (coord_x +
-                                                coord_w, coord_y + coord_h), (255, 0, 0), 2)
+        if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
+            os.makedirs(os.path.abspath(
+                MY_UTILITY.dir_path + '/static/pictures/'))
+        cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path +
+                                    '/static/pictures/' + file_save), img)
 
-    file_save = upload.filename
+        source = os.path.abspath(MY_UTILITY.dir_path +
+                                 '/static/pictures/' + file_save)
 
-    if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
-        os.makedirs(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/'))
-    cv2.imwrite(os.path.abspath(MY_UTILITY.dir_path +
-                                '/static/pictures/' + file_save), img)
+        try:
+            if cv2.__version__ == '3.1.0':
+                fisher_face = cv2.face.createFisherFaceRecognizer()
+            else:
+                fisher_face = cv2.createFisherFaceRecognizer()
+            fisher_face.load('models/emotion_detection_model.xml')
+        except AttributeError as error:
+            handler(error)
 
-    source = os.path.abspath(MY_UTILITY.dir_path +
-                             '/static/pictures/' + file_save)
+        dict_emotion, faces, bmatch = emotionspresent(
+            fisher_face, source, request.POST.getall('emotion_filter'))
 
-    if cv2.__version__ == '3.1.0':
-        fisher_face = cv2.face.createFisherFaceRecognizer()
-    else:
-        fisher_face = cv2.createFisherFaceRecognizer()
-    fisher_face.load('models/emotion_detection_model.xml')
+        if os.path.isfile(file_path):
+            os.remove(file_path)
 
-    neutral, anger, disgust, happy, sadness, surprise, all_emotion, faces = emotions_present(
-        fisher_face, source)
-    # définir les variables ci-dessous
-    emotion_neutral = 0
-    emotion_anger = 0
-    emotion_disgust = 0
-    emotion_happy = 0
-    emotion_sadness = 0
-    emotion_surprise = 0
-    emotion_all = 0
-    if all_emotion != 0:
-        emotion_neutral = neutral * 100 / all_emotion
-        emotion_anger = anger * 100 / all_emotion
-        emotion_disgust = disgust * 100 / all_emotion
-        emotion_happy = happy * 100 / all_emotion
-        emotion_sadness = sadness * 100 / all_emotion
-        emotion_surprise = surprise * 100 / all_emotion
-        emotion_all = all_emotion
+    elif file_format == 'video':
+        MY_MATRIX.update_matrice()
+        classifier_name_found = []
+        while_continue = True
+        cap = cv2.VideoCapture(file_path)
 
-    if os.path.isfile(file_path):
-        os.remove(file_path)
+        while cap.isOpened() and while_continue:
+            img = cap.read()[1]
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            # KNIFES = knife_cascade.detectMultiScale(GRAY, 20, 50, minSize=(200, 100), maxSize=(800, 400))
+            cpt_classifier = 0
+            while len(MY_MATRIX.list_matrix) > cpt_classifier and while_continue:
+                while_continue == False
+                cpt_classifier += 1
+
+        cap.release()
+        cv2.destroyAllWindows()
 
     return dict(title='Resultat',
                 message='Resultat OpenCV',
@@ -225,13 +242,9 @@ def do_upload():
                 user = connectedUser,
                 list_filter=LIST_FILTER,
                 faces=faces,
-                emotion_neutral=emotion_neutral,
-                emotion_anger=emotion_anger,
-                emotion_disgust=emotion_disgust,
-                emotion_happy=emotion_happy,
-                emotion_sadness=emotion_sadness,
-                emotion_surprise=emotion_surprise,
-                emotion_all=emotion_all)
+                dict_emotion=dict_emotion,
+                emotion_all=emotionscount(dict_emotion),
+                bmatch=bmatch)
 
 
 @route('/manage_matrix')
@@ -248,7 +261,18 @@ def manage_matrix():
         connectedUserRole = session['role']
         MY_MATRIX.update_directory_matrix()
 
+    name_matrix = ""
+    statusCheck = "Aucune matrice sélectionnée"
+    if len(MY_MATRIX.list_dir_matrix) > 0:
+        name_matrix = MY_MATRIX.list_dir_matrix[0]
+        if name_matrix != "":
+            statusCheck = MY_MATRIX.status(name_matrix)
+
+    print statusCheck
     return dict(title='Management Matrice',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix=statusCheck,
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
@@ -262,6 +286,51 @@ def manage_matrix():
                 user = connectedUser,
                 role =connectedUserRole,
                 list_matrix=MY_MATRIX.list_dir_matrix,
+                year=MY_UTILITY.date.year)
+
+
+@route('/check_classifier', method='POST')
+@view('manage_matrix')
+def check_classifier():
+
+    name_matrix = request.POST.dict['select_list_matrix'][0]
+    statusCheck = MY_MATRIX.status(name_matrix)
+    print statusCheck
+
+    return dict(title='Management Matrice',
+                message_add_pic='',
+                message_create_matrix='',
+                message_delete_matrix='',
+                list_matrix=MY_MATRIX.list_dir_matrix,
+                color_add_pic="vide",
+                color_add_matrix='',
+                color_do_matrix='',
+                color_suppr_matrix='',
+                message_do_matrix='',
+                message_check_matrix=statusCheck,
+                year=MY_UTILITY.date.year)
+
+
+@route('/do_classifier', method='POST')
+@view('manage_matrix')
+def do_classifier():
+    name_matrix = request.POST.dict['select_list_matrix'][0]
+    """Assignation des 2 valeurs de retour"""
+    message_do_matrix, color_status_matrix = MY_MATRIX.generate(name_matrix)
+
+    statusCheck = MY_MATRIX.status(name_matrix)
+
+    return dict(title='Management Matrice',
+                message_add_pic='',
+                message_create_matrix='',
+                message_delete_matrix='',
+                message_do_matrix=message_do_matrix,
+                list_matrix=MY_MATRIX.list_dir_matrix,
+                color_add_pic="vide",
+                color_add_matrix='',
+                color_do_matrix=color_status_matrix,
+                color_suppr_matrix='',
+                message_check_matrix=statusCheck,
                 year=MY_UTILITY.date.year)
 
 
@@ -281,6 +350,9 @@ def add_matrix():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix='',
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
@@ -318,6 +390,9 @@ def add_pictures():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix='',
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic=message_add_pic,
@@ -349,6 +424,9 @@ def delete_matrix():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix='',
                 # Gestions des alertes
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',

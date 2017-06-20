@@ -1,33 +1,44 @@
 """
-This module contains face detections functions.
+Ce module permet de detecter les visages
 """
 import cv2
 
 CLASSIFIER_CASCADE = cv2.CascadeClassifier('models/haarcascade_frontalface_default.xml')
 
-def find_faces(source):
-    "Function to find faces on source"
-    faces_coordinates = _locate_faces(source)
-    cutted_faces = [source[y:y + h, x:x + w]
+def findfaces(sourcefilepath):
+    """
+    Cette fonction permet de trouver le visage et nous retourne ces coordonnees ainsi que le visage decoupee
+    :param sourcefilepath: Source du fichier
+    """
+    faces_coordinates = locatefaces(sourcefilepath)
+    cutted_faces = [sourcefilepath[y:y + h, x:x + w]
                     for (x, y, w, h) in faces_coordinates]
-    normalized_faces = [_normalize_face(faceRecognize)
+    normalized_faces = [normalizeface(faceRecognize)
                         for faceRecognize in cutted_faces]
-    return normalized_faces
+    return zip(normalized_faces, faces_coordinates)
 
 
-def _normalize_face(facedetect):
+def normalizeface(facedetect):
+    """
+    Cette fonction permet de retourner seulement le visage
+    :param facedetect: Visage detectee
+    """
     facedetect = cv2.cvtColor(facedetect, cv2.COLOR_BGR2GRAY)
     facedetect = cv2.resize(facedetect, (350, 350))
 
     return facedetect
 
 
-def _locate_faces(imagesource):
+def locatefaces(sourcefilepath):
+    """
+    Cette fonction permet de localiser les visages et retourne ces coordonnees
+    :param sourcefilepath: Source du fichier
+    """
     faces = CLASSIFIER_CASCADE.detectMultiScale(
-        imagesource,
+        sourcefilepath,
         scaleFactor=1.1,
         minNeighbors=15,
         minSize=(70, 70)
     )
 
-    return faces  # list of (x, y, w, h)
+    return faces
