@@ -9,7 +9,7 @@ import cv2
 from bottle import route, view, request, run  # pylint: disable=no-name-in-module,unused-import
 from utils import Utils
 from matrix import Matrix
-from emotion import emotions_present, emotions_match, emotions_count
+from emotion import emotionspresent, emotionscount
 
 MY_UTILITY = Utils()
 MY_MATRIX = Matrix()
@@ -72,8 +72,6 @@ def do_upload():
     """
     Upload file for processing
     """
-    # définir les variables ci-dessous
-    filter_emotion = request.POST.getall('emotion_filter')
     fisher_face = ''
     upload = request.files.get('upload')
 
@@ -121,8 +119,8 @@ def do_upload():
         except AttributeError as error:
             handler(error)
 
-        dict_emotion, faces = emotions_present(
-            fisher_face, source, filter_emotion)
+        dict_emotion, faces, bmatch = emotionspresent(
+            fisher_face, source, request.POST.getall('emotion_filter'))
 
         if os.path.isfile(file_path):
             os.remove(file_path)
@@ -151,13 +149,9 @@ def do_upload():
                 file=file_save,
                 list_filter=LIST_FILTER,
                 faces=faces,
-                emotion_neutral=dict_emotion.get("neutral", 0),
-                emotion_anger=dict_emotion.get("anger", 0),
-                emotion_disgust=dict_emotion.get("disgust", 0),
-                emotion_happy=dict_emotion.get("happy", 0),
-                emotion_sadness=dict_emotion.get("sadness", 0),
-                emotion_surprise=dict_emotion.get("surprise", 0),
-                emotion_all=emotions_count(dict_emotion))
+                dict_emotion=dict_emotion,
+                emotion_all=emotionscount(dict_emotion),
+                bmatch=bmatch)
 
 
 @route('/manage_matrix')
