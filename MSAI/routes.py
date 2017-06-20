@@ -40,6 +40,7 @@ def about():
                 message='Application MSAI.',
                 year=MY_UTILITY.date.year)
 
+
 @route('/handler')
 @view('handler')
 def handler(errormessage):
@@ -48,6 +49,7 @@ def handler(errormessage):
                 message='Erreur Application',
                 year=MY_UTILITY.date.year,
                 error=errormessage)
+
 
 @route('/test')
 @view('test')
@@ -162,7 +164,18 @@ def manage_matrix():
     """
     MY_MATRIX.update_directory_matrix()
 
+    name_matrix = ""
+    statusCheck = "Aucune matrice sélectionnée"
+    if len(MY_MATRIX.list_dir_matrix) > 0:
+        name_matrix = MY_MATRIX.list_dir_matrix[0]
+        if name_matrix != "":
+            statusCheck = MY_MATRIX.status(name_matrix)
+
+    print statusCheck
     return dict(title='Management Matrice',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix=statusCheck,
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
@@ -174,6 +187,51 @@ def manage_matrix():
                 message_delete_matrix='',
                 color_suppr_matrix='',
                 list_matrix=MY_MATRIX.list_dir_matrix,
+                year=MY_UTILITY.date.year)
+
+
+@route('/check_classifier', method='POST')
+@view('manage_matrix')
+def check_classifier():
+
+    name_matrix = request.POST.dict['select_list_matrix'][0]
+    statusCheck = MY_MATRIX.status(name_matrix)
+    print statusCheck
+
+    return dict(title='Management Matrice',
+                message_add_pic='',
+                message_create_matrix='',
+                message_delete_matrix='',
+                list_matrix=MY_MATRIX.list_dir_matrix,
+                color_add_pic="vide",
+                color_add_matrix='',
+                color_do_matrix='',
+                color_suppr_matrix='',
+                message_do_matrix='',
+                message_check_matrix=statusCheck,
+                year=MY_UTILITY.date.year)
+
+
+@route('/do_classifier', method='POST')
+@view('manage_matrix')
+def do_classifier():
+    name_matrix = request.POST.dict['select_list_matrix'][0]
+    """Assignation des 2 valeurs de retour"""
+    message_do_matrix, color_status_matrix = MY_MATRIX.generate(name_matrix)
+
+    statusCheck = MY_MATRIX.status(name_matrix)
+
+    return dict(title='Management Matrice',
+                message_add_pic='',
+                message_create_matrix='',
+                message_delete_matrix='',
+                message_do_matrix=message_do_matrix,
+                list_matrix=MY_MATRIX.list_dir_matrix,
+                color_add_pic="vide",
+                color_add_matrix='',
+                color_do_matrix=color_status_matrix,
+                color_suppr_matrix='',
+                message_check_matrix=statusCheck,
                 year=MY_UTILITY.date.year)
 
 
@@ -193,6 +251,9 @@ def add_matrix():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix='',
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
@@ -230,6 +291,9 @@ def add_pictures():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix='',
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic=message_add_pic,
@@ -261,6 +325,9 @@ def delete_matrix():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix='',
                 # Gestions des alertes
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
