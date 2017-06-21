@@ -6,7 +6,7 @@ Routes and views for the bottle application.
 
 import os
 import cv2
-from bottle import route, view, request, run  # pylint: disable=no-name-in-module,unused-import
+from bottle import route, view, request, run, redirect  # pylint: disable=no-name-in-module,unused-import
 from utils import Utils
 from matrix import Matrix
 from emotion import emotionspresent, emotionscount
@@ -42,12 +42,11 @@ def about():
 
 @route('/handler')
 @view('handler')
-def handler(errormessage):
+def handler():
     """Renders the handler page."""
     return dict(title='Erreur',
                 message='Erreur Application',
-                year=MY_UTILITY.date.year,
-                error=errormessage)
+                year=MY_UTILITY.date.year)
 
 @route('/test')
 @view('test')
@@ -257,7 +256,8 @@ def launchimage(filepath, filename):
             fisher_face = cv2.createFisherFaceRecognizer()
         fisher_face.load('models/emotion_detection_model.xml')
     except AttributeError as error:
-        handler(error)
+        return redirect("/handler")
+        #handler(error)
 
     dict_emotion, faces, bmatch = emotionspresent(
         fisher_face, source, request.POST.getall('emotion_filter'))
@@ -283,7 +283,8 @@ def launchvideo(filepath, filename):
             fisher_face = cv2.createFisherFaceRecognizer()
         fisher_face.load('models/emotion_detection_model.xml')
     except AttributeError as error:
-        handler(error)
+        return redirect('/handler')
+        #handler(error)
 
     cap = cv2.VideoCapture(filepath)
     if cap.isOpened():
