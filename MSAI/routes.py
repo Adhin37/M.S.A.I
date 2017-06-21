@@ -7,13 +7,24 @@ Routes and views for the bottle application.
 import os
 import cv2
 from bottle import route, view, request, run, redirect  # pylint: disable=no-name-in-module,unused-import
+import bottle
+import bottlesession
+import sqlite3
+import getpass
 from utils import Utils
 from matrix import Matrix
+from database import Database
 from emotion import emotionspresent, emotionscount
 
 MY_UTILITY = Utils()
 MY_MATRIX = Matrix()
+MY_DATABASE = Database()
 LIST_FILTER = []
+
+
+session_manager = bottlesession.PickleSession()
+session_manager = bottlesession.CookieSession()
+valid_user = bottlesession.authenticator(session_manager)
 
 
 @route('/')
@@ -21,14 +32,87 @@ LIST_FILTER = []
 @view('index')
 def home():
     """Renders the home page."""
-    return dict(year=MY_UTILITY.date.year)
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        connected_user = ''
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+    return dict(title='Resultat',
+                user=connected_user,
+                role=connected_user_role,
+                year=MY_UTILITY.date.year)
 
 
 @route('/contact')
 @view('contact')
 def contact():
     """Renders the contact page."""
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
     return dict(title='Contact',
+                user=connected_user,
+                role=connected_user_role,
+                year=MY_UTILITY.date.year)
+
+
+@route('/login')
+@view('login')
+def login():
+    """Renders the contact page."""
+    return dict(title='Contact',
+                message_connect_user='',
+                color_connect_user='',
+                year=MY_UTILITY.date.year)
+
+
+@route('/connect', method='POST')
+@view('login')
+def connect():
+    session = session_manager.get_session()
+    user_ID = request.POST.dict['inputIdentifiant'][0]
+    user_Password = request.POST.dict['inputPassword'][0]
+    message_connect_user, color_connect_user, connected, user_Role = MY_DATABASE.connectionUser(
+        user_ID, user_Password)
+    session['valid'] = False
+
+    if connected == 'true':
+        session['identifiant'] = user_ID
+        session['role'] = user_Role
+        session['valid'] = True
+        session_manager.save(session)
+        redirect("/home")
+
+    session_manager.save(session)
+    return dict(title='Resultat',
+                message_connect_user=message_connect_user,
+                color_connect_user=color_connect_user)
+
+
+@route('/main')
+@view('main')
+def main():
+    """Renders the contact page."""
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+    return dict(title='Page accueil',
+                user=connected_user,
+                role=connected_user_role,
                 year=MY_UTILITY.date.year)
 
 
@@ -36,9 +120,43 @@ def contact():
 @view('about')
 def about():
     """Renders the about page."""
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
     return dict(title='A propos',
                 message='Application MSAI.',
+                user=connected_user,
+                role=connected_user_role,
                 year=MY_UTILITY.date.year)
+
+
+@route('/manage_database')
+@view('manage_database')
+def manage_database():
+    listUser = []
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    elif session['role'] != False and session['role'] != 'Administrateur':
+        redirect("/home")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+        listUser = MY_DATABASE.getUser()
+
+    return dict(title='Management Matrice',
+                color_database_action='',
+                message_database_action='',
+                user=connected_user,
+                role=connected_user_role,
+                listUser=listUser,
+                year=MY_UTILITY.date.year)
+
 
 @route('/handler')
 @view('handler')
@@ -48,11 +166,22 @@ def handler():
                 message='Erreur Application',
                 year=MY_UTILITY.date.year)
 
+
 @route('/test')
 @view('test')
 def test():
     """Renders the test page."""
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
     path = MY_MATRIX.dir_matrix
+    print 'path:' + path + '\n'
     if not os.path.exists(path):
         os.makedirs(path)
     dirs = os.listdir(path)
@@ -62,6 +191,8 @@ def test():
                 message='Test OPENCV.',
                 file='',
                 year=MY_UTILITY.date.year,
+                user=connected_user,
+                role=connected_user_role,
                 list_filter=LIST_FILTER)
 
 
@@ -71,6 +202,15 @@ def do_upload():
     """
     Upload file for processing
     """
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+    fisher_face = ''
     upload = request.files.get('upload')
     file_format = ''
 
@@ -103,6 +243,7 @@ def do_upload():
                 message='Resultat OpenCV',
                 year=MY_UTILITY.date.year,
                 file=file_save,
+                user=connected_user,
                 list_filter=LIST_FILTER,
                 faces=faces,
                 dict_emotion=dict_emotion,
@@ -116,9 +257,28 @@ def manage_matrix():
     """
     Upload file for processing
     """
-    MY_MATRIX.update_directory_matrix()
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+        MY_MATRIX.update_directory_matrix()
 
+    name_matrix = ""
+    statusCheck = "Aucune matrice sélectionnée"
+    if len(MY_MATRIX.list_dir_matrix) > 0:
+        name_matrix = MY_MATRIX.list_dir_matrix[0]
+        if name_matrix != "":
+            statusCheck = MY_MATRIX.status(name_matrix)
+
+    print statusCheck
     return dict(title='Management Matrice',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix=statusCheck,
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
@@ -129,7 +289,54 @@ def manage_matrix():
                 # Message affiché et couleur de l'alerte - supression d'une matrice
                 message_delete_matrix='',
                 color_suppr_matrix='',
+                user=connected_user,
+                role=connected_user_role,
                 list_matrix=MY_MATRIX.list_dir_matrix,
+                year=MY_UTILITY.date.year)
+
+
+@route('/check_classifier', method='POST')
+@view('manage_matrix')
+def check_classifier():
+
+    name_matrix = request.POST.dict['select_list_matrix'][0]
+    statusCheck = MY_MATRIX.status(name_matrix)
+    print statusCheck
+
+    return dict(title='Management Matrice',
+                message_add_pic='',
+                message_create_matrix='',
+                message_delete_matrix='',
+                list_matrix=MY_MATRIX.list_dir_matrix,
+                color_add_pic="vide",
+                color_add_matrix='',
+                color_do_matrix='',
+                color_suppr_matrix='',
+                message_do_matrix='',
+                message_check_matrix=statusCheck,
+                year=MY_UTILITY.date.year)
+
+
+@route('/do_classifier', method='POST')
+@view('manage_matrix')
+def do_classifier():
+    name_matrix = request.POST.dict['select_list_matrix'][0]
+    """Assignation des 2 valeurs de retour"""
+    message_do_matrix, color_status_matrix = MY_MATRIX.generate(name_matrix)
+
+    statusCheck = MY_MATRIX.status(name_matrix)
+
+    return dict(title='Management Matrice',
+                message_add_pic='',
+                message_create_matrix='',
+                message_delete_matrix='',
+                message_do_matrix=message_do_matrix,
+                list_matrix=MY_MATRIX.list_dir_matrix,
+                color_add_pic="vide",
+                color_add_matrix='',
+                color_do_matrix=color_status_matrix,
+                color_suppr_matrix='',
+                message_check_matrix=statusCheck,
                 year=MY_UTILITY.date.year)
 
 
@@ -149,6 +356,9 @@ def add_matrix():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix='',
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
@@ -186,6 +396,9 @@ def add_pictures():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix='',
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic=message_add_pic,
@@ -209,7 +422,6 @@ def delete_matrix():
     name_matrix = request.POST.dict['selected_matrix'][0]
     message_delete_matrix = ''
     color_suppr_matrix = ''
-    color_status_matrix = ''
 
     # Assignation des 2 valeurs de retour
     message_delete_matrix, color_suppr_matrix = MY_MATRIX.delete_directory_matrix(
@@ -217,6 +429,9 @@ def delete_matrix():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
+                color_do_matrix='',
+                message_do_matrix='',
+                message_check_matrix='',
                 # Gestions des alertes
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
@@ -323,3 +538,126 @@ def launchvideo(filepath, filename):
     #cap.release()
     #cv2.destroyAllWindows()
     return dict_emotion, faces, bmatch, file_save
+
+
+@route('/disconnect')
+@view('index')
+def disconnect():
+    session = session_manager.get_session()
+    session['valid'] = False
+    session_manager.save(session)
+    redirect("/login")
+    return dict(title='Resultat',
+                message_connect_user='',
+                color_connect_user='')
+
+
+@route('/createUser', method='POST')
+@view('manage_database')
+def createUser():
+    """
+    Create one user
+    """
+    listUser = []
+    message_create_user = ''
+    color_create_user = ''
+
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        connected_user = ''
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
+    user_ID = request.POST.dict['inputIdentifiant'][0]
+    password_ID = request.POST.dict['inputPassword'][0]
+    role_ID = request.POST.dict['inputRole'][0]
+
+    # Assignation des 2 valeurs de retour
+    message_create_user, color_create_user = MY_DATABASE.createUser(
+        user_ID, password_ID, role_ID)
+    listUser = MY_DATABASE.getUser()
+
+    return dict(title='Resultat',
+                # Gestions des alertes
+                # Message affiché et couleur de l'alerte - ajout d'un utilisateur
+                color_database_action=color_create_user,
+                message_database_action=message_create_user,
+                user=connected_user,
+                role=connected_user_role,
+                listUser=listUser,
+                year=MY_UTILITY.date.year)
+
+
+@route('/deleteUser', method='POST')
+@view('manage_database')
+def deleteUser():
+    """
+    Create one user
+    """
+    listUser = []
+    message_delete_user = ''
+    color_delete_user = ''
+
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        connected_user = ''
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
+    user_ID = request.POST.dict['idUser'][0]
+
+    # Assignation des 2 valeurs de retour
+    message_delete_user, color_delete_user = MY_DATABASE.deleteUser(user_ID)
+    listUser = MY_DATABASE.getUser()
+
+    return dict(title='Resultat',
+                # Gestions des alertes
+                # Message affiché et couleur de l'alerte - ajout d'un utilisateur
+                color_database_action=color_delete_user,
+                message_database_action=message_delete_user,
+                user=connected_user,
+                role=connected_user_role,
+                listUser=listUser,
+                year=MY_UTILITY.date.year)
+
+
+@route('/updateUser', method='POST')
+@view('manage_database')
+def updateUser():
+    """
+    Create one user
+    """
+    listUser = []
+    message_update_user = ''
+    color_update_user = ''
+
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        connected_user = ''
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
+    user_ID = request.POST.dict['idMajUser'][0]
+    user_Identifiant = request.POST.dict['majIdentifiant'][0]
+    user_Role = request.POST.dict['majRole'][0]
+
+    # Assignation des 2 valeurs de retour
+    message_update_user, color_update_user = MY_DATABASE.updateUser(
+        user_ID, user_Identifiant, user_Role)
+    listUser = MY_DATABASE.getUser()
+
+    return dict(title='Resultat',
+                # Gestions des alertes
+                # Message affiché et couleur de l'alerte - ajout d'un utilisateur
+                color_database_action=color_update_user,
+                message_database_action=message_update_user,
+                user=connected_user,
+                role=connected_user_role,
+                listUser=listUser,
+                year=MY_UTILITY.date.year)
