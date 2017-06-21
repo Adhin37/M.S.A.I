@@ -67,7 +67,7 @@ def contact():
 
 @route('/login')
 @view('login')
-def contact():
+def login():
     """Renders the contact page."""
     return dict(title='Contact',
                 message_connect_user='',
@@ -137,7 +137,7 @@ def about():
 
 @route('/manage_database')
 @view('manage_database')
-def manage_matrix():
+def manage_database():
     listUser = []
     session = session_manager.get_session()
     if session['valid'] is False:

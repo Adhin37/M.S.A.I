@@ -37,7 +37,7 @@ class Database(object):
             role = ''
             connected = ''
             cursor = self.conn.cursor()
-            cursor.execute("""SELECT password, role FROM users WHERE identifiant=?""", (identifiant,))
+            cursor.execute("""SELECT U.password, R.name_role FROM users as U JOIN role as R ON U.id_role = R.id_role WHERE U.identifiant=?""", (identifiant,))
             user = cursor.fetchone()
 
             if (str(user)) != "None" :
@@ -78,7 +78,7 @@ class Database(object):
     def getUser(self):
         self.listUser = []
         cursor = self.conn.cursor()
-        cursor.execute("""SELECT id_user, identifiant, password, role FROM users""")
+        cursor.execute("""SELECT U.id_user, U.identifiant, U.password, R.name_role FROM users as U JOIN role as R ON U.id_role = R.id_role""")
         rows = cursor.fetchall()
         for row in rows:
             self.listUser.append(row)
@@ -110,7 +110,7 @@ class Database(object):
         if id is not None:
             if identifiant is not None and role is not None:
                 cursor = self.conn.cursor()
-                cursor.execute("""UPDATE users SET identifiant = ?, role = ? WHERE id_user = ?""", (identifiant, role, id))
+                cursor.execute("""UPDATE users SET identifiant = ?, id_role = ? WHERE id_user = ?""", (identifiant, role, id))
                 self.conn.commit()
                 message_update_user = "L'utilisateur a bien été mis à jour."
                 color_update_user = "alert alert-success"

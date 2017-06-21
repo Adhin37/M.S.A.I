@@ -82,8 +82,8 @@ document.getElementById("afficheUpdate").style.display = "none";
 				<td><input type="text" class="form-control" id="majIdentifiant" name="majIdentifiant" value={{l[1]}} required></td>
                 <td></td>
 				<td><select class="form-control" id=majRole" name ="majRole">
-					<option>Utilisateur</option>
-					<option>Administrateur</option>
+					<option value="2">Utilisateur</option>
+					<option value="1">Administrateur</option>
 					</select></td>
 				  <td><button type="submit" class="btn btn-primary" id="btnMaj">Modifier</button></td>
 				  </div>
