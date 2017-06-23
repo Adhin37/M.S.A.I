@@ -1,52 +1,216 @@
+# -*- coding: utf-8 -*-
 """
-This module is the main module in this package. It loads emotion recognition model from a file,
-shows a webcam image, recognizes face and it's emotion and draw emotion on the image.
+Ce module permet de reconnaitre les émotions sur une image ou une vidéo
 """
+import operator
 import cv2
-from face_detect import find_faces, _locate_faces
+from face_detect import findfaces, locatefaces
 
-def emotions_present(model, source):
+def emotionspresent(model, sourcefilepath, filteremotion):
     """
-    Shows webcam image, detects faces and its emotions in real time and draw emoticons over those faces.
-    :param model: Learnt emotion detection model.
-    :param source: Source of folder
+    Cette fonction permet de récupérer les émotions présentes
+    :param model: Matrice XML des émotions
+    :param sourcefilepath: Source du fichier
+    :param filteremotion: Filtre des émotions sélectionnés
     """
-    neutral = 0
-    anger = 0
-    disgust = 0
-    happy = 0
-    sadness = 0
-    surprise = 0
-    all_emotion = 0
-    faces = 0
+    dict_emotion = {"Neutre": 0, "Enervé": 0, "Dégoût": 0,
+                    "Joyeux": 0, "Triste": 0, "Surpris": 0}
+    bmatch = False
 
-    readsource = cv2.VideoCapture(source)
+    readsource = cv2.VideoCapture(sourcefilepath)
     if readsource.isOpened():
         read_value, webcam_image = readsource.read()
     else:
         return
 
-    faces = len(_locate_faces(webcam_image))
+    faces = len(locatefaces(webcam_image))
     while read_value:
-        for normalized_face in find_faces(webcam_image):
+        for normalized_face, (x_coord, y_coord, w_coord, h_coord) in findfaces(webcam_image):
             prediction = model.predict(normalized_face)
             if cv2.__version__ != '3.1.0':
                 prediction = prediction[0]
 
-            all_emotion += 1
             if prediction == 0:
-                neutral += 1
+                dict_emotion["Neutre"] += 1
             if prediction == 1:
-                anger += 1
+                dict_emotion["Enervé"] += 1
             if prediction == 2:
-                disgust += 1
+                dict_emotion["Dégoût"] += 1
             if prediction == 3:
-                happy += 1
+                dict_emotion["Joyeux"] += 1
             if prediction == 4:
-                sadness += 1
+                dict_emotion["Triste"] += 1
             if prediction == 5:
-                surprise += 1
+                dict_emotion["Surpris"] += 1
 
+            drawrectangle(webcam_image, (x_coord, y_coord,
+                                         w_coord, h_coord), sourcefilepath)
         read_value, webcam_image = readsource.read()
 
-        return neutral, anger, disgust, happy, sadness, surprise, all_emotion, faces
+        dict_emotion = sorted(dict_emotion.iteritems(),
+                              key=operator.itemgetter(1), reverse=True)
+
+        if filteremotion:
+            bmatch = emotionsmatch(dict_emotion, filteremotion)
+
+        return dict_emotion, faces, bmatch
+
+
+def emotionsmatch(dictemotion, indexchoose):
+    """
+    Cette fonction permet de déterminer si les émotions présentes sont celles sélectionnées
+    :param dictemotion: Liste des émotions
+    :param indexchoose: Index des émotions choisis
+    """
+    position_1, position_2, position_3, position_4, position_5, position_6 = positionemotion(
+        dictemotion)
+
+    if len(indexchoose) == 1:
+        b_match = bool(indexchoose[0] in position_1.keys())
+
+    if len(indexchoose) == 2:
+        for index in indexchoose:
+            if index in position_1.keys() or index in position_2.keys():
+                b_match = True
+            else:
+                b_match = False
+                break
+
+    if len(indexchoose) == 3:
+        for index in indexchoose:
+            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys():
+                b_match = True
+            else:
+                b_match = False
+                break
+
+    if len(indexchoose) == 4:
+        for index in indexchoose:
+            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys() or index in position_4.keys():
+                b_match = True
+            else:
+                b_match = False
+                break
+
+    if len(indexchoose) == 5:
+        for index in indexchoose:
+            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys() or index in position_4.keys() or index in position_5.keys():
+                b_match = True
+            else:
+                b_match = False
+                break
+
+    if len(indexchoose) == 6:
+        for index in indexchoose:
+            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys() or index in position_4.keys() or index in position_5.keys() or index in position_6.keys():
+                b_match = True
+            else:
+                b_match = False
+                break
+
+    return b_match
+
+def positionemotion(dictemotion):
+    """
+    Cette fonction permet de déterminer les position des émotions présentes
+    :param dictemotion: Liste des émotions
+    """
+    position_1 = {}
+    position_2 = {}
+    position_3 = {}
+    position_4 = {}
+    position_5 = {}
+    position_6 = {}
+
+    for emotion in dictemotion:
+        b_use = False
+        if emotion[1] != 0:
+            if len(position_1.keys()) >= 0:
+                if len(position_1.keys()) == 0:
+                    position_1[emotion[0]] = emotion[1]
+                else:
+                    for value in position_1.values():
+                        if value == emotion[1]:
+                            position_1[emotion[0]] = emotion[1]
+                            b_use = True
+                        else:
+                            break
+                    if len(position_2.keys()) >= 0 and not b_use:
+                        if len(position_2.keys()) == 0:
+                            position_2[emotion[0]] = emotion[1]
+                        else:
+                            for value in position_2.values():
+                                if value == emotion[1]:
+                                    position_2[emotion[0]] = emotion[1]
+                                    b_use = True
+                                else:
+                                    break
+                            if len(position_3.keys()) >= 0 and not b_use:
+                                if len(position_3.keys()) == 0:
+                                    position_3[emotion[0]] = emotion[1]
+                                else:
+                                    for value in position_3.values():
+                                        if value == emotion[1]:
+                                            position_3[emotion[0]] = emotion[1]
+                                            b_use = True
+                                        else:
+                                            break
+                                    if len(position_4.keys()) >= 0 and not b_use:
+                                        if len(position_4.keys()) == 0:
+                                            position_4[emotion[0]] = emotion[1]
+                                        else:
+                                            for value in position_4.values():
+                                                if value == emotion[1]:
+                                                    position_4[emotion[0]] = emotion[1]
+                                                    b_use = True
+                                                else:
+                                                    break
+                                            if len(position_5.keys()) >= 0 and not b_use:
+                                                if len(position_5.keys()) == 0:
+                                                    position_5[emotion[0]] = emotion[1]
+                                                else:
+                                                    for value in position_5.values():
+                                                        if value == emotion[1]:
+                                                            position_5[emotion[0]] = emotion[1]
+                                                            b_use = True
+                                                        else:
+                                                            break
+                                                    if len(position_6.keys()) >= 0 and not b_use:
+                                                        if len(position_6.keys()) == 0:
+                                                            position_6[emotion[0]] = emotion[1]
+                                                        else:
+                                                            for value in position_6.values():
+                                                                if value == emotion[1]:
+                                                                    position_6[emotion[0]] = emotion[1]
+                                                                else:
+                                                                    break
+        else:
+            break
+
+    return position_1, position_2, position_3, position_4, position_5, position_6
+
+
+def emotionscount(dictemotion):
+    """
+    Cette fonction permet de retourner le nombre d'émotion détecté
+    :param dictemotion: Liste des émotions
+    """
+    emotion_count = 0
+    for emotion in dictemotion:
+        emotion_count += emotion[1]
+    if emotion_count == 0:
+        emotion_count = 1
+    return emotion_count
+
+
+def drawrectangle(sourceimage, coordinatesface, sourcefilepath):
+    """
+    Cette fonction dessine un rectangle sur un visage.
+    :param sourceimage: Source de l'image.
+    :param coordinatesface: Coordonnées du visage.
+    :param sourcefilepath: Chemin du fichier
+    """
+    x_coord, y_coord, w_coord, h_coord = coordinatesface
+    cv2.rectangle(sourceimage, (x_coord, y_coord),
+                  (x_coord + w_coord, y_coord + h_coord), 255, 2)
+    cv2.imwrite(sourcefilepath, sourceimage)
