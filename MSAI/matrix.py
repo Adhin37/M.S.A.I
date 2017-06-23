@@ -174,8 +174,8 @@ class Matrix(object):
         color_add_pic = ''
         file_path = ''
 
-        if picture_ext not in ('.png','.jpg'):
-            message_add_pic = "Attention ! Seules les images en .png ou .jpg sont acceptees, le format de votre image est en " + picture_ext + "."
+        if picture_ext not in '.jpg':
+            message_add_pic = "Attention ! Seules les images en .jpg sont acceptees, le format de votre image est en " + picture_ext + "."
             color_add_pic = "alert alert-danger"
         else:
             file_path = os.path.abspath(
