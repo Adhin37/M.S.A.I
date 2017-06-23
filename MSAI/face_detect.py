@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 """
-Ce module permet de detecter les visages
+Ce module permet de détecter les visages
 """
 import cv2
 
@@ -7,7 +8,7 @@ CLASSIFIER_CASCADE = cv2.CascadeClassifier('models/haarcascade_frontalface_defau
 
 def findfaces(sourcefilepath):
     """
-    Cette fonction permet de trouver le visage et nous retourne ces coordonnees ainsi que le visage decoupee
+    Cette fonction permet de trouver le visage et nous retourne ces coordonnées ainsi que le visage découpée
     :param sourcefilepath: Source du fichier
     """
     faces_coordinates = locatefaces(sourcefilepath)
@@ -21,7 +22,7 @@ def findfaces(sourcefilepath):
 def normalizeface(facedetect):
     """
     Cette fonction permet de retourner seulement le visage
-    :param facedetect: Visage detectee
+    :param facedetect: Visage détectée
     """
     facedetect = cv2.cvtColor(facedetect, cv2.COLOR_BGR2GRAY)
     facedetect = cv2.resize(facedetect, (350, 350))
@@ -31,7 +32,7 @@ def normalizeface(facedetect):
 
 def locatefaces(sourcefilepath):
     """
-    Cette fonction permet de localiser les visages et retourne ces coordonnees
+    Cette fonction permet de localiser les visages et retourne ces coordonnées
     :param sourcefilepath: Source du fichier
     """
     faces = CLASSIFIER_CASCADE.detectMultiScale(

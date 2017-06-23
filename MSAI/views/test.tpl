@@ -45,14 +45,14 @@
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Enerve" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="Enervé" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Enervé" readonly>
 					</div>
 					<br/>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Degout" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value="Dégoût" aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value="Dégoût" readonly>
 					</div>

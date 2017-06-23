@@ -3,5 +3,5 @@
 <h2>{{ title }}.</h2>
 </br>
 <div class="alert alert-danger">
-    {{ error }}
+    <p>Erreur Application</p>
 </div>
