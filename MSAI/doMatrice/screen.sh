@@ -1,6 +1,6 @@
 #!/bin/bash
-#je ne sais pas pk mais la matrix_path est le param 0
 matrix_path=$0
 name_matrix=$1
-#le screen se ferme juste après la dernière commande
+
+#le screen se ferme juste après la dernière 
 screen -dmS "generate_matrice_"$name_matrix $PWD/doMatrice/generateClassifier.sh $matrix_path $name_matrix

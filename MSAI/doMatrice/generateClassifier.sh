@@ -2,9 +2,18 @@
 matrix_path=$1
 name_matrix=$2
 if cd $matrix_path ; then
+
+  #resize image
   pos=$(find ./positive_img -type f | wc -l)
+  for file in ./positive_img/*; do
+    convert ./positive_img/${file##*/} -resize 100x100 ./positive_img/${file##*/}
+  done
   find ./positive_img -iname "*.jpg" > positives.txt
+
   neg=$(find ./negative_img -type f | wc -l)
+  for file in ./negative_img/*; do
+    convert ./negative_img/${file##*/} -resize 100x100 ./negative_img/${file##*/}
+  done
   find ./negative_img -iname "*.jpg" > negatives.txt
 
   neg2=$(($neg*3))
