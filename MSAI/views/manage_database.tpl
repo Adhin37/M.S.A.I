@@ -89,7 +89,7 @@ document.getElementById("afficheUpdate").style.display = "none";
 				  </div>
                 </tr>
 				</form>
-				<% end %>                
+				<% end %>
               </tbody>
             </table>
           </div>

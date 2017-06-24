@@ -268,17 +268,20 @@ def manage_matrix():
         MY_MATRIX.update_directory_matrix()
 
     name_matrix = ""
-    statusCheck = "Aucune matrice sélectionnée"
-    if len(MY_MATRIX.list_dir_matrix) > 0:
+    statuscheck = "Aucune matrice sélectionnée"
+    lenghtarray = len(MY_MATRIX.list_dir_matrix)
+    show_status = True
+    if lenghtarray > 0:
+        #on selectionne le premier element par defaut
         name_matrix = MY_MATRIX.list_dir_matrix[0]
         if name_matrix != "":
-            statusCheck = MY_MATRIX.status(name_matrix)
-
-    print statusCheck
+            statuscheck, show_status = MY_MATRIX.status(name_matrix)
     return dict(title='Management Matrice',
-                color_do_matrix='',
-                message_do_matrix='',
-                message_check_matrix=statusCheck,
+                #color_do_matrix='',
+                #message_do_matrix='',
+                message_check_matrix=statuscheck,
+                name_matrix=name_matrix,
+                show_status=show_status,
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
@@ -294,13 +297,13 @@ def manage_matrix():
                 list_matrix=MY_MATRIX.list_dir_matrix,
                 year=MY_UTILITY.date.year)
 
-
+# pourra etre enlever
 @route('/check_classifier', method='POST')
 @view('manage_matrix')
 def check_classifier():
 
     name_matrix = request.POST.dict['select_list_matrix'][0]
-    statusCheck = MY_MATRIX.status(name_matrix)
+    statuscheck = MY_MATRIX.status(name_matrix)
     print statusCheck
 
     return dict(title='Management Matrice',
@@ -313,30 +316,37 @@ def check_classifier():
                 color_do_matrix='',
                 color_suppr_matrix='',
                 message_do_matrix='',
-                message_check_matrix=statusCheck,
+                message_check_matrix=statuscheck,
                 year=MY_UTILITY.date.year)
 
 
 @route('/do_classifier', method='POST')
 @view('manage_matrix')
 def do_classifier():
+    """
+    Assignation des 2 valeurs de retour
+    """
     name_matrix = request.POST.dict['select_list_matrix'][0]
-    """Assignation des 2 valeurs de retour"""
     message_do_matrix, color_status_matrix = MY_MATRIX.generate(name_matrix)
 
-    statusCheck = MY_MATRIX.status(name_matrix)
+    #est lancé automatiquement maintenant
+    #statuscheck = MY_MATRIX.status(name_matrix)
 
     return dict(title='Management Matrice',
+                # Gestions des alertes"""
+                # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
-                message_create_matrix='',
-                message_delete_matrix='',
-                message_do_matrix=message_do_matrix,
-                list_matrix=MY_MATRIX.list_dir_matrix,
                 color_add_pic="vide",
+                # Message affiché et couleur de l'alerte - création d'une nouvelle matrice
+                message_create_matrix='',
                 color_add_matrix='',
-                color_do_matrix=color_status_matrix,
+                # Message affiché et couleur de l'alerte - supression d'une matrice
+                message_delete_matrix='',
                 color_suppr_matrix='',
-                message_check_matrix=statusCheck,
+                # Message affiché et couleur de l'alerte - lancement génération matrice
+                message_do_matrix=message_do_matrix,
+                color_do_matrix=color_status_matrix,
+                list_matrix=MY_MATRIX.list_dir_matrix,
                 year=MY_UTILITY.date.year)
 
 
@@ -356,9 +366,6 @@ def add_matrix():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
-                color_do_matrix='',
-                message_do_matrix='',
-                message_check_matrix='',
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
@@ -396,9 +403,6 @@ def add_pictures():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
-                color_do_matrix='',
-                message_do_matrix='',
-                message_check_matrix='',
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic=message_add_pic,
@@ -429,9 +433,6 @@ def delete_matrix():
     MY_MATRIX.update_directory_matrix()
 
     return dict(title='Resultat',
-                color_do_matrix='',
-                message_do_matrix='',
-                message_check_matrix='',
                 # Gestions des alertes
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',

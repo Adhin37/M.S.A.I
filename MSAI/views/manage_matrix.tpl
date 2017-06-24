@@ -9,10 +9,11 @@
 </script>
 
 <body onLoad="afficher();">
+	%if defined('show_status'):
 	<div class="row">
 		<div class="col-md-offset-3 col-md-6">
 			<div class="panel panel-default panel-submit">
-				<div class="panel-heading">Etat Matrice</div>
+				<div class="panel-heading">Etat de la matrice {{ name_matrix }}</div>
 				<div class="panel-body paddingPanel">
 					<div>
 						{{ message_check_matrix }}
@@ -21,6 +22,7 @@
 			</div>
 		</div>
 	</div>
+	%end
 	<div class="row">
 		<div class="col-md-offset-2 col-md-4 col-form">
 			<div class="panel panel-default panel-submit">
@@ -93,10 +95,12 @@
 				<div class="panel-body paddingPanel">
 					<form action="/do_classifier" method="post" enctype="multipart/form-data">
 						<div class="form-group">
+							%if defined('message_do_matrix'):
 							<div class="{{ color_do_matrix }}" role="alert">
 								<button type="button" class="close" data-dismiss="alert" ></button>
 								{{ message_do_matrix }}
 							</div>
+							%end
 							<label for="sel1">Lancer la génération du classifier de la matrice sélectionnée:</label>
 							<p> Une fois lancé, le script peut étre trés long (plusieurs jours en fonction du nombre d'images)<p>
 						</div>

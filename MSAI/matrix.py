@@ -72,14 +72,15 @@ class Matrix(object):
         """
         Permet de check le statut de génération d'une matrice.
         """
+        result = "Aucune génération en cours pour la matrice " + name_matrix
+        show_status = False
         # il faut regarder le repertoire classifier de la matrice
         classifier_matrix = os.path.join(
             self.dir_matrix, name_matrix + "/classifier")
-        matrix_path = os.path.join(self.dir_matrix, name_matrix)
         if os.path.isfile(classifier_matrix + "/cascade.xml"):
             result = "La génération de la matrice " + name_matrix + " est terminé"
+            show_status = True
         else:
-            result = "Aucune génération en cours pour la matrice " + name_matrix
             # commande pour recuperer si un proc generate_matrice est en marche
             if self.my_utility.os_name == 'Linux':
                 cmd = "ps -aef | grep generate_matrice_" + \
@@ -87,10 +88,11 @@ class Matrix(object):
                 #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
                 in_progress = subprocess.check_output([cmd], shell=True)
                 if format(in_progress) >= 1:
+                    show_status = True
                     result = "La matrice " + name_matrix + " est en cours de génération. "
                     i = 19
                     fin = False
-                    while (i >= 0 and fin is False):
+                    while i >= 0 and fin is False:
                         if os.path.isfile(classifier_matrix + "/stage" + str(i) + ".xml"):
                             fin = True
                             result = result + os.linesep + \
@@ -99,10 +101,9 @@ class Matrix(object):
                     if fin is False:
                         result = result + os.linesep + "Génération en cours : étape 0/19"
             else:
-                # TODO windows
-                print self.my_utility.os_name
+                show_status = True
                 result = "Non pris en compte, cause environnement :" + self.my_utility.os_name
-        return result
+        return result, show_status
 
     def add_directory_matrix(self, name_matrix):
         """Add one matrix directory to matrix directory list"""
