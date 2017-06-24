@@ -10,18 +10,22 @@
 
 <body onLoad="afficher();">
 	%if defined('show_status'):
-	<div class="row">
-		<div class="col-md-offset-3 col-md-6">
-			<div class="panel panel-default panel-submit">
-				<div class="panel-heading">Etat de la matrice {{ name_matrix }}</div>
-				<div class="panel-body paddingPanel">
-					<div>
-						{{ message_check_matrix }}
+		%if show_status == True:
+		<div class="row">
+			<div class="col-md-offset-3 col-md-6">
+				<div class="panel panel-default panel-submit">
+					<div class="panel-heading">Etat de génération des matrices</div>
+					<div class="panel-body paddingPanel">
+						<div>
+							<% for ligne in message_check_matrix: %>
+								<p class="text-results">{{ligne[0]}}<b>{{ligne[1]}}</b>{{ligne[2]}}</p>
+							<% end %>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+		%end
 	%end
 	<div class="row">
 		<div class="col-md-offset-2 col-md-4 col-form">

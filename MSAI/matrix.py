@@ -45,64 +45,92 @@ class Matrix(object):
         elif os.path.isfile(os.path.join(self.dir_models, name_matrix + "_classifier.xml")):
             message_create_matrix = "La matrice " + name_matrix + " a déjà été generé !"
             color_status_matrix = "alert alert-danger"
+        elif os.path.isfile(os.path.join(self.dir_matrix, name_matrix + "/classifier/cascade.xml")):
+            message_create_matrix = "La matrice " + name_matrix + " a déjà été generé, cependant un problème a eu lieu lors de la mise à disposition de celle-ci dans les models!"
+            color_status_matrix = "alert alert-danger"
         else:
             current_matrix = os.path.join(self.dir_matrix, name_matrix)
             cmd = "ps -aef | grep generate_matrice_" + \
                 name_matrix + " | grep -v grep | wc -l"
-            #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
             in_progress = subprocess.check_output([cmd], shell=True)
             if int(in_progress) >= 1:
-                # print format(in_progress)>0
                 message_create_matrix = "La matrice " + \
                     name_matrix + " est déjà cours de génération. "
                 color_status_matrix = "alert alert-danger"
             else:
-                dir_script = os.path.abspath(
-                    self.my_utility.dir_path + "/doMatrice/screen.sh")
-                os.chmod(dir_script, 0777)
-                # Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
-                subprocess.call(
-                    ['. ' + dir_script, current_matrix, name_matrix], shell=True)
+                cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
+                nb_generate_in_progress = subprocess.check_output([cmd], shell=True)
+                if int(nb_generate_in_progress) >= 2:
+                    message_create_matrix = "La génération de la matrice " + \
+                        name_matrix + " n'a pas pu être lancé car la limite de génération simultanée est déjà atteinte (limite : 2). "
+                    color_status_matrix = "alert alert-danger"
+                else:
+                    dir_script = os.path.abspath(
+                        self.my_utility.dir_path + "/doMatrice/screen.sh")
+                    os.chmod(dir_script, 0777)
+                    # Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
+                    subprocess.call(
+                        ['. ' + dir_script, current_matrix, name_matrix], shell=True)
 
-                message_create_matrix = "La matrice est désormais cours de génération, vous pouvez consulter son avancement par le check."
-                color_status_matrix = "alert alert-success"
+                    message_create_matrix = "La matrice est désormais cours de génération, vous pouvez consulter son avancement par le check."
+                    color_status_matrix = "alert alert-success"
         return message_create_matrix, color_status_matrix
 
-    def status(self, name_matrix):
+    def status(self):
         """
         Permet de check le statut de génération d'une matrice.
         """
-        result = "Aucune génération en cours pour la matrice " + name_matrix
         show_status = False
-        # il faut regarder le repertoire classifier de la matrice
-        classifier_matrix = os.path.join(
-            self.dir_matrix, name_matrix + "/classifier")
-        if os.path.isfile(classifier_matrix + "/cascade.xml"):
-            result = "La génération de la matrice " + name_matrix + " est terminé"
+        result = []
+
+        if self.my_utility.os_name != 'Linux':
             show_status = True
+            message = []
+            message.append("Non pris en compte, cause environnement : ")
+            message.append(self.my_utility.os_name)
+            result.append(message)
         else:
-            # commande pour recuperer si un proc generate_matrice est en marche
-            if self.my_utility.os_name == 'Linux':
-                cmd = "ps -aef | grep generate_matrice_" + \
-                    name_matrix + " | grep -v grep | wc -l"
-                #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
-                in_progress = subprocess.check_output([cmd], shell=True)
-                if format(in_progress) >= 1:
+            for name_matrix in self.list_dir_matrix:
+                # il faut regarder le repertoire classifier de chaque matrice
+                classifier_matrix = os.path.join(
+                    self.dir_matrix, name_matrix + "/classifier")
+                message = []
+                message.append("La matrice ")
+                message.append(name_matrix)
+
+                if os.path.isfile(classifier_matrix + "/cascade.xml"):
+                    message.append(" est genéré")
                     show_status = True
-                    result = "La matrice " + name_matrix + " est en cours de génération. "
-                    i = 19
-                    fin = False
-                    while i >= 0 and fin is False:
-                        if os.path.isfile(classifier_matrix + "/stage" + str(i) + ".xml"):
-                            fin = True
-                            result = result + os.linesep + \
-                                "Génération en cours : étape " + str(i) + "/19"
-                        i = i - 1
-                    if fin is False:
-                        result = result + os.linesep + "Génération en cours : étape 0/19"
-            else:
-                show_status = True
-                result = "Non pris en compte, cause environnement :" + self.my_utility.os_name
+                else:
+                    # commande pour recuperer si un proc generate_matrice est en marche
+                    cmd = "ps -aef | grep generate_matrice_" + \
+                        name_matrix + " | grep -v grep | wc -l"
+                    #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
+                    in_progress = subprocess.check_output([cmd], shell=True)
+                    if int(in_progress) >= 1:
+                        show_status = True
+                        msg = " est en cours de génération. "
+                        i = 19
+                        fin = False
+                        while i >= 0 and fin is False:
+                            if os.path.isfile(classifier_matrix + "/stage" + str(i) + ".xml"):
+                                fin = True
+                                msg = msg + "Etape " + str(i) + "/19"
+                            i = i - 1
+                        if fin is False:
+                            msg = msg + "Etape 0/19"
+                    else:
+                        msg = " n'est pas encore lancé."
+                        current_matrix = os.path.join(self.dir_matrix, name_matrix)
+                        cmd_pos = "find " + current_matrix +"/positive_img -type f | wc -l"
+                        cmd_neg = "find " + current_matrix +"/negative_img -type f | wc -l"
+                        msg = msg + " Nb image positive : "+ subprocess.check_output([cmd_pos], shell=True)+"-"
+                        msg = msg + " Nb image negative : "+ subprocess.check_output([cmd_neg], shell=True)+"."
+                    #3 eme append (obligatoire)
+                    message.append(msg)
+                #on pousse les messages dans le tableau result
+                result.append(message)
+            #fin de for
         return result, show_status
 
     def add_directory_matrix(self, name_matrix):

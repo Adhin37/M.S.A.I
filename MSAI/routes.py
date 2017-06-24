@@ -267,20 +267,12 @@ def manage_matrix():
         connected_user_role = session['role']
         MY_MATRIX.update_directory_matrix()
 
-    name_matrix = ""
-    statuscheck = "Aucune matrice sélectionnée"
-    lenghtarray = len(MY_MATRIX.list_dir_matrix)
-    show_status = True
-    if lenghtarray > 0:
-        #on selectionne le premier element par defaut
-        name_matrix = MY_MATRIX.list_dir_matrix[0]
-        if name_matrix != "":
-            statuscheck, show_status = MY_MATRIX.status(name_matrix)
+    message_check, show_status = MY_MATRIX.status()
+
     return dict(title='Management Matrice',
                 #color_do_matrix='',
                 #message_do_matrix='',
-                message_check_matrix=statuscheck,
-                name_matrix=name_matrix,
+                message_check_matrix=message_check,
                 show_status=show_status,
                 # Gestions des alertes"""
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
@@ -297,28 +289,6 @@ def manage_matrix():
                 list_matrix=MY_MATRIX.list_dir_matrix,
                 year=MY_UTILITY.date.year)
 
-# pourra etre enlever
-@route('/check_classifier', method='POST')
-@view('manage_matrix')
-def check_classifier():
-
-    name_matrix = request.POST.dict['select_list_matrix'][0]
-    statuscheck = MY_MATRIX.status(name_matrix)
-    print statusCheck
-
-    return dict(title='Management Matrice',
-                message_add_pic='',
-                message_create_matrix='',
-                message_delete_matrix='',
-                list_matrix=MY_MATRIX.list_dir_matrix,
-                color_add_pic="vide",
-                color_add_matrix='',
-                color_do_matrix='',
-                color_suppr_matrix='',
-                message_do_matrix='',
-                message_check_matrix=statuscheck,
-                year=MY_UTILITY.date.year)
-
 
 @route('/do_classifier', method='POST')
 @view('manage_matrix')
@@ -326,14 +296,23 @@ def do_classifier():
     """
     Assignation des 2 valeurs de retour
     """
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
     name_matrix = request.POST.dict['select_list_matrix'][0]
     message_do_matrix, color_status_matrix = MY_MATRIX.generate(name_matrix)
-
-    #est lancé automatiquement maintenant
-    #statuscheck = MY_MATRIX.status(name_matrix)
+    message_check, show_status = MY_MATRIX.status()
 
     return dict(title='Management Matrice',
                 # Gestions des alertes"""
+                message_check_matrix=message_check,
+                show_status=show_status,
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
                 color_add_pic="vide",
@@ -346,6 +325,8 @@ def do_classifier():
                 # Message affiché et couleur de l'alerte - lancement génération matrice
                 message_do_matrix=message_do_matrix,
                 color_do_matrix=color_status_matrix,
+                user=connected_user,
+                role=connected_user_role,
                 list_matrix=MY_MATRIX.list_dir_matrix,
                 year=MY_UTILITY.date.year)
 
@@ -356,6 +337,15 @@ def add_matrix():
     """
     Add new matrix for matrix generation
     """
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
     name_matrix = request.POST.dict['name_matrice'][0]
     message_create_matrix = ''
     color_status_matrix = ''
@@ -363,10 +353,14 @@ def add_matrix():
     # Assignation des 2 valeurs de retour
     message_create_matrix, color_status_matrix = MY_MATRIX.add_directory_matrix(
         name_matrix)
+
     MY_MATRIX.update_directory_matrix()
+    message_check, show_status = MY_MATRIX.status()
 
     return dict(title='Resultat',
                 # Gestions des alertes"""
+                message_check_matrix=message_check,
+                show_status=show_status,
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
                 color_add_pic="vide",
@@ -376,6 +370,8 @@ def add_matrix():
                 # Message affiché et couleur de l'alerte - supression d'une matrice
                 message_delete_matrix='',
                 color_suppr_matrix='',
+                user=connected_user,
+                role=connected_user_role,
                 list_matrix=MY_MATRIX.list_dir_matrix,
                 year=MY_UTILITY.date.year)
 
@@ -386,6 +382,15 @@ def add_pictures():
     """
     Add new images for matrix generation
     """
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
     name_matrix = request.POST.dict['select_list_matrix'][0]
     picture_type = request.POST.dict['typeImage'][0]
     uploads = request.files.getall('upload')
@@ -401,9 +406,12 @@ def add_pictures():
             upload.save(filepath)
 
     MY_MATRIX.update_directory_matrix()
+    message_check, show_status = MY_MATRIX.status()
 
     return dict(title='Resultat',
                 # Gestions des alertes"""
+                message_check_matrix=message_check,
+                show_status=show_status,
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic=message_add_pic,
                 color_add_pic=color_add_pic,
@@ -413,6 +421,8 @@ def add_pictures():
                 # Message affiché et couleur de l'alerte - supression d'une matrice
                 message_delete_matrix='',
                 color_suppr_matrix='',
+                user=connected_user,
+                role=connected_user_role,
                 list_matrix=MY_MATRIX.list_dir_matrix,
                 year=MY_UTILITY.date.year)
 
@@ -423,6 +433,15 @@ def delete_matrix():
     """
     Delete one matrix
     """
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
     name_matrix = request.POST.dict['selected_matrix'][0]
     message_delete_matrix = ''
     color_suppr_matrix = ''
@@ -431,9 +450,11 @@ def delete_matrix():
     message_delete_matrix, color_suppr_matrix = MY_MATRIX.delete_directory_matrix(
         name_matrix)
     MY_MATRIX.update_directory_matrix()
-
+    message_check, show_status = MY_MATRIX.status()
     return dict(title='Resultat',
                 # Gestions des alertes
+                message_check_matrix=message_check,
+                show_status=show_status,
                 # Message affiché et couleur de l'alerte - ajout d'une image dans une matrice
                 message_add_pic='',
                 color_add_pic='',
@@ -443,6 +464,8 @@ def delete_matrix():
                 # Message affiché et couleur de l'alerte - supression d'une matrice
                 message_delete_matrix=message_delete_matrix,
                 color_suppr_matrix=color_suppr_matrix,
+                user=connected_user,
+                role=connected_user_role,
                 list_matrix=MY_MATRIX.list_dir_matrix,
                 year=MY_UTILITY.date.year)
 
