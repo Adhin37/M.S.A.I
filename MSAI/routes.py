@@ -505,10 +505,8 @@ def launchimage(filepath, filename):
     name_select_matrice = ""
     nbmatch = 0
     if len(request.POST.getall('matrice_filter')) > 0:
-        print "recherche knife"
         bmatchmatrice, nbmatch = matricepresent(source, request.POST.getall('matrice_filter'))
         name_select_matrice = request.POST.getall('matrice_filter')[0]
-        print bmatchmatrice
 
     if os.path.isfile(filepath):
         os.remove(filepath)

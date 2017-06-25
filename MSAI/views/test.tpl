@@ -106,8 +106,8 @@
 						<p class="text-results"> {{emotion[0]}} : {{emotion[1]*100/emotion_all}}%.</p>
 					%end
 				%end
-				<hr />
-				<div class="content-results">
+				<div class="content-results" style="display:none;">
+					<hr />
 					<p class="text-muted">Est-ce correct ?</p>
 					<button class="btn btn-sm btn-success">Oui</button>
 					<button class="btn btn-sm btn-danger">Non</button>
