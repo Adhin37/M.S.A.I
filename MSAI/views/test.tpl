@@ -92,7 +92,11 @@
 
 						%end
 					%else:
-					<p class="text-results alert-success">Situation normale.</p>
+						%if bmatchmatrice is True:
+						<p class="text-results alert-warning">Objet négatif détecté !<br> Mais pas d'émotion négative </p>
+						%else:
+						<p class="text-results alert-success">Situation normale.</p>
+						%end
 					%end
 				%end
 				%if faces != 0:
