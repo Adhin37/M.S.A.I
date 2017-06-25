@@ -236,10 +236,10 @@ def do_upload():
     upload.save(file_path)
 
     if file_format == 'img':
-        dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatchmatrice = launchimage(file_path, upload.filename)
+        dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatchmatrice, list_emotion = launchimage(file_path, upload.filename)
 
     elif file_format == 'video':
-        dict_emotion, faces, bmatch, file_save = launchvideo(file_path, upload.filename)
+        dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatchmatrice, list_emotion = launchvideo(file_path, upload.filename)
 
     path = MY_MATRIX.dir_matrix
     if not os.path.exists(path):
@@ -262,7 +262,8 @@ def do_upload():
                 bmatch=bmatch,
                 bmatchmatrice=bmatchmatrice,
                 name_select_matrice=name_select_matrice,
-                nbmatchmatrice=nbmatchmatrice)
+                nbmatchmatrice=nbmatchmatrice,
+                list_emotion=list_emotion)
 
 
 @route('/manage_matrix')
@@ -476,6 +477,8 @@ def launchimage(filepath, filename):
     :param filepath: Chemin du fichier
     :param filename: Nom du fichier
     """
+    list_emotion = []
+    list_emotion = request.POST.getall('emotion_filter')
     img = cv2.imread(filepath, 1)
 
     file_save = filename
@@ -499,7 +502,7 @@ def launchimage(filepath, filename):
         return redirect("/handler")
 
     dict_emotion, faces, bmatch = emotionspresent(
-        fisher_face, source, request.POST.getall('emotion_filter'))
+        fisher_face, source, list_emotion)
 
     bmatchmatrice = False
     name_select_matrice = ""
@@ -511,7 +514,7 @@ def launchimage(filepath, filename):
     if os.path.isfile(filepath):
         os.remove(filepath)
 
-    return dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatch
+    return dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatch, list_emotion
 
 def launchvideo(filepath, filename):
     """
@@ -520,6 +523,16 @@ def launchvideo(filepath, filename):
     :param filename: Nom du fichier
     """
     bmatch = False
+    sortie = False
+    sortie_emotion = False
+    bmatchmatrice = False
+    sortie_object = False
+    name_select_matrice = ""
+    list_emotion = []
+    list_emotion = request.POST.getall('emotion_filter')
+    if len(request.POST.getall('matrice_filter')) > 0:
+        name_select_matrice = request.POST.getall('matrice_filter')[0]
+
     base = os.path.basename(filename)
     file_save = os.path.splitext(base)[0] + '.jpg'
     try:
@@ -537,7 +550,7 @@ def launchvideo(filepath, filename):
     else:
         return
 
-    while read_value and not bmatch:
+    while read_value and not sortie:
         if not os.path.exists(os.path.abspath(MY_UTILITY.dir_path + '/static/pictures/')):
             os.makedirs(os.path.abspath(
                 MY_UTILITY.dir_path + '/static/pictures/'))
@@ -547,27 +560,34 @@ def launchvideo(filepath, filename):
 
         source = os.path.abspath(MY_UTILITY.dir_path +
                                  '/static/pictures/' + file_save)
-
-        dict_emotion, faces, bmatch = emotionspresent(fisher_face, source, request.POST.getall('emotion_filter'))
-
+        comp = len(request.POST.getall('emotion_filter'))
+        if comp > 0:
+            dict_emotion, faces, bmatch = emotionspresent(fisher_face, source, list_emotion)
+            if bmatch is True:
+                sortie_emotion = True
+            else:
+                sortie_emotion = False
+        else:
+            sortie_emotion = True
+            dict_emotion = {}
+            faces = 0
+        nbmatch = 0
+        if name_select_matrice != "":
+            bmatchmatrice, nbmatch = matricepresent(source, name_select_matrice)
+            if bmatchmatrice is True:
+                sortie_object = True
+            else:
+                sortie_object = False
+        else:
+            sortie_object = True
         read_value, img = cap.read()
-
-    #MY_MATRIX.update_matrice()
-    #classifier_name_found = []
-    #while_continue = True
-
-    #while cap.isOpened() and while_continue:
-        #img = cap.read()[1]
-        #gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        ## KNIFES = knife_cascade.detectMultiScale(GRAY, 20, 50, minSize=(200, 100), maxSize=(800, 400))
-        #cpt_classifier = 0
-        #while len(MY_MATRIX.list_matrix) > cpt_classifier and while_continue:
-           #while_continue == False
-            #cpt_classifier += 1
-
-    #cap.release()
-    #cv2.destroyAllWindows()
-    return dict_emotion, faces, bmatch, file_save
+        if sortie_emotion is True and sortie_object is True:
+            sortie = True
+        print "sortie1: "+ str(sortie_emotion)
+        print "sortie2: "+ str(sortie_object)
+        print "sortie final "+ str(sortie)
+    cap.release()
+    return dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatch, list_emotion
 
 
 @route('/disconnect')
