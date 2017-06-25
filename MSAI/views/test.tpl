@@ -86,12 +86,13 @@
 					<p class="text-results">Résultat :</p>
 					%if bmatch is True:
 						%if bmatchmatrice is True:
-						<p class="text-results red-color">Situation anormale détectée !</p>
+						<p class="text-results alert-danger">Situation anormale détectée !</p>
 						%else:
-						<p class="text-results orange-color">Emotion négative détectée !</p>
+						<p class="text-results alert-warning">Emotion négative détectée !<br> Mais pas de zone de matrice detecté </p>
+
 						%end
 					%else:
-					<p class="text-results green-color">Situation normale.</p>
+					<p class="text-results alert-success">Situation normale.</p>
 					%end
 				%end
 				%if faces != 0:
