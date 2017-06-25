@@ -27,7 +27,7 @@
 					<% for f in list_filter: %>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id={{f}} value={{f}} aria-label="...">
+							<input type="checkbox" name="matrice_filter" id={{f}} value={{f}} aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value={{f}} readonly>
 					</div>
@@ -85,14 +85,21 @@
 				%if defined('bmatch'):
 					<p class="text-results">Résultat :</p>
 					%if bmatch is True:
-					<p class="text-results">Situation anormale détectée !</p>
+						%if bmatchmatrice is True:
+						<p class="text-results red-color">Situation anormale détectée !</p>
+						%else:
+						<p class="text-results orange-color">Emotion négative détectée !</p>
+						%end
 					%else:
-					<p class="text-results">Situation normale.</p>
+					<p class="text-results green-color">Situation normale.</p>
 					%end
 				%end
 				%if faces != 0:
 					</br>
 					<p class="text-results">Prédiction :</p>
+					%if bmatchmatrice is True:
+					<p class="text-results">J'ai identifié {{nbmatchmatrice}} zone de {{name_select_matrice}}(s).</p>
+					%end
 					<p class="text-results">J'ai identifié {{faces}} visage(s).</p>
 					%for emotion in dict_emotion:
 						<p class="text-results"> {{emotion[0]}} : {{emotion[1]*100/emotion_all}}%.</p>

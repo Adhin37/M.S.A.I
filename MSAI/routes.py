@@ -15,6 +15,7 @@ from utils import Utils
 from matrix import Matrix
 from database import Database
 from emotion import emotionspresent, emotionscount
+from objectmatrice import matricepresent
 
 MY_UTILITY = Utils()
 MY_MATRIX = Matrix()
@@ -181,12 +182,13 @@ def test():
         connected_user_role = session['role']
 
     path = MY_MATRIX.dir_matrix
-    print 'path:' + path + '\n'
     if not os.path.exists(path):
         os.makedirs(path)
     dirs = os.listdir(path)
+    LIST_FILTER = []
     for one_dir in dirs:
-        LIST_FILTER.append(one_dir)
+        if os.path.isfile(os.path.join(MY_MATRIX.dir_models, one_dir + "_classifier.xml")):
+            LIST_FILTER.append(one_dir)
     return dict(title='Test',
                 message='Test OPENCV.',
                 file='',
@@ -210,7 +212,7 @@ def do_upload():
     else:
         connected_user = session['identifiant']
         connected_user_role = session['role']
-    fisher_face = ''
+
     upload = request.files.get('upload')
     file_format = ''
 
@@ -234,21 +236,33 @@ def do_upload():
     upload.save(file_path)
 
     if file_format == 'img':
-        dict_emotion, faces, bmatch, file_save = launchimage(file_path, upload.filename)
+        dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatchmatrice = launchimage(file_path, upload.filename)
 
     elif file_format == 'video':
         dict_emotion, faces, bmatch, file_save = launchvideo(file_path, upload.filename)
 
+    path = MY_MATRIX.dir_matrix
+    if not os.path.exists(path):
+        os.makedirs(path)
+    dirs = os.listdir(path)
+    LIST_FILTER = []
+    for one_dir in dirs:
+        if os.path.isfile(os.path.join(MY_MATRIX.dir_models, one_dir + "_classifier.xml")):
+            LIST_FILTER.append(one_dir)
     return dict(title='Resultat',
                 message='Resultat OpenCV',
                 year=MY_UTILITY.date.year,
                 file=file_save,
                 user=connected_user,
+                role=connected_user_role,
                 list_filter=LIST_FILTER,
                 faces=faces,
                 dict_emotion=dict_emotion,
                 emotion_all=emotionscount(dict_emotion),
-                bmatch=bmatch)
+                bmatch=bmatch,
+                bmatchmatrice=bmatchmatrice,
+                name_select_matrice=name_select_matrice,
+                nbmatchmatrice=nbmatchmatrice)
 
 
 @route('/manage_matrix')
@@ -346,6 +360,15 @@ def add_matrix():
     """
     Add new matrix for matrix generation
     """
+    connected_user = ''
+    connected_user_role = ''
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
     name_matrix = request.POST.dict['name_matrice'][0]
     message_create_matrix = ''
     color_status_matrix = ''
@@ -369,6 +392,8 @@ def add_matrix():
                 # Message affiché et couleur de l'alerte - supression d'une matrice
                 message_delete_matrix='',
                 color_suppr_matrix='',
+                user=connected_user,
+                role=connected_user_role,
                 list_matrix=MY_MATRIX.list_dir_matrix,
                 year=MY_UTILITY.date.year)
 
@@ -472,15 +497,23 @@ def launchimage(filepath, filename):
         fisher_face.load('models/emotion_detection_model.xml')
     except AttributeError as error:
         return redirect("/handler")
-        #handler(error)
 
     dict_emotion, faces, bmatch = emotionspresent(
         fisher_face, source, request.POST.getall('emotion_filter'))
 
+    bmatchmatrice = False
+    name_select_matrice = ""
+    nbmatch = 0
+    if len(request.POST.getall('matrice_filter')) > 0:
+        print "recherche knife"
+        bmatchmatrice, nbmatch = matricepresent(source, request.POST.getall('matrice_filter'))
+        name_select_matrice = request.POST.getall('matrice_filter')[0]
+        print bmatchmatrice
+
     if os.path.isfile(filepath):
         os.remove(filepath)
 
-    return dict_emotion, faces, bmatch, file_save
+    return dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatch
 
 def launchvideo(filepath, filename):
     """
@@ -499,7 +532,6 @@ def launchvideo(filepath, filename):
         fisher_face.load('models/emotion_detection_model.xml')
     except AttributeError as error:
         return redirect('/handler')
-        #handler(error)
 
     cap = cv2.VideoCapture(filepath)
     if cap.isOpened():
