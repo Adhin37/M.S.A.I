@@ -46,7 +46,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profil</a></li>
-                                <li id="zoneAdmin" style="display:none;"><a href="/manage_database"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Panneau administration</a></li>
+                                <li id="zoneAdmin" style="display:none;"><a href="/manage_users"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Panneau administration</a></li>
                                 <li><a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editer configuration</a></li>
                                 <li><a href="/disconnect"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Déconnexion</a></li>
                             </ul>

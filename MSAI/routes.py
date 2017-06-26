@@ -136,9 +136,9 @@ def about():
                 year=MY_UTILITY.date.year)
 
 
-@route('/manage_database')
-@view('manage_database')
-def manage_database():
+@route('/manage_users')
+@view('manage_users')
+def manage_users():
     listUser = []
     session = session_manager.get_session()
     if session['valid'] is False:
@@ -158,6 +158,27 @@ def manage_database():
                 listUser=listUser,
                 year=MY_UTILITY.date.year)
 
+@route('/manage_emotions')
+@view('manage_emotions')
+def manage_users():
+    listEmotion = []
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        redirect("/login")
+    elif session['role'] != False and session['role'] != 'Administrateur':
+        redirect("/home")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+        listEmotion = MY_DATABASE.getEmotion()
+
+    return dict(title='Management Matrice',
+                color_emotion_action='',
+                message_emotion_action='',
+                user=connected_user,
+                role=connected_user_role,
+                listEmotion=listEmotion,
+                year=MY_UTILITY.date.year)
 
 @route('/handler')
 @view('handler')
@@ -616,7 +637,7 @@ def disconnect():
 
 
 @route('/createUser', method='POST')
-@view('manage_database')
+@view('manage_users')
 def createUser():
     """
     Create one user
@@ -653,11 +674,46 @@ def createUser():
                 year=MY_UTILITY.date.year)
 
 
+@route('/createEmotion', method='POST')
+@view('manage_emotions')
+def createEmotion():
+    """
+    Create one emotion
+    """
+    listEmotion = []
+    message_create_emotion = ''
+    color_create_emotion = ''
+
+    session = session_manager.get_session()
+    if session['valid'] is False:
+        connected_user = ''
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
+    emotion_Intitule = request.POST.dict['inputEmotion'][0]
+
+    # Assignation des 2 valeurs de retour
+    message_create_emotion, color_create_emotion = MY_DATABASE.createEmotion(
+        emotion_Intitule)
+    listEmotion = MY_DATABASE.getEmotion()
+
+    return dict(title='Resultat',
+                # Gestions des alertes
+                # Message affiché et couleur de l'alerte - ajout d'un utilisateur
+                color_emotion_action=color_create_emotion,
+                message_emotion_action=message_create_emotion,
+                user=connected_user,
+                role=connected_user_role,
+                listEmotion=listEmotion,
+                year=MY_UTILITY.date.year)
+
 @route('/deleteUser', method='POST')
-@view('manage_database')
+@view('manage_users')
 def deleteUser():
     """
-    Create one user
+    Delete one user
     """
     listUser = []
     message_delete_user = ''
@@ -687,9 +743,42 @@ def deleteUser():
                 listUser=listUser,
                 year=MY_UTILITY.date.year)
 
+@route('/deleteEmotion', method='POST')
+@view('manage_emotions')
+def deleteEmotion():
+    """
+    Delete one emotion
+    """
+    listEmotion = []
+    message_delete_emotion = ''
+    color_delete_emotion = ''
+
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        connected_user = ''
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
+    emotion_ID = request.POST.dict['idEmotion'][0]
+
+    # Assignation des 2 valeurs de retour
+    message_delete_emotion, color_delete_emotion = MY_DATABASE.deleteEmotion(emotion_ID)
+    listEmotion = MY_DATABASE.getEmotion()
+
+    return dict(title='Resultat',
+                # Gestions des alertes
+                # Message affiché et couleur de l'alerte - ajout d'un utilisateur
+                color_emotion_action=color_delete_emotion,
+                message_emotion_action=message_delete_emotion,
+                user=connected_user,
+                role=connected_user_role,
+                listEmotion=listEmotion,
+                year=MY_UTILITY.date.year)
 
 @route('/updateUser', method='POST')
-@view('manage_database')
+@view('manage_users')
 def updateUser():
     """
     Create one user
@@ -723,4 +812,40 @@ def updateUser():
                 user=connected_user,
                 role=connected_user_role,
                 listUser=listUser,
+                year=MY_UTILITY.date.year)
+
+@route('/updateEmotion', method='POST')
+@view('manage_emotions')
+def updateUser():
+    """
+    Create one emotion
+    """
+    listEmotion = []
+    message_update_emotion = ''
+    color_update_emotion = ''
+
+    session = session_manager.get_session()
+    if session['valid'] == False:
+        connected_user = ''
+        redirect("/login")
+    else:
+        connected_user = session['identifiant']
+        connected_user_role = session['role']
+
+    emotion_ID = request.POST.dict['idMajEmotion'][0]
+    emotion_Intitule = request.POST.dict['majEmotion'][0]
+
+    # Assignation des 2 valeurs de retour
+    message_update_emotion, color_update_emotion = MY_DATABASE.updateEmotion(
+        emotion_ID, emotion_Intitule)
+    listEmotion = MY_DATABASE.getEmotion()
+
+    return dict(title='Resultat',
+                # Gestions des alertes
+                # Message affiché et couleur de l'alerte - ajout d'un utilisateur
+                color_emotion_action=color_update_emotion,
+                message_emotion_action=message_update_emotion,
+                user=connected_user,
+                role=connected_user_role,
+                listEmotion =listEmotion,
                 year=MY_UTILITY.date.year)

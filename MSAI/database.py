@@ -74,6 +74,21 @@ class Database(object):
             color_create_user = "alert alert-danger"
 
         return message_create_user, color_create_user
+
+    def createEmotion(self, intitule):
+        message_create_emotion = ''
+        color_create_emotion = ''
+        if intitule is not None:
+            cursor = self.conn.cursor()
+            cursor.execute("""INSERT INTO emotion(name_emotion) VALUES(?)""", (intitule,))
+            self.conn.commit()
+            message_create_emotion = "L'émotion " + intitule + " a bien été créée dans la base de données."
+            color_create_emotion = "alert alert-success"
+        else:
+            message_create_emotion = "Ajout échoué, l'intitulé ne peut pas être vide."
+            color_create_emotion = "alert alert-danger"
+
+        return message_create_emotion, color_create_emotion
     
     def getUser(self):
         self.listUser = []
@@ -84,6 +99,16 @@ class Database(object):
             self.listUser.append(row)
 
         return  self.listUser
+
+    def getEmotion(self):
+        self.listEmotion = []
+        cursor = self.conn.cursor()
+        cursor.execute("""SELECT E.id_emotion, E.name_emotion FROM emotion as E""")
+        rows = cursor.fetchall()
+        for row in rows:
+            self.listEmotion.append(row)
+
+        return  self.listEmotion
 
     def deleteUser(self, id):
         self.listUser = []
@@ -103,6 +128,23 @@ class Database(object):
 
         return  message_delete_user, color_delete_user
 
+    def deleteEmotion(self, id):
+        self.listEmotion = []
+        message_delete_emotion = ''
+        color_delete_emotion= ''
+
+        if id is not None:
+            cursor = self.conn.cursor()
+            cursor.execute("""DELETE FROM emotion WHERE id_emotion = ?""", (id,))
+            self.conn.commit()
+            message_delete_emotion = "L'émotion a bien été supprimée de la base de données."
+            color_delete_emotion = "alert alert-success"
+        else:
+            message_delete_emotion = "Une erreur est survenue."
+            color_delete_emotion = "alert alert-danger"
+
+        return  message_delete_emotion, color_delete_emotion
+
     def updateUser(self, id, identifiant, role):
         self.listUser = []
         message_update_user = ''
@@ -119,3 +161,20 @@ class Database(object):
             color_update_user = "alert alert-danger"
 
         return  message_update_user, color_update_user
+
+    def updateEmotion(self, id, intitule):
+        self.listEmotion = []
+        message_update_emotion = ''
+        color_update_emotion= ''
+        if id is not None:
+            if intitule is not None:
+                cursor = self.conn.cursor()
+                cursor.execute("""UPDATE emotion SET name_emotion = ? WHERE id_emotion = ?""", (intitule, id))
+                self.conn.commit()
+                message_update_emotion = "L'émotion a bien été mise à jour."
+                color_update_emotion = "alert alert-success"
+        else:
+            message_update_emotion = "Une erreur est survenue."
+            color_update_emotion = "alert alert-danger"
+
+        return  message_update_emotion, color_update_emotion

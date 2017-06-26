@@ -57,7 +57,7 @@
     <Folder Include="views\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="views\manage_database.tpl" />
+    <Content Include="views\manage_users.tpl" />
     <Content Include="models\emotion_detection_model.xml" />
     <Content Include="models\haarcascade_eye.xml" />
     <Content Include="models\haarcascade_frontalface_default.xml" />
@@ -87,6 +87,7 @@
     <Content Include="static\scripts\respond.min.js" />
     <Content Include="static\scripts\_references.js" />
     <Content Include="views\index.tpl" />
+    <Content Include="views\manage_emotions.tpl" />
     <Content Include="views\manage_matrix.tpl" />
     <Content Include="views\test.tpl" />
     <Content Include="views\about.tpl" />
