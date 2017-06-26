@@ -18,6 +18,7 @@ class Database(object):
         self.conn = sqlite3.connect('MSIA.db')
         self.connected_user = ''
         self.list_user = []
+        self.list_emotion = []
 
     def createtable(self):
         """
@@ -100,6 +101,28 @@ class Database(object):
 
         return message_create_user, color_create_user
 
+    def createemotion(self, intitule):
+        """
+        Cette fonction permet de créer un utilisateur
+        :param self: Objet courant
+        :param intitule: nom de l'émotion
+        """
+        message_create_emotion = ''
+        color_create_emotion = ''
+        if intitule is not None:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                """INSERT INTO emotion(name_emotion) VALUES(?)""", (intitule,))
+            self.conn.commit()
+            message_create_emotion = "L'émotion " + intitule + \
+                " a bien été créée dans la base de données."
+            color_create_emotion = "alert alert-success"
+        else:
+            message_create_emotion = "Ajout échoué, l'intitulé ne peut pas être vide."
+            color_create_emotion = "alert alert-danger"
+
+        return message_create_emotion, color_create_emotion
+
     def getuser(self):
         """
         Cette fonction permet de récupérer un User
@@ -114,6 +137,21 @@ class Database(object):
             self.list_user.append(row)
 
         return self.list_user
+
+    def getemotion(self):
+        """
+        Cette fonction permet de récupérer les émotions en base
+        :param self: Objet courant
+        """
+        self.list_emotion = []
+        cursor = self.conn.cursor()
+        cursor.execute(
+            """SELECT E.id_emotion, E.name_emotion FROM emotion as E""")
+        rows = cursor.fetchall()
+        for row in rows:
+            self.list_emotion.append(row)
+
+        return self.list_emotion
 
     def deleteuser(self, id_user):
         """
@@ -137,6 +175,29 @@ class Database(object):
             color_delete_user = "alert alert-danger"
 
         return message_delete_user, color_delete_user
+
+    def deleteemotion(self, id_emo):
+        """
+        Cette fonction permet de supprimer une émotion
+        :param self: Objet courant
+        :param id_emo: Identifiant
+        """
+        self.list_emotion = []
+        message_delete_emotion = ''
+        color_delete_emotion = ''
+
+        if id_emo is not None:
+            cursor = self.conn.cursor()
+            cursor.execute(
+                """DELETE FROM emotion WHERE id_emotion = ?""", (id_emo,))
+            self.conn.commit()
+            message_delete_emotion = "L'émotion a bien été supprimée de la base de données."
+            color_delete_emotion = "alert alert-success"
+        else:
+            message_delete_emotion = "Une erreur est survenue."
+            color_delete_emotion = "alert alert-danger"
+
+        return message_delete_emotion, color_delete_emotion
 
     def updateuser(self, id_user, identifiant, role):
         """
@@ -162,3 +223,26 @@ class Database(object):
             color_update_user = "alert alert-danger"
 
         return message_update_user, color_update_user
+
+    def updateemotion(self, id_emo, intitule):
+        """
+        Cette fonction permet de modifier une émotion en base
+        :param self: Objet courant
+        :param id_emo: Identifiant de l'utilisateur
+        :param intitule: Nom de l'émotion
+        """
+        message_update_emotion = ''
+        color_update_emotion = ''
+        if id_emo is not None:
+            if intitule is not None:
+                cursor = self.conn.cursor()
+                cursor.execute(
+                    """UPDATE emotion SET name_emotion = ? WHERE id_emotion = ?""", (intitule, id_emo))
+                self.conn.commit()
+                message_update_emotion = "L'émotion a bien été mise à jour."
+                color_update_emotion = "alert alert-success"
+        else:
+            message_update_emotion = "Une erreur est survenue."
+            color_update_emotion = "alert alert-danger"
+
+        return message_update_emotion, color_update_emotion

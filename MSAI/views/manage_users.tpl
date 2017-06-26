@@ -16,8 +16,7 @@ document.getElementById("afficheUpdate").style.display = "none";
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Gestion utilisateurs<span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Gestion emotions</a></li>
-            <li><a href="#">Gestion matrices</a></li>
+            <li><a href="/manage_emotions">Gestion émotions</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -53,7 +52,6 @@ document.getElementById("afficheUpdate").style.display = "none";
                 <tr>
                   <th>ID</th>
                   <th>Identifiant</th>
-                  <th>Mot de passe</th>
 				  <th>Role</th>
 				  <th>Action</th>
                 </tr>
@@ -67,7 +65,6 @@ document.getElementById("afficheUpdate").style.display = "none";
 				  <input type="hidden" class="form-control" id="usr" name="idUser" value={{l[0]}}>
 				  </td>
                   <td>{{l[1]}}</td>
-                  <td>{{l[2]}}</td>
 				  <td>{{l[3]}}</td>
 				  <td><button class="btn btn-primary" type="button" id="afficheUpdate" onclick="updateForm({{l[0]}})">Modifier</button>
 				  <button type="submit" class="btn btn-danger">Supprimer</button></td>
