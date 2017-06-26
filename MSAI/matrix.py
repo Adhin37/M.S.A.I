@@ -88,6 +88,8 @@ class Matrix(object):
             message = []
             message.append("Non pris en compte, cause environnement : ")
             message.append(self.my_utility.os_name)
+            #troisieme argument requis
+            message.append("")
             result.append(message)
         else:
             for name_matrix in self.list_dir_matrix:
