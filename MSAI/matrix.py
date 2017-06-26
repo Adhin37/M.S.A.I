@@ -225,11 +225,10 @@ class Matrix(object):
 
         knifes = knife_cascade.detectMultiScale(gray, 20, 50)
         if len(knifes):
-            print 'FOUND'
-            for (x, y, w, h) in knifes:
-                cv2.rectangle(img, (x, y), (x + w, y + h), (125, 0, 255), 2)
+            for (x_coord, y_coord, w_coord, h_coord) in knifes:
+                cv2.rectangle(img, (x_coord, y_coord), (x_coord + w_coord, y_coord + h_coord), (125, 0, 255), 2)
                 font = cv2.FONT_HERSHEY_SIMPLEX
-                cv2.putText(img, 'Knife', (x + w / 2, y - h / 2),
+                cv2.putText(img, 'Knife', (x_coord + w_coord / 2, y_coord - h_coord / 2),
                             font, 1, (100, 255, 255), 2, cv2.LINE_AA)
             found = True
         else:

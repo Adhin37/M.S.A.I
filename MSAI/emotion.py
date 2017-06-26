@@ -6,6 +6,7 @@ import operator
 import cv2
 from face_detect import findfaces, locatefaces
 
+
 def emotionspresent(model, sourcefilepath, filteremotion):
     """
     Cette fonction permet de récupérer les émotions présentes
@@ -109,6 +110,7 @@ def emotionsmatch(dictemotion, indexchoose):
                 break
 
     return b_match
+
 
 def positionemotion(dictemotion):
     """

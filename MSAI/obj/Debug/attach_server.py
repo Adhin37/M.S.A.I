@@ -199,7 +199,7 @@ def enable_attach(secret, address = ('0.0.0.0', DEFAULT_PORT), certfile = None, 
                     write_string(client, exe)
 
                     try:
-                        username = getpass.getuser()
+                        username = getpass.getUser()
                     except AttributeError:
                         username = ''
                     write_string(client, username)
