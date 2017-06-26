@@ -50,7 +50,15 @@ input[type="checkbox"].input-validation-error {
 .text-results, .content-results {
     padding-left: 15px;
 }
-
+.red-color{
+    color:red;
+}
+.orange-color{
+    color:orange;
+}
+.green-color{
+    color:green;
+}
 .content-results {
     padding-bottom: 15px;
 }

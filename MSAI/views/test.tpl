@@ -21,13 +21,15 @@
 					<input type="file" name="upload" />
 					<input type="submit" class="btn btn-sm btn-primary btn-submit-img" value="Lancer l'analyse" />
 					<button type="button" class="btn btn-sm btn-info btn-submit-img" onclick="toggle_div(this,'zoneFiltre');"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span></button>
+					<br/><br/>
+					<p> <i> NB : Pour une vidéo de 2 min ne détectant aucune situation anormale, la page mettra 2 min à vous répondre le temps d'analyser toute la vidéo</i></p>
 					<div id="zoneFiltre" style="display:none;">
 					<br />
 					<h4>Matrices <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
 					<% for f in list_filter: %>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" id={{f}} value={{f}} aria-label="...">
+							<input type="checkbox" name="matrice_filter" id={{f}} value={{f}} aria-label="...">
 						</span>
 						<input type="text" class="form-control" aria-label="..." value={{f}} readonly>
 					</div>
@@ -85,21 +87,40 @@
 				%if defined('bmatch'):
 					<p class="text-results">Résultat :</p>
 					%if bmatch is True:
-					<p class="text-results">Situation anormale détectée !</p>
+						%if bmatchmatrice is True:
+						<p class="text-results alert-danger">Situation anormale détectée !</p>
+						%else:
+							%if name_select_matrice != '':
+								<p class="text-results alert-warning">Emotion négative détectée !<br> Mais pas de zone de matrice detecté </p>
+							%else:
+								<p class="text-results alert-danger">Situation anormale détectée !</p>
+							%end
+						%end
 					%else:
-					<p class="text-results">Situation normale.</p>
+						%if bmatchmatrice is True and len(list_emotion) == 0:
+						<p class="text-results alert-danger">Situation anormale détectée !</p>
+						%elif bmatchmatrice is True:
+						<p class="text-results alert-warning">Objet négatif détecté !<br> Mais pas d'émotion négative </p>
+						%else:
+						<p class="text-results alert-success">Situation normale.</p>
+						%end
+					%end
+					%if bmatchmatrice is True or bmatch is True:
+						</br>
+						<p class="text-results">Prédiction :</p>
+						%if bmatchmatrice is True:
+							<p class="text-results">J'ai identifié {{nbmatchmatrice}} zone de {{name_select_matrice}}(s).</p>
+						%end
+						%if faces != 0:
+							<p class="text-results">J'ai identifié {{faces}} visage(s).</p>
+							%for emotion in dict_emotion:
+								<p class="text-results"> {{emotion[0]}} : {{emotion[1]*100/emotion_all}}%.</p>
+							%end
+						%end
 					%end
 				%end
-				%if faces != 0:
-					</br>
-					<p class="text-results">Prédiction :</p>
-					<p class="text-results">J'ai identifié {{faces}} visage(s).</p>
-					%for emotion in dict_emotion:
-						<p class="text-results"> {{emotion[0]}} : {{emotion[1]*100/emotion_all}}%.</p>
-					%end
-				%end
-				<hr />
-				<div class="content-results">
+				<div class="content-results" style="display:none;">
+					<hr />
 					<p class="text-muted">Est-ce correct ?</p>
 					<button class="btn btn-sm btn-success">Oui</button>
 					<button class="btn btn-sm btn-danger">Non</button>
