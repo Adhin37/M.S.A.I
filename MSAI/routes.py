@@ -453,7 +453,7 @@ def launchimage(filepath, filename):
     nbmatch = 0
     if len(request.POST.getall('matrice_filter')) > 0:
         bmatchmatrice, nbmatch = matricepresent(
-            source, request.POST.getall('matrice_filter'))
+            source, request.POST.getall('matrice_filter')[0])
         name_select_matrice = request.POST.getall('matrice_filter')[0]
 
     if os.path.isfile(filepath):

@@ -72,7 +72,6 @@
 							<p class="text-results alert-success">Situation normale.</p>
 						%end
 					%end
-					%if bmatchmatrice is True or bmatch is True:
 						</br>
 						<p class="text-results">Prédiction :</p>
 						%if bmatchmatrice is True:
@@ -84,7 +83,6 @@
 								<p class="text-results"> {{emotion[0]}} : {{emotion[1]*100/emotion_all}}%.</p>
 							%end
 						%end
-					%end
 				%end
 				<div class="content-results" style="display:none;">
 					<hr />
