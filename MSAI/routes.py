@@ -5,8 +5,6 @@ Routes and views for the bottle application.
 """
 
 import os
-import sqlite3
-import getpass
 import cv2
 from bottle import route, view, request, run, redirect  # pylint: disable=no-name-in-module,unused-import
 import bottle
@@ -254,7 +252,8 @@ def do_upload():
     ext = os.path.splitext(upload.filename)[1]
     if ext in ('.png', '.jpg', '.jpeg', '.gif', '.PNG', '.JPG', '.JPEG', '.GIF'):
         file_format = 'img'
-    elif ext in ('.mp4', '.wma', '.avi', '.mov', '.mpg', '.mkv', '.MP4', '.WMA', '.AVI', '.MOV', '.MPG', '.MKV'):
+    elif ext in ('.mp4', '.wma', '.avi', '.mov', '.mpg', '.mkv', '.MP4',
+                 '.WMA', '.AVI', '.MOV', '.MPG', '.MKV'):
         file_format = 'video'
     else:
         return "File extension not allowed."
@@ -276,14 +275,6 @@ def do_upload():
         dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatchmatrice, list_emotion = launchvideo(
             file_path, upload.filename)
 
-    path = MY_MATRIX.dir_matrix
-    if not os.path.exists(path):
-        os.makedirs(path)
-    dirs = os.listdir(path)
-
-    for one_dir in dirs:
-        if os.path.isfile(os.path.join(MY_MATRIX.dir_models, one_dir + "_classifier.xml")):
-            LIST_FILTER.append(one_dir)
     return dict(title='Resultat',
                 message='Resultat OpenCV',
                 year=MY_UTILITY.date.year,

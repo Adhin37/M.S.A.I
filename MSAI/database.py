@@ -90,13 +90,15 @@ class Database(object):
             print hashed
             cursor = self.conn.cursor()
             cursor.execute(
-                """INSERT INTO users(identifiant, password, role) VALUES(?, ?, ?)""", (identifiant, hashed, role))
+                """INSERT INTO users(identifiant, password, role) VALUES(?, ?, ?)""",
+                (identifiant, hashed, role))
             self.conn.commit()
             message_create_user = "L'utilisateur " + identifiant + \
                 " a bien été créé dans la base de données."
             color_create_user = "alert alert-success"
         else:
-            message_create_user = "Ajout échoué, l'identifiant ou le mot de passe ne peut pas être vide."
+            message_create_user = "Ajout échoué, l'identifiant ou" + \
+                "le mot de passe ne peut pas être vide."
             color_create_user = "alert alert-danger"
 
         return message_create_user, color_create_user
@@ -214,7 +216,8 @@ class Database(object):
             if identifiant is not None and role is not None:
                 cursor = self.conn.cursor()
                 cursor.execute(
-                    """UPDATE users SET identifiant = ?, id_role = ? WHERE id_user = ?""", (identifiant, role, id_user))
+                    """UPDATE users SET identifiant = ?, id_role = ? WHERE id_user = ?""",
+                    (identifiant, role, id_user))
                 self.conn.commit()
                 message_update_user = "L'utilisateur a bien été mis à jour."
                 color_update_user = "alert alert-success"
@@ -237,7 +240,8 @@ class Database(object):
             if intitule is not None:
                 cursor = self.conn.cursor()
                 cursor.execute(
-                    """UPDATE emotion SET name_emotion = ? WHERE id_emotion = ?""", (intitule, id_emo))
+                    """UPDATE emotion SET name_emotion = ? WHERE id_emotion = ?""",
+                    (intitule, id_emo))
                 self.conn.commit()
                 message_update_emotion = "L'émotion a bien été mise à jour."
                 color_update_emotion = "alert alert-success"

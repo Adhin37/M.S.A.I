@@ -8,7 +8,8 @@ CLASSIFIER_CASCADE = cv2.CascadeClassifier('models/haarcascade_frontalface_defau
 
 def findfaces(sourcefilepath):
     """
-    Cette fonction permet de trouver le visage et nous retourne ces coordonnées ainsi que le visage découpée
+    Cette fonction permet de trouver le visage et nous retourne
+    ces coordonnées ainsi que le visage découpée
     :param sourcefilepath: Source du fichier
     """
     faces_coordinates = locatefaces(sourcefilepath)

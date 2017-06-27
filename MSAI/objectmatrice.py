@@ -25,7 +25,8 @@ def matricepresent(sourcefilepath, classifier):
         bmatch = False
         nbmatch = len(obj)
         for (x_coord, y_coord, w_coord, h_coord) in obj:
-            cv2.rectangle(img, (x_coord, y_coord), (x_coord + w_coord, y_coord + h_coord), (125, 0, 255), 2)
+            cv2.rectangle(img, (x_coord, y_coord), (x_coord + w_coord, y_coord + h_coord),
+                          (125, 0, 255), 2)
             bmatch = True
 
         if bmatch is True:
