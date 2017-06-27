@@ -33,15 +33,7 @@ VALID_USER = bottlesession.authenticator(SESSION_MANAGER)
 @view('index')
 def home():
     """Renders the home page."""
-    connected_user = ''
-    connected_user_role = ''
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        connected_user = ''
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     return dict(title='Resultat',
                 user=connected_user,
                 role=connected_user_role,
@@ -52,14 +44,7 @@ def home():
 @view('contact')
 def contact():
     """Renders the contact page."""
-    connected_user = ''
-    connected_user_role = ''
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     return dict(title='Contact',
                 user=connected_user,
                 role=connected_user_role,
@@ -106,14 +91,7 @@ def connect():
 @view('main')
 def main():
     """Renders the contact page."""
-    connected_user = ''
-    connected_user_role = ''
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     return dict(title='Page accueil',
                 user=connected_user,
                 role=connected_user_role,
@@ -124,14 +102,7 @@ def main():
 @view('about')
 def about():
     """Renders the about page."""
-    connected_user = ''
-    connected_user_role = ''
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     return dict(title='A propos',
                 message='Application MSAI.',
                 user=connected_user,
@@ -146,15 +117,8 @@ def manageusers():
     Affiche le panneau d'administration
     """
     list_user = []
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    elif session['role'] != False and session['role'] != 'Administrateur':
-        redirect("/home")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
-        list_user = MY_DATABASE.getuser()
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('admin')
+    list_user = MY_DATABASE.getuser()
 
     return dict(title='Management Database',
                 color_database_action='',
@@ -172,15 +136,8 @@ def manageemotions():
     Affiche l'onglet émotion
     """
     list_emotion = []
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    elif session['role'] != False and session['role'] != 'Administrateur':
-        redirect("/home")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
-        list_emotion = MY_DATABASE.getemotion()
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('admin')
+    list_emotion = MY_DATABASE.getemotion()
 
     return dict(title='Management Matrice',
                 color_emotion_action='',
@@ -204,16 +161,9 @@ def handler():
 @view('test')
 def test():
     """Renders the test page."""
-    connected_user = ''
-    connected_user_role = ''
-
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
-
+    list_emotion = []
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
+    list_emotion = MY_DATABASE.getemotion()
     path = MY_MATRIX.dir_matrix
     if not os.path.exists(path):
         os.makedirs(path)
@@ -228,6 +178,7 @@ def test():
                 year=MY_UTILITY.date.year,
                 user=connected_user,
                 role=connected_user_role,
+                list_emotion = list_emotion,
                 list_filter=LIST_FILTER)
 
 
@@ -237,15 +188,7 @@ def do_upload():
     """
     Upload file for processing
     """
-    connected_user = ''
-    connected_user_role = ''
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
-
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     upload = request.files.get('upload')
     file_format = ''
 
@@ -307,15 +250,8 @@ def manage_matrix():
     """
     Upload file for processing
     """
-    connected_user = ''
-    connected_user_role = ''
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
-        MY_MATRIX.update_directory_matrix()
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
+    MY_MATRIX.update_directory_matrix()
 
     message_check, show_status = MY_MATRIX.status()
 
@@ -346,15 +282,7 @@ def do_classifier():
     """
     Assignation des 2 valeurs de retour
     """
-    connected_user = ''
-    connected_user_role = ''
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
-
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     name_matrix = request.POST.dict['select_list_matrix'][0]
     message_do_matrix, color_status_matrix = MY_MATRIX.generate(name_matrix)
     message_check, show_status = MY_MATRIX.status()
@@ -387,15 +315,7 @@ def add_matrix():
     """
     Add new matrix for matrix generation
     """
-    connected_user = ''
-    connected_user_role = ''
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
-
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     name_matrix = request.POST.dict['name_matrice'][0]
     message_create_matrix = ''
     color_status_matrix = ''
@@ -432,15 +352,7 @@ def add_pictures():
     """
     Add new images for matrix generation
     """
-    connected_user = ''
-    connected_user_role = ''
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
-
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     name_matrix = request.POST.dict['select_list_matrix'][0]
     picture_type = request.POST.dict['typeImage'][0]
     uploads = request.files.getall('upload')
@@ -483,15 +395,7 @@ def delete_matrix():
     """
     Delete one matrix
     """
-    connected_user = ''
-    connected_user_role = ''
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
-
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     name_matrix = request.POST.dict['selected_matrix'][0]
     message_delete_matrix = ''
     color_suppr_matrix = ''
@@ -661,13 +565,7 @@ def createuser():
     message_create_user = ''
     color_create_user = ''
 
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        connected_user = ''
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
 
     user_id = request.POST.dict['inputIdentifiant'][0]
     password_id = request.POST.dict['inputPassword'][0]
@@ -699,13 +597,7 @@ def createemotion():
     message_create_emotion = ''
     color_create_emotion = ''
 
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        connected_user = ''
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
 
     emotion_intitule = request.POST.dict['inputEmotion'][0]
 
@@ -735,13 +627,7 @@ def deleteuser():
     message_delete_user = ''
     color_delete_user = ''
 
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        connected_user = ''
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
 
     user_id = request.POST.dict['idUser'][0]
 
@@ -770,13 +656,7 @@ def deleteemotion():
     message_delete_emotion = ''
     color_delete_emotion = ''
 
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        connected_user = ''
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
 
     emotion_id = request.POST.dict['idEmotion'][0]
 
@@ -806,13 +686,7 @@ def updateuser():
     message_update_user = ''
     color_update_user = ''
 
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        connected_user = ''
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
 
     user_id = request.POST.dict['idMajUser'][0]
     user_identifiant = request.POST.dict['majIdentifiant'][0]
@@ -844,13 +718,7 @@ def updateemotion():
     message_update_emotion = ''
     color_update_emotion = ''
 
-    session = SESSION_MANAGER.get_session()
-    if session['valid'] is False:
-        connected_user = ''
-        redirect("/login")
-    else:
-        connected_user = session['identifiant']
-        connected_user_role = session['role']
+    connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
 
     emotion_id = request.POST.dict['idMajEmotion'][0]
     emotion_intitule = request.POST.dict['majEmotion'][0]

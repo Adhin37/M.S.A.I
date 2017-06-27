@@ -1,4 +1,4 @@
-% rebase('layout.tpl', title=title, year=year, list_filter=list_filter)
+% rebase('layout.tpl', title=title, year=year, list_filter=list_filter, list_emotion= list_emotion)
 % setdefault('faces',0)
 
 <script type="text/javascript">
@@ -38,48 +38,15 @@
 					<!-- /input-group -->
 
 					<h4>Emotions <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
+					<% for l in list_emotion: %>
 					<div class="input-group">
 						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Neutre" aria-label="...">
+							<input type="checkbox" name="emotion_filter" value={{l[1]}} aria-label="...">
 						</span>
-						<input type="text" class="form-control" aria-label="..." value="Neutre" readonly>
+						<input type="text" class="form-control" aria-label="..." value={{l[1]}} readonly>
 					</div>
 					<br/>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Enervé" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Enervé" readonly>
-					</div>
-					<br/>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Dégoût" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Dégoût" readonly>
-					</div>
-					<br/>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Joyeux" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Joyeux" readonly>
-					</div>
-					<br/>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Triste" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Triste" readonly>
-					</div>
-					<br/>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Surpris" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Surpris" readonly>
-					</div>
-						<br/>
+					<% end %>					
 					</div>
 				</div>
 
