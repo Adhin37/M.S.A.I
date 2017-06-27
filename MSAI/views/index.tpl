@@ -12,6 +12,6 @@
     Annonces &nbsp; <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
   </a>
     <a href="#" class="list-group-item">Presentation du projet, mardi prochain.</a>
-    <a href="#" class="list-group-item">Panneau d'administration ouvert !</a>
-    <a href="#" class="list-group-item">J'ai une grosse bite.</a>
+    <a href="#" class="list-group-item">Panneau d'administration accessible et fonctionnel</a>
+    <a href="#" class="list-group-item">Ajout de la possibilité d'effectuer une analyse à partir d'une vidéo.</a>
 </div>

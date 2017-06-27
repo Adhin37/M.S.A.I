@@ -11,12 +11,13 @@
     <body onLoad="afficher();">
         <div class="navbar navbar-inverse">
             <div class="container">
-                <div class="navbar-header">
+                <div class="navbar-header">	
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+					<a href="#" class="navbar-left"><img src="static/fonts/ptitLogo.png" style="margin-right: 20px;"></a>
                     <a href="/home" class="navbar-brand">MSAI</a>
                 </div>
                 <div class="navbar-collapse collapse">
