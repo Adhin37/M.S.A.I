@@ -1,10 +1,10 @@
-% rebase('layout.tpl', title=title, year=year)
+% rebase('layout.tpl', title=title, year=year, user=user, role=role)
 
 <h2>{{ title }}.</h2>
 <h3>{{ message }}</h3>
 
 <div class="panel-group" id="accordion">
-        <div class="faqHeader">Généralités</div>
+        <div class="faqHeader">Gï¿½nï¿½ralitï¿½s</div>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
@@ -14,9 +14,9 @@
             <div id="collapseUn" class="panel-collapse collapse in">
                 <div class="panel-body">
                     <p>M.S.A.I. signifie Modern Software Artificial Intelligence.</p>
-					<p>Il s'agit d'une application créée par cinq étudiants dans le cadre de leur formation de Manager des Systèmes d'Information.</p>
-					<p>Le rôle final de cette application est de reconnaitre une situation (décrite en format photo ou vidéo) définie comme "anormale".
-					<p>Cette application est un "Proof of Concept" et ne garanti aucun résultat.</p>
+					<p>Il s'agit d'une application crï¿½ï¿½e par cinq ï¿½tudiants dans le cadre de leur formation de Manager des Systï¿½mes d'Information.</p>
+					<p>Le rï¿½le final de cette application est de reconnaitre une situation (dï¿½crite en format photo ou vidï¿½o) dï¿½finie comme "anormale".
+					<p>Cette application est un "Proof of Concept" et ne garanti aucun rï¿½sultat.</p>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
             </div>
             <div id="collapseDeux" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <p>L'intelligence artificielle est une discipline scientifique appartenant au groupe des sciences cognitives et au groupe des sciences informatiques . Elle recherche des méthodes de résolution de problèmes à forte complexité logique ou algorithmique. Par extension elle désigne, dans le langage courant, les dispositifs imitant ou remplaçant l'humain dans certaines mises en œuvre de ses fonctions cognitives.</p>
+                    <p>L'intelligence artificielle est une discipline scientifique appartenant au groupe des sciences cognitives et au groupe des sciences informatiques . Elle recherche des mï¿½thodes de rï¿½solution de problï¿½mes ï¿½ forte complexitï¿½ logique ou algorithmique. Par extension elle dï¿½signe, dans le langage courant, les dispositifs imitant ou remplaï¿½ant l'humain dans certaines mises en ï¿½uvre de ses fonctions cognitives.</p>
 					<p><i> - Source : Wikipedia </i>
 				</div>
             </div>
@@ -43,19 +43,19 @@
             </div>
             <div id="collapseTrois" class="panel-collapse collapse">
                 <div class="panel-body">
-                    L'application est actuellement utilisée par un particulier.
+                    L'application est actuellement utilisï¿½e par un particulier.
                 </div>
             </div>
         </div>
 		<div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseQuatre">Dans quel langage est codé M.S.A.I. ?</a>
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseQuatre">Dans quel langage est codï¿½ M.S.A.I. ?</a>
                 </h4>
             </div>
             <div id="collapseQuatre" class="panel-collapse collapse">
                 <div class="panel-body">
-                    M.S.A.I est codé en python dans sa version 2.7.
+                    M.S.A.I est codï¿½ en python dans sa version 2.7.
                 </div>
             </div>
         </div>
@@ -79,7 +79,7 @@
             </div>
             <div id="collapseSix" class="panel-collapse collapse">
                 <div class="panel-body">
-                    M.S.A.I. n'a actuellement pas vocation à être commercialement distribuée. L'application ainsi que sa propriété seront remises au client qui pourra choisir de la distribuer gratuitement ou non.
+                    M.S.A.I. n'a actuellement pas vocation ï¿½ ï¿½tre commercialement distribuï¿½e. L'application ainsi que sa propriï¿½tï¿½ seront remises au client qui pourra choisir de la distribuer gratuitement ou non.
                 </div>
             </div>
         </div>
@@ -88,7 +88,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSept">Comment effectuée un traitement avec MSAI ?</a>
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseSept">Comment effectuï¿½e un traitement avec MSAI ?</a>
                 </h4>
             </div>
             <div id="collapseSept" class="panel-collapse collapse">
@@ -100,7 +100,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseHuit">Que suis-je censé obtenir après ce traitement ?</a>
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseHuit">Que suis-je censï¿½ obtenir aprï¿½s ce traitement ?</a>
                 </h4>
             </div>
             <div id="collapseHuit" class="panel-collapse collapse">
@@ -117,14 +117,14 @@
             </div>
             <div id="collapseNeuf" class="panel-collapse collapse">
                 <div class="panel-body">
-                    Une matrice est une formule mathématique généré par un script alimenté en images. Ce script génère une "base de données de formes" sous forme mathématique.
+                    Une matrice est une formule mathï¿½matique gï¿½nï¿½rï¿½ par un script alimentï¿½ en images. Ce script gï¿½nï¿½re une "base de donnï¿½es de formes" sous forme mathï¿½matique.
                 </div>
             </div>
         </div>
 		<div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseDix">Comment créer une matrice ?</a>
+                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseDix">Comment crï¿½er une matrice ?</a>
                 </h4>
             </div>
             <div id="collapseDix" class="panel-collapse collapse">

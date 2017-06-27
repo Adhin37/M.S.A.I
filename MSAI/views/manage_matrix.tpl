@@ -1,4 +1,4 @@
-% rebase('layout.tpl', title=title, year=year, list_matrix=list_matrix)
+% rebase('layout.tpl', title=title, year=year, list_matrix=list_matrix, user=user, role=role)
 
 <script type="text/javascript">
 	function afficher() {
