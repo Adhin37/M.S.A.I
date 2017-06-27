@@ -1,4 +1,4 @@
-% rebase('layout.tpl', title=title, year=year, liste_emotion=liste_emotion)
+% rebase('layout.tpl', title=title, year=year, list_emotion=list_emotion)
 
 <script type="text/javascript"> 
 
@@ -15,7 +15,7 @@ document.getElementById("afficheUpdate").style.display = "none";
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Gestion des �motions<span class="sr-only">(current)</span></a></li>
+            <li class="active"><a href="#">Gestion des emotions<span class="sr-only">(current)</span></a></li>
             <li><a href="/manage_users">Gestion utilisateurs</a></li>
           </ul>
         </div>
@@ -28,10 +28,10 @@ document.getElementById("afficheUpdate").style.display = "none";
 					<button type="button" class="close" data-dismiss="alert" ></button>
 					{{ message_emotion_action }}
 					</div>
-			  <label for="usr">Intitul�:</label>
+			  <label for="usr">Intitule:</label>
 			  <input type="text" class="form-control" id="usr" name="inputEmotion" required>
 			</div>
-			<button type="submit" class="btn btn-success">Ajouter une �motion</button>
+			<button type="submit" class="btn btn-success">Ajouter une emotion</button>
             </div>
 			</form>
           <div class="table-responsive">
@@ -44,7 +44,7 @@ document.getElementById("afficheUpdate").style.display = "none";
                 </tr>
               </thead>
               <tbody>
-				<% for l in liste_emotion: %>
+				<% for l in list_emotion: %>
 				<form class="form-signin" action="/deleteEmotion" method="post" enctype="multipart/form-data">
 				<tr>
 				  <td>{{l[0]}}
@@ -63,7 +63,6 @@ document.getElementById("afficheUpdate").style.display = "none";
 				<input type="hidden" class="form-control" id="emotion" name="idMajEmotion" value={{l[0]}}>
 				</td>
 				<td><input type="text" class="form-control" id="majEmotion" name="majEmotion" value={{l[1]}} required></td>
-                <td></td>
 				<td><button type="submit" class="btn btn-primary" id="btnMaj">Modifier</button></td>
 				  </div>
                 </tr>

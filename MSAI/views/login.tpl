@@ -34,11 +34,6 @@
                     <span id="reauth-email" class="reauth-email"></span>
                     <input type="text" id="Identifiant" name="inputIdentifiant" class="form-control" placeholder="Identifiant" required autofocus>
                     <input type="password" id="Password" name ="inputPassword" class="form-control" placeholder="Mot de passe" required>
-                    <div id="remember" class="checkbox">
-                        <label>
-                            <input type="checkbox" value="remember-me"> Avoir souvenance de moi
-                        </label>
-                    </div>
                     <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Se connecter</button>
                 </form><!-- /form -->
                 <a href="#" class="forgot-password">

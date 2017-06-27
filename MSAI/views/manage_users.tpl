@@ -16,7 +16,7 @@ document.getElementById("afficheUpdate").style.display = "none";
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Gestion utilisateurs<span class="sr-only">(current)</span></a></li>
-            <li><a href="/manage_emotions">Gestion �motions</a></li>
+            <li><a href="/manage_emotions">Gestion emotions</a></li>
           </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -77,7 +77,6 @@ document.getElementById("afficheUpdate").style.display = "none";
 				<input type="hidden" class="form-control" id="usr" name="idMajUser" value={{l[0]}}>
 				</td>
 				<td><input type="text" class="form-control" id="majIdentifiant" name="majIdentifiant" value={{l[1]}} required></td>
-                <td></td>
 				<td><select class="form-control" id=majRole" name ="majRole">
 					<option value="2">Utilisateur</option>
 					<option value="1">Administrateur</option>
