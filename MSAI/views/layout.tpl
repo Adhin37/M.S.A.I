@@ -8,17 +8,6 @@
         <link rel="stylesheet" type="text/css" href="/static/content/site.css"/>
         <link rel="stylesheet" type="text/css" href="/static/content/Admin.css"/>
 	</head>
-    <script type="text/javascript">
-        function afficher() {
-            if (document.getElementById("role").value == 'Administrateur') {
-                document.getElementById("zoneAdmin").style.display = "";
-                }
-            else{
-                document.getElementById("zoneAdmin").style.display = "none";
-            }
-
-        }
-    </script>
     <body onLoad="afficher();">
         <div class="navbar navbar-inverse">
             <div class="container">
@@ -34,7 +23,7 @@
                     <ul class="nav navbar-nav">
                         <li><a href="/test">Test OpenCV</a></li>
                         <li><a href="/manage_matrix">Gestion des matrices</a></li>
-                        <li><a href="/about">A propos</a></li>
+                        <li><a href="/about">FAQ</a></li>
                         <li><a href="/contact">Contact</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -69,4 +58,16 @@
         <script src="/static/scripts/respond.js"></script>
         <script src="/static/scripts/functions.js"></script>
     </body>
+
+	<script type="text/javascript">
+        function afficher() {
+            if (document.getElementById("role").value == 'Administrateur') {
+                document.getElementById("zoneAdmin").style.display = "";
+                }
+            else{
+                document.getElementById("zoneAdmin").style.display = "none";
+            }
+
+        }
+    </script>
 </html>

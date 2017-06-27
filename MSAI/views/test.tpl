@@ -1,4 +1,4 @@
-% rebase('layout.tpl', title=title, year=year, list_filter=list_filter, user=user, role=role)
+% rebase('layout.tpl', title=title, year=year, list_filter=list_filter, list_emotion= list_emotion, user=user, role=role)
 % setdefault('faces',0)
 
 <script type="text/javascript">
@@ -26,60 +26,27 @@
 					<div id="zoneFiltre" style="display:none;">
 					<br />
 					<h4>Matrices <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
-					<% for f in list_filter: %>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="matrice_filter" id={{f}} value={{f}} aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value={{f}} readonly>
-					</div>
-					<br/>
-					<% end %>
+					% for f in list_filter:
+						<div class="input-group">
+							<span class="input-group-addon">
+								<input type="checkbox" name="matrice_filter" id={{f}} value={{f}} aria-label="...">
+							</span>
+							<input type="text" class="form-control" aria-label="..." value={{f}} readonly>
+						</div>
+						<br/>
+					% end
 					<!-- /input-group -->
 
 					<h4>Emotions <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Neutre" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Neutre" readonly>
-					</div>
-					<br/>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Enervé" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Enervé" readonly>
-					</div>
-					<br/>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Dégoût" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Dégoût" readonly>
-					</div>
-					<br/>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Joyeux" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Joyeux" readonly>
-					</div>
-					<br/>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Triste" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Triste" readonly>
-					</div>
-					<br/>
-					<div class="input-group">
-						<span class="input-group-addon">
-							<input type="checkbox" name="emotion_filter" value="Surpris" aria-label="...">
-						</span>
-						<input type="text" class="form-control" aria-label="..." value="Surpris" readonly>
-					</div>
+					% for l in list_emotion:
+						<div class="input-group">
+							<span class="input-group-addon">
+								<input type="checkbox" name="emotion_filter" value={{l[1]}} aria-label="...">
+							</span>
+							<input type="text" class="form-control" aria-label="..." value={{l[1]}} readonly>
+						</div>
 						<br/>
+					% end
 					</div>
 				</div>
 
@@ -98,11 +65,11 @@
 						%end
 					%else:
 						%if bmatchmatrice is True and len(list_emotion) == 0:
-						<p class="text-results alert-danger">Situation anormale détectée !</p>
+							<p class="text-results alert-danger">Situation anormale détectée !</p>
 						%elif bmatchmatrice is True:
-						<p class="text-results alert-warning">Objet négatif détecté !<br> Mais pas d'émotion négative </p>
+							<p class="text-results alert-warning">Objet négatif détecté !<br> Mais pas d'émotion négative </p>
 						%else:
-						<p class="text-results alert-success">Situation normale.</p>
+							<p class="text-results alert-success">Situation normale.</p>
 						%end
 					%end
 					%if bmatchmatrice is True or bmatch is True:
@@ -133,9 +100,9 @@
             <div class="panel-heading">Résultat :</div>
 			<div class="panel-body paddingPanel">
 				%if file:
-				<img src="static/pictures/{{file}}" style="width: 100%;"/>
+					<img src="static/pictures/{{file}}" style="width: 100%;"/>
 				%else:
-				<img src="static/fonts/no_image.png" style="width: 100%;"/>
+					<img src="static/fonts/no_image.png" style="width: 100%;"/>
 				%end
 			</div>
 		</div>

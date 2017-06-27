@@ -142,7 +142,6 @@ body, html {
 }
 
 footer {
-	position: absolute;
     text-align: center;
 }
 
@@ -160,3 +159,5 @@ footer {
     padding: 0 5px 10px 15px;
     margin-bottom: 10px;
 }
+
+

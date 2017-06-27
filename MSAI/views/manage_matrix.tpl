@@ -1,13 +1,5 @@
 % rebase('layout.tpl', title=title, year=year, list_matrix=list_matrix, user=user, role=role)
 
-<script type="text/javascript">
-	function afficher() {
-	document.getElementById("select_list_matrix").value = document.getElementById("selected_matrix").value;
-	document.getElementById("select_list_matrix_classi").value = document.getElementById("selected_matrix").value;
-	document.getElementById("select_list_matrix_check").value = document.getElementById("selected_matrix").value;
-}
-</script>
-
 <body onLoad="afficher();">
 	%if defined('show_status'):
 		%if show_status == True:
@@ -116,4 +108,12 @@
 		</div>
 	</div> <!-- /fin row -->
 </body>
+
+<script type="text/javascript">
+	function afficher() {
+	document.getElementById("select_list_matrix").value = document.getElementById("selected_matrix").value;
+	document.getElementById("select_list_matrix_classi").value = document.getElementById("selected_matrix").value;
+	document.getElementById("select_list_matrix_check").value = document.getElementById("selected_matrix").value;
+}
+</script>
 
