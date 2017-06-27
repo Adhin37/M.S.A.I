@@ -4,6 +4,7 @@
 Routes and views for the bottle application.
 """
 
+from shutil import copyfile
 import os
 import cv2
 from bottle import route, view, request, run, redirect  # pylint: disable=no-name-in-module,unused-import
@@ -176,7 +177,7 @@ def test():
                 year=MY_UTILITY.date.year,
                 user=connected_user,
                 role=connected_user_role,
-                list_emotion = list_emotion,
+                list_emotion=list_emotion,
                 list_filter=LIST_FILTER)
 
 
@@ -189,7 +190,6 @@ def do_upload():
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     upload = request.files.get('upload')
     file_format = ''
-
     if not upload:
         return "No file uploaded."
     ext = os.path.splitext(upload.filename)[1]
@@ -232,7 +232,7 @@ def do_upload():
                 bmatchmatrice=bmatchmatrice,
                 name_select_matrice=name_select_matrice,
                 nbmatchmatrice=nbmatchmatrice,
-                list_emotion=list_emotion)
+                list_emotion=MY_DATABASE.list_emotion)
 
 
 @route('/manage_matrix')
@@ -474,6 +474,12 @@ def launchvideo(filepath, filename):
     bmatchmatrice = False
     sortie_object = False
     name_select_matrice = ""
+    incomplet_result = ""
+    incomplet_dict = ""
+    incomplet_result_nb_object = 0
+    #variable pour le stockage d'une image provisoire lors d'une detection d'un seul élement
+    provisoire_img = os.path.abspath(MY_UTILITY.dir_path +
+                                     '/static/pictures/provisoire.jpg')
     list_emotion = []
     list_emotion = request.POST.getall('emotion_filter')
     if len(request.POST.getall('matrice_filter')) > 0:
@@ -521,9 +527,37 @@ def launchvideo(filepath, filename):
             sortie_object = bool(bmatchmatrice)
         else:
             sortie_object = True
-        read_value, img = cap.read()
+
+
         if sortie_emotion is True and sortie_object is True:
             sortie = True
+        elif sortie_emotion is True:
+            copyfile(source, provisoire_img)
+            incomplet_result = 1
+            incomplet_result_nb = faces
+            incomplet_dict = dict_emotion
+        elif sortie_object is True:
+            copyfile(source, provisoire_img)
+            incomplet_result = 2
+            incomplet_result_nb = faces
+            incomplet_dict = dict_emotion
+            incomplet_result_nb_object = nbmatch
+
+        read_value, img = cap.read()
+
+    if incomplet_result != "" and sortie is False:
+        #on copie l'image provisoire vers l'image source (qui est en fin de vidéo)
+        copyfile(provisoire_img, source)
+        print "copy"
+        #on réattribue le dernier match
+        dict_emotion = incomplet_dict
+        faces = incomplet_result_nb
+        if incomplet_result == 1:
+            bmatch = True
+        else:
+            bmatchmatrice = True
+            nbmatch = incomplet_result_nb_object
+
     cap.release()
     return dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatch, list_emotion
 
