@@ -1,4 +1,4 @@
-% rebase('layout.tpl', title=title, year=year, listEmotion=listEmotion)
+% rebase('layout.tpl', title=title, year=year, liste_emotion=liste_emotion)
 
 <script type="text/javascript"> 
 
@@ -15,7 +15,7 @@ document.getElementById("afficheUpdate").style.display = "none";
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Gestion des émotions<span class="sr-only">(current)</span></a></li>
+            <li class="active"><a href="#">Gestion des ï¿½motions<span class="sr-only">(current)</span></a></li>
             <li><a href="/manage_users">Gestion utilisateurs</a></li>
           </ul>
         </div>
@@ -28,10 +28,10 @@ document.getElementById("afficheUpdate").style.display = "none";
 					<button type="button" class="close" data-dismiss="alert" ></button>
 					{{ message_emotion_action }}
 					</div>
-			  <label for="usr">Intitulé:</label>
+			  <label for="usr">Intitulï¿½:</label>
 			  <input type="text" class="form-control" id="usr" name="inputEmotion" required>
 			</div>
-			<button type="submit" class="btn btn-success">Ajouter une émotion</button>
+			<button type="submit" class="btn btn-success">Ajouter une ï¿½motion</button>
             </div>
 			</form>
           <div class="table-responsive">
@@ -44,7 +44,7 @@ document.getElementById("afficheUpdate").style.display = "none";
                 </tr>
               </thead>
               <tbody>
-				<% for l in listEmotion: %>
+				<% for l in liste_emotion: %>
 				<form class="form-signin" action="/deleteEmotion" method="post" enctype="multipart/form-data">
 				<tr>
 				  <td>{{l[0]}}
