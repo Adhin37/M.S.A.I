@@ -189,6 +189,7 @@ def do_upload():
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     upload = request.files.get('upload')
     file_format = ''
+    list_emotion = MY_DATABASE.getemotion()
 
     if not upload:
         return "No file uploaded."
