@@ -1,4 +1,4 @@
-% rebase('layout.tpl', title='Accueil', year=year)
+% rebase('layout.tpl', title='Accueil', year=year, user=user, role=role)
 
 <div class="jumbotron">
     <h1>MSAI</h1>

@@ -1,4 +1,4 @@
-% rebase('layout.tpl', title=title, year=year, list_filter=list_filter)
+% rebase('layout.tpl', title=title, year=year, list_filter=list_filter, user=user, role=role)
 % setdefault('faces',0)
 
 <script type="text/javascript">

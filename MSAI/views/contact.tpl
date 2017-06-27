@@ -1,10 +1,10 @@
-% rebase('layout.tpl', title=title, year=year)
+% rebase('layout.tpl', title=title, year=year, user=user, role=role)
 
 <h2>{{ title }}.</h2>
 
 <address>
     MSAI<br />
-    2 Allée Jean Vaillé, 36000 Châteauroux<br />
+    2 Allï¿½e Jean Vaillï¿½, 36000 Chï¿½teauroux<br />
 </address>
 
 <address>
