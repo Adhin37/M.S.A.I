@@ -5,7 +5,6 @@ This script implement the matrix navigation tab.
 import os
 import shutil
 import subprocess
-from routes import cv2
 from utils import Utils
 
 
@@ -46,7 +45,9 @@ class Matrix(object):
             message_create_matrix = "La matrice " + name_matrix + " a déjà été generé !"
             color_status_matrix = "alert alert-danger"
         elif os.path.isfile(os.path.join(self.dir_matrix, name_matrix + "/classifier/cascade.xml")):
-            message_create_matrix = "La matrice " + name_matrix + " a déjà été generé, cependant un problème a eu lieu lors de la mise à disposition de celle-ci dans les models!"
+            message_create_matrix = "La matrice " + name_matrix + \
+                " a déjà été generé, cependant un problème a eu lieu " + \
+                "lors de la mise à disposition de celle-ci dans les models!"
             color_status_matrix = "alert alert-danger"
         else:
             current_matrix = os.path.join(self.dir_matrix, name_matrix)
@@ -59,20 +60,25 @@ class Matrix(object):
                 color_status_matrix = "alert alert-danger"
             else:
                 cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
-                nb_generate_in_progress = subprocess.check_output([cmd], shell=True)
+                nb_generate_in_progress = subprocess.check_output(
+                    [cmd], shell=True)
                 if int(nb_generate_in_progress) >= 2:
                     message_create_matrix = "La génération de la matrice " + \
-                        name_matrix + " n'a pas pu être lancé car la limite de génération simultanée est déjà atteinte (limite : 2). "
+                        name_matrix + \
+                        " n'a pas pu être lancé car la limite de génération simultanée est déjà" + \
+                        " atteinte (limite : 2). "
                     color_status_matrix = "alert alert-danger"
                 else:
                     dir_script = os.path.abspath(
                         self.my_utility.dir_path + "/doMatrice/screen.sh")
                     os.chmod(dir_script, 0777)
-                    # Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
+                    # Obliger d'utiliser une "," pour passer les paramètres
+                    # (on passe le chemin pour generate)
                     subprocess.call(
                         ['. ' + dir_script, current_matrix, name_matrix], shell=True)
 
-                    message_create_matrix = "La matrice est désormais cours de génération, vous pouvez consulter son avancement par le check."
+                    message_create_matrix = "La matrice est désormais cours de génération, " \
+                        "vous pouvez consulter son avancement par le check."
                     color_status_matrix = "alert alert-success"
         return message_create_matrix, color_status_matrix
 
@@ -88,7 +94,7 @@ class Matrix(object):
             message = []
             message.append("Non pris en compte, cause environnement : ")
             message.append(self.my_utility.os_name)
-            #troisieme argument requis
+            # troisieme argument requis
             message.append("")
             result.append(message)
         else:
@@ -114,25 +120,30 @@ class Matrix(object):
                         msg = " est en cours de génération. "
                         i = 19
                         fin = False
+                        msg_end = "Etape 0/20"
                         while i >= 0 and fin is False:
                             if os.path.isfile(classifier_matrix + "/stage" + str(i) + ".xml"):
                                 fin = True
-                                msg = msg + "Etape " + str(i) + "/19"
+                                msg_end = "Etape " + str(i+1) + "/20"
                             i = i - 1
-                        if fin is False:
-                            msg = msg + "Etape 0/19"
+                        msg = msg + msg_end
                     else:
                         msg = " n'est pas encore lancé."
-                        current_matrix = os.path.join(self.dir_matrix, name_matrix)
-                        cmd_pos = "find " + current_matrix +"/positive_img -type f | wc -l"
-                        cmd_neg = "find " + current_matrix +"/negative_img -type f | wc -l"
-                        msg = msg + " Nb image positive : "+ subprocess.check_output([cmd_pos], shell=True)+"-"
-                        msg = msg + " Nb image negative : "+ subprocess.check_output([cmd_neg], shell=True)+"."
-                    #3 eme append (obligatoire)
+                        current_matrix = os.path.join(
+                            self.dir_matrix, name_matrix)
+                        cmd_pos = "find " + current_matrix + "/positive_img -type f | wc -l"
+                        cmd_neg = "find " + current_matrix + "/negative_img -type f | wc -l"
+                        msg = msg + " Nb image positive : " + \
+                            subprocess.check_output(
+                                [cmd_pos], shell=True) + "-"
+                        msg = msg + " Nb image negative : " + \
+                            subprocess.check_output(
+                                [cmd_neg], shell=True) + "."
+                    # 3 eme append (obligatoire)
                     message.append(msg)
-                #on pousse les messages dans le tableau result
+                # on pousse les messages dans le tableau result
                 result.append(message)
-            #fin de for
+            # fin de for
         return result, show_status
 
     def add_directory_matrix(self, name_matrix):
@@ -206,11 +217,13 @@ class Matrix(object):
         file_path = ''
 
         if picture_ext not in '.jpg':
-            message_add_pic = "Attention ! Seules les images en .jpg sont acceptees, le format de votre image est en " + picture_ext + "."
+            message_add_pic = "Attention ! Seules les images en .jpg sont acceptees, " \
+                "le format de votre image est en " + picture_ext + "."
             color_add_pic = "alert alert-danger"
         else:
             file_path = os.path.abspath(
-                self.dir_matrix + '/' + name_matrix + '/' + picture_pos_neg + '/' + picture_filename)
+                self.dir_matrix + '/' + name_matrix + '/' + \
+                    picture_pos_neg + '/' + picture_filename)
             if os.path.isfile(file_path):
                 os.remove(file_path)
 
@@ -218,20 +231,3 @@ class Matrix(object):
             color_add_pic = "alert alert-success"
 
         return message_add_pic, color_add_pic, file_path
-
-    def nom_classifier(self, knife_cascade, img, gray):
-        """Récupération du nom du classifier"""
-        found = ''
-
-        knifes = knife_cascade.detectMultiScale(gray, 20, 50)
-        if len(knifes):
-            for (x_coord, y_coord, w_coord, h_coord) in knifes:
-                cv2.rectangle(img, (x_coord, y_coord), (x_coord + w_coord, y_coord + h_coord), (125, 0, 255), 2)
-                font = cv2.FONT_HERSHEY_SIMPLEX
-                cv2.putText(img, 'Knife', (x_coord + w_coord / 2, y_coord - h_coord / 2),
-                            font, 1, (100, 255, 255), 2, cv2.LINE_AA)
-            found = True
-        else:
-            found = False
-
-        return found
