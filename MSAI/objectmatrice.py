@@ -20,7 +20,7 @@ def matricepresent(sourcefilepath, classifier):
 
     while read_value:
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        obj = classifier_cascade.detectMultiScale(gray, 20, 50)
+        obj = classifier_cascade.detectMultiScale(gray, 30, 60)
         #obj = classifier_cascade.detectMultiScale(gray, 15, 35)
         bmatch = False
         nbmatch = len(obj)

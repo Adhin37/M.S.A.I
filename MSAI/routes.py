@@ -216,7 +216,7 @@ def test():
     if not os.path.exists(path):
         os.makedirs(path)
     dirs = os.listdir(path)
-
+    del LIST_FILTER[:]
     for one_dir in dirs:
         if os.path.isfile(os.path.join(MY_MATRIX.dir_models, one_dir + "_classifier.xml")):
             LIST_FILTER.append(one_dir)
@@ -620,9 +620,6 @@ def launchvideo(filepath, filename):
         read_value, img = cap.read()
         if sortie_emotion is True and sortie_object is True:
             sortie = True
-        print "sortie1: " + str(sortie_emotion)
-        print "sortie2: " + str(sortie_object)
-        print "sortie final " + str(sortie)
     cap.release()
     return dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatch, list_emotion
 

@@ -5,6 +5,7 @@ Ce module permet de reconnaitre les émotions sur une image ou une vidéo
 import operator
 import cv2
 from facedetect import findfaces, locatefaces
+#from collections import Counter
 
 
 def emotionspresent(model, sourcefilepath, filteremotion):
@@ -56,58 +57,19 @@ def emotionspresent(model, sourcefilepath, filteremotion):
 
         return dict_emotion, faces, bmatch
 
-
 def emotionsmatch(dictemotion, indexchoose):
     """
     Cette fonction permet de déterminer si les émotions présentes sont celles sélectionnées
     :param dictemotion: Liste des émotions
     :param indexchoose: Index des émotions choisis
     """
-    position_1, position_2, position_3, position_4, position_5, position_6 = positionemotion(
-        dictemotion)
-
-    if len(indexchoose) == 1:
-        b_match = bool(indexchoose[0] in position_1.keys())
-
-    if len(indexchoose) == 2:
-        for index in indexchoose:
-            if index in position_1.keys() or index in position_2.keys():
-                b_match = True
-            else:
-                b_match = False
-                break
-
-    if len(indexchoose) == 3:
-        for index in indexchoose:
-            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys():
-                b_match = True
-            else:
-                b_match = False
-                break
-
-    if len(indexchoose) == 4:
-        for index in indexchoose:
-            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys() or index in position_4.keys():
-                b_match = True
-            else:
-                b_match = False
-                break
-
-    if len(indexchoose) == 5:
-        for index in indexchoose:
-            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys() or index in position_4.keys() or index in position_5.keys():
-                b_match = True
-            else:
-                b_match = False
-                break
-
-    if len(indexchoose) == 6:
-        for index in indexchoose:
-            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys() or index in position_4.keys() or index in position_5.keys() or index in position_6.keys():
-                b_match = True
-            else:
-                b_match = False
-                break
+    pos_dictemotion = positionemotion(dictemotion)
+    for index in indexchoose:
+        if index in pos_dictemotion.keys():
+            b_match = True
+        else:
+            b_match = False
+            break
 
     return b_match
 
@@ -187,7 +149,8 @@ def positionemotion(dictemotion):
                                                                 break
         else:
             break
-    return position_1, position_2, position_3, position_4, position_5, position_6
+    return dict(position_1.items() + position_2.items() + position_3.items() +
+                position_4.items() + position_5.items() + position_6.items())
 
 
 def emotionscount(dictemotion):
