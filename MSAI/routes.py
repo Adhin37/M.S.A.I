@@ -548,7 +548,6 @@ def launchvideo(filepath, filename):
     if incomplet_result != "" and sortie is False:
         #on copie l'image provisoire vers l'image source (qui est en fin de vidéo)
         copyfile(provisoire_img, source)
-        print "copy"
         #on réattribue le dernier match
         dict_emotion = incomplet_dict
         faces = incomplet_result_nb
