@@ -23,9 +23,9 @@
 
 <body>
     <div class="container">
-        <div class="card card-container">
+        <div class="card card-container" style="padding: 60px 40px 60px 40px;">
             <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
-            <img id="profile-img" class="profile-img-card" src="static/fonts/Logo.png" style="width:128px;height:128px;" />
+            <img id="profile-img" class="profile-img-card" src="static/fonts/Logo.png" style="width:128px;height:128px;background-color: white;" />
             <p id="profile-name" class="profile-name-card"></p>
             <form class="form-signin" action="/connect" method="post" enctype="multipart/form-data">
                 <div class="form-group">
