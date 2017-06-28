@@ -55,7 +55,6 @@
         </footer>
         <script src="/static/scripts/modernizr-2.6.2.js"></script>
         <script src="/static/scripts/jquery-1.10.2.js"></script>
-        <script src="/static/scripts/bootstrap.min.js"></script>
         <script src="/static/scripts/bootstrap.js"></script>
         <script src="/static/scripts/respond.js"></script>
         <script src="/static/scripts/functions.js"></script>
