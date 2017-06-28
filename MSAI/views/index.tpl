@@ -9,9 +9,9 @@
 </div>
 <div class="list-group" style="width: 70%;margin-left: auto;margin-right: auto;">
     <a href="#" class="list-group-item active" style="background-color: #222; border-color: #222; color:white; ">
-    Annonces &nbsp; <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
-  </a>
+        Annonces &nbsp; <span class="glyphicon glyphicon-comment" aria-hidden="true"></span>
+    </a>
     <a href="#" class="list-group-item">Presentation du projet, mardi prochain.</a>
     <a href="#" class="list-group-item">Panneau d'administration accessible et fonctionnel</a>
-    <a href="#" class="list-group-item">Ajout de la possibilité d'effectuer une analyse à partir d'une vidéo.</a>
+    <a href="#" class="list-group-item">Ajout de la possibilitÃ© d'effectuer une analyse Ã  partir d'une vidÃ©o.</a>
 </div>

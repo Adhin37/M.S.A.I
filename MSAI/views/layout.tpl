@@ -6,12 +6,12 @@
         <title>{{ title }} - Projet MSAI</title>
         <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="/static/content/site.css"/>
-        <link rel="stylesheet" type="text/css" href="/static/content/Admin.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/content/admin.css"/>
 	</head>
     <body onLoad="afficher();">
         <div class="navbar navbar-inverse">
             <div class="container">
-                <div class="navbar-header">	
+                <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -48,27 +48,25 @@
 
         <div class="container-fluid body-content">
             {{!base}}
-            <hr />
-            <footer>
-                <p>&copy; {{ year }} - MSAI</p>
-            </footer>
         </div>
+        <footer>
+            <hr />
+            <p>&copy; {{ year }} - MSAI</p>
+        </footer>
         <script src="/static/scripts/modernizr-2.6.2.js"></script>
         <script src="/static/scripts/jquery-1.10.2.js"></script>
+        <script src="/static/scripts/bootstrap.min.js"></script>
         <script src="/static/scripts/bootstrap.js"></script>
         <script src="/static/scripts/respond.js"></script>
         <script src="/static/scripts/functions.js"></script>
     </body>
-
 	<script type="text/javascript">
         function afficher() {
             if (document.getElementById("role").value == 'Administrateur') {
                 document.getElementById("zoneAdmin").style.display = "";
-                }
-            else{
+            } else{
                 document.getElementById("zoneAdmin").style.display = "none";
             }
-
         }
     </script>
 </html>

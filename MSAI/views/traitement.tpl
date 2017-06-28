@@ -14,39 +14,39 @@
 
 <div class="row">
 	<div class="col-md-3 col-form">
-		<form action="/test" method="post" enctype="multipart/form-data">
+		<form action="/traitement" method="post" enctype="multipart/form-data">
 			<div class="panel panel-default panel-submit">
 				<div class="panel-heading">Sélection Fichier :</div>
 				<div class="panel-body paddingPanel">
 					<input type="file" name="upload" />
 					<input type="submit" class="btn btn-sm btn-primary btn-submit-img" value="Lancer l'analyse" />
 					<button type="button" class="btn btn-sm btn-info btn-submit-img" onclick="toggle_div(this,'zoneFiltre');"><span class="glyphicon glyphicon-filter" aria-hidden="true"></span></button>
-					<br/><br/>
+					<br><br>
 					<p> <i> NB : Pour une vidéo de 2 min ne détectant aucune situation anormale, la page mettra 2 min à vous répondre le temps d'analyser toute la vidéo</i></p>
 					<div id="zoneFiltre" style="display:none;">
-					<br />
+					<br>
 					<h4>Matrices <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
-					% for f in list_filter:
+					%for f in list_filter:
 						<div class="input-group">
 							<span class="input-group-addon">
 								<input type="checkbox" name="matrice_filter" id={{f}} value={{f}} aria-label="...">
 							</span>
 							<input type="text" class="form-control" aria-label="..." value={{f}} readonly>
 						</div>
-						<br/>
-					% end
+						<br>
+					%end
 					<!-- /input-group -->
 
 					<h4>Emotions <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span></h4>
-					% for l in list_emotion:
+					%for l in list_emotion:
 						<div class="input-group">
 							<span class="input-group-addon">
 								<input type="checkbox" name="emotion_filter" value={{l[1]}} aria-label="...">
 							</span>
 							<input type="text" class="form-control" aria-label="..." value={{l[1]}} readonly>
 						</div>
-						<br/>
-					% end
+						<br>
+					%end
 					</div>
 				</div>
 
@@ -72,7 +72,7 @@
 							<p class="text-results alert-success">Situation normale.</p>
 						%end
 					%end
-						</br>
+						<br>
 						<p class="text-results">Prédiction :</p>
 						%if bmatchmatrice is True:
 							<p class="text-results">J'ai identifié {{nbmatchmatrice}} zone de {{name_select_matrice}}(s).</p>

@@ -90,3 +90,6 @@
   display: inline-block;
   border-radius: 50%;
 }
+.navbar {
+  border-radius: 0px;
+}
