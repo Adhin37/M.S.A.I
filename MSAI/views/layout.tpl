@@ -49,10 +49,10 @@
         <div class="container-fluid body-content">
             {{!base}}
         </div>
-        <footer>
+        <div class="footer">
             <hr />
             <p>&copy; {{ year }} - MSAI</p>
-        </footer>
+        </div>
         <script src="/static/scripts/modernizr-2.6.2.js"></script>
         <script src="/static/scripts/jquery-1.10.2.js"></script>
         <script src="/static/scripts/bootstrap.js"></script>
