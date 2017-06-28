@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-This script store global variable in this application.
+Ce module permet de gérer les fonctions utiles.
 """
 from datetime import datetime
 from bottle import redirect
@@ -14,6 +14,11 @@ VALID_USER = bottlesession.authenticator(SESSION_MANAGER)
 
 
 class Utils(object):
+    """
+    Cette classe gère la classe utils.
+    :param object: Objet
+    :type object: Object
+    """
 
     """Variables"""
     dir_path = ''
@@ -34,6 +39,17 @@ class Utils(object):
             self.dir_opencv = os.getenv("HOME") + '/opencv-3.1.0'
 
     def verificationsession(self, acces):
+        """
+        Cette fonction permet de vérifier la session actuelle.
+        :param self: Objet courant
+        :param acces: Accès de l'utilisateur
+        :type self: Object
+        :type acces: String
+        :return connected_user: Utilisateur connecté
+        :return connected_user_role: Rôle de l'utilisateur connecté
+        :rtype connected_user: String
+        :rtype connected_user_role: String
+        """
         connected_user = ''
         connected_user_role = ''
         session = SESSION_MANAGER.get_session()

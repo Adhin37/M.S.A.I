@@ -3,10 +3,15 @@
 <h2>{{ title }}.</h2>
 
 <address>
-    MSAI<br />
-    2 All�e Jean Vaill�, 36000 Ch�teauroux<br />
+    Equipe MSAI.<br />
 </address>
 
 <address>
-    <strong>Project Manager:</strong>   <a href="mailto:thomasdemay37@gmail.com">thomasdemay37@gmail.com</a><br />
+    <strong>Project Manager:</strong>
+    <p>Thomas DEMAY <a href="mailto:thomasdemay37@gmail.com">&#8249;thomasdemay37@gmail.com&#8250;</a></p> <br />
+    <strong>Développeur:</strong>
+    <p>Aurélien BARRE</p>
+    <p>Maxence BLAIS <a href="mailto:maxenceblais@hotmail.fr">&#8249;maxenceblais@hotmail.fr&#8250;</a></p>
+    <p>Bastien DERLON <a href="mailto:bastienderlon@gmail.com">&#8249;bastienderlon@gmail.com&#8250;</a></p>
+    <p>Marc LOUCHART <a href="mailto:marclouchartpro@gmail.com">&#8249;marclouchartpro@gmail.com&#8250;</a></p>
 </address>

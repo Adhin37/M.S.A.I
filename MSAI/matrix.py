@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-This script implement the matrix navigation tab.
+Ce module permet de gérer les matrices.
 """
 import os
 import shutil
@@ -9,7 +9,10 @@ from utils import Utils
 
 
 class Matrix(object):
-    """Class for matrix management"""
+    """
+    Classe gérant les matrices
+    :param object: Objet courant
+    """
     dir_matrix = ''
     dir_models = ''
     list_dir_matrix = []
@@ -37,6 +40,14 @@ class Matrix(object):
     def generate(self, name_matrix):
         """
         Permet de lancer la génération de la matrice name_matrix.
+        :param self: Objet courant
+        :param name_matrix: Nom matrice
+        :type self: Object
+        :type name_matrix: String
+        :return message_create_matrix: Message création matrice
+        :return color_status_matrix: Couleur création matrice
+        :rtype message_create_matrix: String
+        :rtype color_status_matrix: String
         """
         if name_matrix == '' or name_matrix is None:
             message_create_matrix = "Erreur, vous n'avez pas selectionné de matrice !"
@@ -85,6 +96,12 @@ class Matrix(object):
     def status(self):
         """
         Permet de check le statut de génération d'une matrice.
+        :param self: Objet courant
+        :type self: Object
+        :return result: Tableau des résultats
+        :return show_status: Montrer status
+        :rtype result: Array
+        :rtype show_status: Boolean
         """
         show_status = False
         result = []
@@ -147,7 +164,17 @@ class Matrix(object):
         return result, show_status
 
     def add_directory_matrix(self, name_matrix):
-        """Add one matrix directory to matrix directory list"""
+        """
+        Cette fonction ajoute un dossier matrice dans la liste des dossiers des matrices.
+        :param self: Objet Courant
+        :param name_matrix: Nom de la matrice
+        :type self: Object
+        :type name_matrix: String
+        :return message_create_matrix: Message création matrice
+        :return color_status_matrix: Couleur status matrice
+        :rtype message_create_matrix: String
+        :rtype color_status_matrix: String
+        """
         message_create_matrix = ''
         color_status_matrix = ''
 
@@ -173,7 +200,13 @@ class Matrix(object):
         return message_create_matrix, color_status_matrix
 
     def update_directory_matrix(self):
-        """Refresh matrix directory list"""
+        """
+        Cette fonction rafraichit les dossiers des matrices.
+        :param self: Objet Courant
+        :type self: Object
+        :return self.list_dir_matrix: Liste des dossiers matrices
+        :rtype self.list_dir_matrix: List
+        """
         self.list_dir_matrix = []
         dirs = os.listdir(self.dir_matrix)
         for one_dir in sorted(dirs):
@@ -182,7 +215,17 @@ class Matrix(object):
         return self.list_dir_matrix
 
     def delete_directory_matrix(self, name_matrix):
-        """Delete one matrix directory from matrix directory list"""
+        """
+        Cette fonction permet de supprimer un dossier de matrice.
+        :param self: Objet Courant
+        :param name_matrix: Nom matrice
+        :type self: Object
+        :type name_matrix: String
+        :return message_delete_matrix: Message suppression matrice
+        :return color_suppr_matrix: Couleur suppression matrice
+        :rtype message_delete_matrix: String
+        :rtype color_suppr_matrix: String
+        """
         message_delete_matrix = ''
         color_suppr_matrix = ''
 
@@ -201,7 +244,13 @@ class Matrix(object):
         return message_delete_matrix, color_suppr_matrix
 
     def update_matrix(self):
-        """Actualisation de la liste des matrices"""
+        """
+        Actualisation de la liste des matrices.
+        :param self: Objet Courant
+        :type self: Object
+        :return self.list_matrix: Liste des matrices
+        :rtype self.list_matrix: List
+        """
         self.list_matrix = []
         files = os.listdir(self.dir_models)
         for matrix_file in sorted(files):
@@ -211,7 +260,25 @@ class Matrix(object):
         return self.list_matrix
 
     def add_object(self, name_matrix, picture_pos_neg, picture_ext, picture_filename):
-        """Ajout objet dans la matrice sélectionnée via la liste"""
+        """
+        Ajout objet dans la matrice sélectionnée via la liste.
+        :param self: Objet Courant
+        :param name_matrix: Nom de la matrice
+        :param picture_pos_neg: Nom de l'image négative
+        :param picture_ext: Nom de l'extension de l'image
+        :param picture_filename: Nom de l'image
+        :type self: Object
+        :type name_matrix: String
+        :type picture_pos_neg: String
+        :type picture_ext: String
+        :type picture_filename: String
+        :return message_add_pic: Message Ajout Image
+        :return color_add_pic: Couleur Ajout Image
+        :return file_path: Chemin du fichier
+        :rtype message_add_pic: String
+        :rtype color_add_pic: String
+        :rtype file_path: String
+        """
         message_add_pic = ''
         color_add_pic = ''
         file_path = ''

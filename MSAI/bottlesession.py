@@ -1,11 +1,13 @@
 #!/usr/bin/env python
-#
+# -*- coding: utf-8 -*-
 #  Bottle session manager.  See README for full documentation.
 #
 #  Written by: Sean Reifschneider <jafo@tummy.com>
 #
 #  License: 3-clause BSD
-
+"""
+Ce module permet de gérer les sessions
+"""
 from __future__ import with_statement
 
 import pickle
@@ -53,6 +55,7 @@ def authenticator(session_manager, login_url='/auth/login'):
         return decorator
     return valid_user
 
+
 class BaseSession(object):
     '''Base class which implements some of the basic functionality required for
     session managers.  Cannot be used directly.
@@ -61,6 +64,7 @@ class BaseSession(object):
             if the cookie is not to expire, a number of seconds in the future,
             or a datetime object.  (default: 30 days)
     '''
+
     def __init__(self, cookie_expires=86400 * 30):
         self.cookie_expires = cookie_expires
 
@@ -68,7 +72,7 @@ class BaseSession(object):
         """Load session."""
         raise NotImplementedError
 
-    def save(self, sessionid, data):
+    def save(self, data):
         """Save session."""
         raise NotImplementedError
 
@@ -110,6 +114,7 @@ class PickleSession(BaseSession):
     :param session_dir: Directory that session information is stored in.
             (default: ``'/tmp'``).
     '''
+
     def __init__(self, session_dir='/tmp', *args, **kwargs):
         super(PickleSession, self).__init__(*args, **kwargs)
         self.session_dir = session_dir
@@ -125,10 +130,11 @@ class PickleSession(BaseSession):
     def save(self, data):
         """Save session."""
         sessionid = data['sessionid']
-        sessionfilename = os.path.join(self.session_dir, 'session-%s' % sessionid)
+        sessionfilename = os.path.join(
+            self.session_dir, 'session-%s' % sessionid)
         sessiontmpname = sessionfilename + '.' + str(uuid.uuid4())
         with open(sessiontmpname, 'w') as filepath:
-            self.session = pickle.dump(data,filepath)
+            pickle.dump(data, filepath)
         os.rename(sessiontmpname, sessionfilename)
 
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Routes and views for the bottle application.
+Ce module permet de gérer les routes et vues de l'application MSAI.
 """
 
 from shutil import copyfile
@@ -31,9 +31,11 @@ VALID_USER = bottlesession.authenticator(SESSION_MANAGER)
 @route('/home')
 @view('index')
 def home():
-    """Renders the home page."""
+    """
+    Cette fonction nous renvoie vers la page home.
+    """
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
-    return dict(title='Resultat',
+    return dict(title='Accueil',
                 user=connected_user,
                 role=connected_user_role,
                 year=MY_UTILITY.date.year)
@@ -42,7 +44,9 @@ def home():
 @route('/contact')
 @view('contact')
 def contact():
-    """Renders the contact page."""
+    """
+    Cette fonction nous renvoie vers la page contact.
+    """
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     return dict(title='Contact',
                 user=connected_user,
@@ -53,8 +57,10 @@ def contact():
 @route('/login')
 @view('login')
 def login():
-    """Renders the contact page."""
-    return dict(title='Contact',
+    """
+    Cette fonction nous renvoie vers la page login.
+    """
+    return dict(title='Login',
                 message_connect_user='',
                 color_connect_user='',
                 year=MY_UTILITY.date.year)
@@ -64,7 +70,7 @@ def login():
 @view('login')
 def connect():
     """
-    Permet de se connecter à l'application
+    Permet de se connecter à l'application.
     """
     session = SESSION_MANAGER.get_session()
     user_id = request.POST.dict['inputIdentifiant'][0]
@@ -89,7 +95,9 @@ def connect():
 @route('/main')
 @view('main')
 def main():
-    """Renders the contact page."""
+    """
+    Cette fonction nous renvoie vers la page home.
+    """
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     return dict(title='Page accueil',
                 user=connected_user,
@@ -97,13 +105,15 @@ def main():
                 year=MY_UTILITY.date.year)
 
 
-@route('/about')
-@view('about')
+@route('/faq')
+@view('faq')
 def about():
-    """Renders the about page."""
+    """
+    Cette fonction nous renvoie vers la page FAQ.
+    """
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
-    return dict(title='A propos',
-                message='Application MSAI.',
+    return dict(title='FAQ',
+                message='FAQ',
                 user=connected_user,
                 role=connected_user_role,
                 year=MY_UTILITY.date.year)
@@ -150,16 +160,20 @@ def manageemotions():
 @route('/handler')
 @view('handler')
 def handler():
-    """Renders the handler page."""
+    """
+    Cette fonction nous renvoie vers la page handler.
+    """
     return dict(title='Erreur',
                 message='Erreur Application',
                 year=MY_UTILITY.date.year)
 
 
-@route('/test')
-@view('test')
+@route('/traitement')
+@view('traitement')
 def test():
-    """Renders the test page."""
+    """
+    Cette fonction nous renvoie vers la page traitement.
+    """
     list_emotion = []
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     list_emotion = MY_DATABASE.getemotion()
@@ -171,8 +185,8 @@ def test():
     for one_dir in dirs:
         if os.path.isfile(os.path.join(MY_MATRIX.dir_models, one_dir + "_classifier.xml")):
             LIST_FILTER.append(one_dir)
-    return dict(title='Test',
-                message='Test OPENCV.',
+    return dict(title='Traitement',
+                message='Traitement.',
                 file='',
                 year=MY_UTILITY.date.year,
                 user=connected_user,
@@ -181,11 +195,11 @@ def test():
                 list_filter=LIST_FILTER)
 
 
-@route('/test', method='POST')
-@view('test')
+@route('/traitement', method='POST')
+@view('traitement')
 def do_upload():
     """
-    Upload file for processing
+    Cette fonction permet de réaliser le traitement.
     """
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     upload = request.files.get('upload')
@@ -211,15 +225,15 @@ def do_upload():
     upload.save(file_path)
 
     if file_format == 'img':
-        dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatchmatrice, list_emotion = launchimage(
+        dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatchmatrice = launchimage(
             file_path, upload.filename)
 
     elif file_format == 'video':
-        dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatchmatrice, list_emotion = launchvideo(
+        dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatchmatrice = launchvideo(
             file_path, upload.filename)
 
     return dict(title='Resultat',
-                message='Resultat OpenCV',
+                message='Resultat',
                 year=MY_UTILITY.date.year,
                 file=file_save,
                 user=connected_user,
@@ -239,7 +253,7 @@ def do_upload():
 @view('manage_matrix')
 def manage_matrix():
     """
-    Upload file for processing
+    Cette fonction nous renvoie vers la page Manage Matrix.
     """
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     MY_MATRIX.update_directory_matrix()
@@ -304,7 +318,7 @@ def do_classifier():
 @view('manage_matrix')
 def add_matrix():
     """
-    Add new matrix for matrix generation
+    Ajout d'une nouvelle matrice.
     """
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     name_matrix = request.POST.dict['name_matrice'][0]
@@ -341,7 +355,7 @@ def add_matrix():
 @view('manage_matrix')
 def add_pictures():
     """
-    Add new images for matrix generation
+    Ajout nouvelle image dans la matrice.
     """
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     name_matrix = request.POST.dict['select_list_matrix'][0]
@@ -384,7 +398,7 @@ def add_pictures():
 @view('manage_matrix')
 def delete_matrix():
     """
-    Delete one matrix
+    Suppression d'une matrice.
     """
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
     name_matrix = request.POST.dict['selected_matrix'][0]
@@ -417,9 +431,25 @@ def delete_matrix():
 
 def launchimage(filepath, filename):
     """
-    Cette fonction permet de lancer le traitement image
+    Cette fonction permet de lancer le traitement image.
     :param filepath: Chemin du fichier
     :param filename: Nom du fichier
+    :type filepath: String
+    :type filename: String
+    :return dict_emotion: Dictionnaire des émotions
+    :return faces: Nombre de visages
+    :return bmatch: Emotion trouvé
+    :return file_save: Nom de fichier sauvegardé
+    :return bmatchmatrice: Matrice Objet trouvé
+    :return name_select_matrice: Nom Matrice sélectionné
+    :return nbmatch: Nombre de match
+    :rtype dict_emotion: Dictionnary
+    :rtype faces: String
+    :rtype bmatch: Boolean
+    :rtype file_save: String
+    :rtype bmatchmatrice: Boolean
+    :rtype name_select_matrice: String
+    :rtype nbmatch: Integer
     """
     list_emotion = []
     list_emotion = request.POST.getall('emotion_filter')
@@ -459,7 +489,7 @@ def launchimage(filepath, filename):
     if os.path.isfile(filepath):
         os.remove(filepath)
 
-    return dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatch, list_emotion
+    return dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatch
 
 
 def launchvideo(filepath, filename):
@@ -467,6 +497,22 @@ def launchvideo(filepath, filename):
     Cette fonction permet de lancer le traitement vidéo
     :param filepath: Chemin du fichier
     :param filename: Nom du fichier
+    :type filepath: String
+    :type filename: String
+    :return dict_emotion: Dictionnaire des émotions
+    :return faces: Nombre de visages
+    :return bmatch: Emotion trouvé
+    :return file_save: Nom de fichier sauvegardé
+    :return bmatchmatrice: Matrice Objet trouvé
+    :return name_select_matrice: Nom Matrice sélectionné
+    :return nbmatch: Nombre de match
+    :rtype dict_emotion: Dictionnary
+    :rtype faces: String
+    :rtype bmatch: Boolean
+    :rtype file_save: String
+    :rtype bmatchmatrice: Boolean
+    :rtype name_select_matrice: String
+    :rtype nbmatch: Integer
     """
     bmatch = False
     sortie = False
@@ -558,14 +604,14 @@ def launchvideo(filepath, filename):
             nbmatch = incomplet_result_nb_object
 
     cap.release()
-    return dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatch, list_emotion
+    return dict_emotion, faces, bmatch, file_save, bmatchmatrice, name_select_matrice, nbmatch
 
 
 @route('/disconnect')
 @view('index')
 def disconnect():
     """
-    Permet de déconnecter l'utilisateur
+    Permet de déconnecter l'utilisateur.
     """
     session = SESSION_MANAGER.get_session()
     session['valid'] = False
@@ -580,7 +626,7 @@ def disconnect():
 @view('manage_users')
 def createuser():
     """
-    Create one user
+    Création d'un utilisateur.
     """
     list_user = []
     message_create_user = ''
@@ -612,7 +658,7 @@ def createuser():
 @view('manage_emotions')
 def createemotion():
     """
-    Create one emotion
+    Création de la liste des émotions.
     """
     list_emotion = []
     message_create_emotion = ''
@@ -642,7 +688,7 @@ def createemotion():
 @view('manage_users')
 def deleteuser():
     """
-    Delete one user
+    Suppression d'un utilisateur.
     """
     list_user = []
     message_delete_user = ''
@@ -671,7 +717,7 @@ def deleteuser():
 @view('manage_emotions')
 def deleteemotion():
     """
-    Delete one emotion
+    Suppression de la liste des émotions.
     """
     list_emotion = []
     message_delete_emotion = ''
@@ -701,7 +747,7 @@ def deleteemotion():
 @view('manage_users')
 def updateuser():
     """
-    Update one user
+    Modification d'un utilisateur.
     """
     list_user = []
     message_update_user = ''
@@ -733,7 +779,7 @@ def updateuser():
 @view('manage_emotions')
 def updateemotion():
     """
-    Create one emotion
+    Modification de la liste des émotions.
     """
     list_emotion = []
     message_update_emotion = ''

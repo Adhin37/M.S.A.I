@@ -87,7 +87,7 @@
 	<div class="row">
 		<div class="col-md-offset-3 col-md-6">
 			<div class="panel panel-default panel-submit">
-				<div class="panel-heading">Géneration Classifier</div>
+				<div class="panel-heading">Génération Classifier</div>
 				<div class="panel-body paddingPanel">
 					<form action="/do_classifier" method="post" enctype="multipart/form-data">
 						<div class="form-group">

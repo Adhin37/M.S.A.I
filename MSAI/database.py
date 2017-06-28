@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Ce module permet de gérer la bdd
+Ce module permet de gérer la bdd.
 """
 
 import sqlite3
@@ -10,8 +10,9 @@ import bcrypt
 
 class Database(object):
     """
-    Cette classe gère la database
+    Cette classe gère la database.
     :param object: Objet
+    :type object: Object
     """
 
     def __init__(self):
@@ -22,8 +23,13 @@ class Database(object):
 
     def createtable(self):
         """
-        Cette fonction permet de créer la table
+        Cette fonction permet de créer la table.
         :param self: Objet courant
+        :type self: Object
+        :return message_connect_user: Message Utilisateur
+        :return color_connect_user: Couleur Utilisateur
+        :rtype message_connect_user: String
+        :rtype color_connect_user: String
         """
         cursor = self.conn.cursor()
         cursor.execute("""
@@ -42,10 +48,21 @@ class Database(object):
 
     def connectionuser(self, identifiant, password):
         """
-        Cette fonction permet de se connecter
+        Cette fonction permet de se connecter.
         :param self: Objet courant
         :param identifiant: Id
         :param password: Mot de passe
+        :type self: Object
+        :type identifiant: String
+        :type password: String
+        :return message_connect_user: Message Utilisateur
+        :return color_connect_user: Couleur Utilisateur
+        :return connected: Utilisateur connecté
+        :return role: Rôle de l'utilisateur
+        :rtype message_connect_user: String
+        :rtype color_connect_user: String
+        :rtype connected: String
+        :rtype role: String
         """
         if identifiant is not None and password is not None:
             message_connect_user = ''
@@ -77,11 +94,19 @@ class Database(object):
 
     def createuser(self, identifiant, password, role):
         """
-        Cette fonction permet de créer un utilisateur
+        Cette fonction permet de créer un utilisateur.
         :param self: Objet courant
         :param identifiant: Id
         :param password: Mot de passe
         :param role: Rôle de l'utilisateur
+        :type self: Object
+        :type identifiant: String
+        :type password: String
+        :type role: String
+        :return message_create_user: Message création utilisateur
+        :return color_create_user: Couleur création utilisateur
+        :rtype message_create_user: String
+        :rtype color_create_user: String
         """
         message_create_user = ''
         color_create_user = ''
@@ -105,9 +130,15 @@ class Database(object):
 
     def createemotion(self, intitule):
         """
-        Cette fonction permet de créer un utilisateur
+        Cette fonction permet de créer un utilisateur.
         :param self: Objet courant
         :param intitule: nom de l'émotion
+        :type self: Object
+        :type intitule: String
+        :return message_create_emotion: Message création emotion
+        :return color_create_emotion: Couleur création emotion
+        :rtype message_create_emotion: String
+        :rtype color_create_emotion: String
         """
         message_create_emotion = ''
         color_create_emotion = ''
@@ -129,6 +160,9 @@ class Database(object):
         """
         Cette fonction permet de récupérer un User
         :param self: Objet courant
+        :type self: Object
+        :return self.list_user: Liste des utilisateurs
+        :rtype self.list_user: Array
         """
         self.list_user = []
         cursor = self.conn.cursor()
@@ -142,8 +176,11 @@ class Database(object):
 
     def getemotion(self):
         """
-        Cette fonction permet de récupérer les émotions en base
+        Cette fonction permet de récupérer les émotions en base.
         :param self: Objet courant
+        :type self: Object
+        :return self.list_emotion: Liste des émotions
+        :rtype self.list_emotion: Array
         """
         self.list_emotion = []
         cursor = self.conn.cursor()
@@ -157,9 +194,15 @@ class Database(object):
 
     def deleteuser(self, id_user):
         """
-        Cette fonction permet de supprimer un utilisateur
+        Cette fonction permet de supprimer un utilisateur.
         :param self: Objet courant
         :param id_user: Identifiant
+        :type self: Object
+        :type id_user: Integer
+        :return message_delete_user: Message suppression utilisateur
+        :return color_delete_user: Couleur suppression utilisateur
+        :rtype message_delete_user: String
+        :rtype color_delete_user: String
         """
         self.list_user = []
         message_delete_user = ''
@@ -180,9 +223,15 @@ class Database(object):
 
     def deleteemotion(self, id_emo):
         """
-        Cette fonction permet de supprimer une émotion
+        Cette fonction permet de supprimer une émotion.
         :param self: Objet courant
         :param id_emo: Identifiant
+        :type self: Object
+        :type id_emo: Integer
+        :return message_delete_emotion: Message suppression émotion
+        :return color_delete_emotion: Couleur suppression émotion
+        :rtype message_delete_emotion: String
+        :rtype color_delete_emotion: String
         """
         self.list_emotion = []
         message_delete_emotion = ''
@@ -203,11 +252,19 @@ class Database(object):
 
     def updateuser(self, id_user, identifiant, role):
         """
-        Cette fonction permet de modifier un utilisateur
+        Cette fonction permet de modifier un utilisateur.
         :param self: Objet courant
         :param id_user: Identifiant de l'utilisateur
         :param identifiant: Nom de l'utilisateur
         :param role: Rôle de l'utilisateur
+        :type self: Object
+        :type id_user: Integer
+        :type identifiant: Integer
+        :type role: String
+        :return message_update_user: Message modification utilisateur
+        :return color_update_user: Couleur modification utilisateur
+        :rtype message_update_user: String
+        :rtype color_update_user: String
         """
         self.list_user = []
         message_update_user = ''
@@ -229,10 +286,17 @@ class Database(object):
 
     def updateemotion(self, id_emo, intitule):
         """
-        Cette fonction permet de modifier une émotion en base
+        Cette fonction permet de modifier une émotion en base.
         :param self: Objet courant
-        :param id_emo: Identifiant de l'utilisateur
+        :param id_emo: Identifiant de l'émotion
         :param intitule: Nom de l'émotion
+        :type self: Object
+        :type id_emo: Integer
+        :type intitule: String
+        :return message_update_emotion: Message modification émotion
+        :return color_update_emotion: Couleur modification émotion
+        :rtype message_update_emotion: String
+        :rtype color_update_emotion: String
         """
         message_update_emotion = ''
         color_update_emotion = ''

@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
 """
-Ce module permet la détection de matrices
+Ce module permet la détection de matrices.
 """
 import cv2
 
 def matricepresent(sourcefilepath, classifier):
     """
-    Cette fonction permet de détecter si cette matrice est présente
+    Cette fonction permet de détecter si cette matrice est présente.
     :param source: Source du fichier
     :param classifier: Matrice à utiliser
+    :type source: String
+    :type classifier: String
+    :return bmatch: Matrice présent
+    :return nbmatch: Nombre d'objet trouvé
+    :rtype bmatch: Boolean
+    :rtype nbmatch: Integer
     """
     classifier_cascade = cv2.CascadeClassifier('./models/' + str(classifier) + '_classifier.xml')
     cap = cv2.VideoCapture(sourcefilepath)
@@ -21,7 +27,6 @@ def matricepresent(sourcefilepath, classifier):
     while read_value:
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         obj = classifier_cascade.detectMultiScale(gray, 30, 60)
-        #obj = classifier_cascade.detectMultiScale(gray, 15, 35)
         bmatch = False
         nbmatch = len(obj)
         for (x_coord, y_coord, w_coord, h_coord) in obj:
