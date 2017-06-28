@@ -16,7 +16,7 @@
 	<div class="col-md-3 col-form">
 		<form action="/test" method="post" enctype="multipart/form-data">
 			<div class="panel panel-default panel-submit">
-				<div class="panel-heading">Sélection Image :</div>
+				<div class="panel-heading">Sélection Fichier :</div>
 				<div class="panel-body paddingPanel">
 					<input type="file" name="upload" />
 					<input type="submit" class="btn btn-sm btn-primary btn-submit-img" value="Lancer l'analyse" />
@@ -58,7 +58,7 @@
 						<p class="text-results alert-danger">Situation anormale détectée !</p>
 						%else:
 							%if name_select_matrice != '':
-								<p class="text-results alert-warning">Emotion négative détectée !<br> Mais pas de zone de matrice detecté </p>
+								<p class="text-results alert-warning">Dernière identification : <br> Emotion négative détectée !<br> Mais pas de zone de matrice detecté au même moment </p>
 							%else:
 								<p class="text-results alert-danger">Situation anormale détectée !</p>
 							%end
@@ -67,12 +67,11 @@
 						%if bmatchmatrice is True and len(list_emotion) == 0:
 							<p class="text-results alert-danger">Situation anormale détectée !</p>
 						%elif bmatchmatrice is True:
-							<p class="text-results alert-warning">Objet négatif détecté !<br> Mais pas d'émotion négative </p>
+							<p class="text-results alert-warning">Dernière identification : <br> Objet négatif détecté !<br> Mais pas d'émotion négative au même instant </p>
 						%else:
 							<p class="text-results alert-success">Situation normale.</p>
 						%end
 					%end
-					%if bmatchmatrice is True or bmatch is True:
 						</br>
 						<p class="text-results">Prédiction :</p>
 						%if bmatchmatrice is True:
@@ -84,7 +83,6 @@
 								<p class="text-results"> {{emotion[0]}} : {{emotion[1]*100/emotion_all}}%.</p>
 							%end
 						%end
-					%end
 				%end
 				<div class="content-results" style="display:none;">
 					<hr />

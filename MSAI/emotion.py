@@ -15,7 +15,7 @@ def emotionspresent(model, sourcefilepath, filteremotion):
     :param sourcefilepath: Source du fichier
     :param filteremotion: Filtre des émotions sélectionnés
     """
-    dict_emotion = {"Neutre": 0, "Enervé": 0, "Dégoût": 0,
+    dict_emotion = {"Neutre": 0, "Enerve": 0, "Degout": 0,
                     "Joyeux": 0, "Triste": 0, "Surpris": 0}
     bmatch = False
 
@@ -35,9 +35,9 @@ def emotionspresent(model, sourcefilepath, filteremotion):
             if prediction == 0:
                 dict_emotion["Neutre"] += 1
             if prediction == 1:
-                dict_emotion["Enervé"] += 1
+                dict_emotion["Enerve"] += 1
             if prediction == 2:
-                dict_emotion["Dégoût"] += 1
+                dict_emotion["Degout"] += 1
             if prediction == 3:
                 dict_emotion["Joyeux"] += 1
             if prediction == 4:
