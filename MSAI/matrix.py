@@ -73,11 +73,11 @@ class Matrix(object):
                 cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
                 nb_generate_in_progress = subprocess.check_output(
                     [cmd], shell=True)
-                if int(nb_generate_in_progress) >= 2:
+                if int(nb_generate_in_progress) >= 1:
                     message_create_matrix = "La génération de la matrice " + \
                         name_matrix + \
                         " n'a pas pu être lancé car la limite de génération simultanée est déjà" + \
-                        " atteinte (limite : 2). "
+                        " atteinte (limite : 1). "
                     color_status_matrix = "alert alert-danger"
                 else:
                     dir_script = os.path.abspath(
@@ -130,7 +130,6 @@ class Matrix(object):
                     # commande pour recuperer si un proc generate_matrice est en marche
                     cmd = "ps -aef | grep generate_matrice_" + \
                         name_matrix + " | grep -v grep | wc -l"
-                    #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
                     in_progress = subprocess.check_output([cmd], shell=True)
                     if int(in_progress) >= 1:
                         show_status = True
@@ -148,14 +147,14 @@ class Matrix(object):
                         msg = " n'est pas encore lancé."
                         current_matrix = os.path.join(
                             self.dir_matrix, name_matrix)
-                        cmd_pos = "find " + current_matrix + "/positive_img -type f | wc -l"
-                        cmd_neg = "find " + current_matrix + "/negative_img -type f | wc -l"
+                        dir_pos = current_matrix + '/positive_img'
+                        dir_neg = current_matrix + '/negative_img'
+                        list_pos = os.listdir(dir_pos)
                         msg = msg + " Nb image positive : " + \
-                            subprocess.check_output(
-                                [cmd_pos], shell=True) + "-"
+                            str(len(list_pos)) + " -"
+                        list_neg = os.listdir(dir_neg)
                         msg = msg + " Nb image negative : " + \
-                            subprocess.check_output(
-                                [cmd_neg], shell=True) + "."
+                            str(len(list_neg)) + "."
                     # 3 eme append (obligatoire)
                     message.append(msg)
                 # on pousse les messages dans le tableau result
