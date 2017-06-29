@@ -358,6 +358,7 @@ def add_pictures():
     Ajout nouvelle image dans la matrice.
     """
     connected_user, connected_user_role = MY_UTILITY.verificationsession('user')
+    print request.POST.dict
     name_matrix = request.POST.dict['select_list_matrix'][0]
     picture_type = request.POST.dict['typeImage'][0]
     uploads = request.files.getall('upload')
