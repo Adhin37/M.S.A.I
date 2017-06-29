@@ -88,3 +88,8 @@ input[type="checkbox"].input-validation-error {
     padding-bottom: 1rem;
     text-align: center;
 }
+
+.container-main {
+    max-width: none;
+    width: 85%;
+}

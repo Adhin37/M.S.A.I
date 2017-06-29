@@ -17,7 +17,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-					<a href="#" class="navbar-left"><img src="static/fonts/ptitLogo.png" style="margin-right: 20px;"></a>
+					<a href="/home" class="navbar-left"><img src="static/fonts/ptitLogo.png" style="margin-right: 20px;" alt="Accueil"></a>
                     <a href="/home" class="navbar-brand">MSAI</a>
                 </div>
                 <div class="navbar-collapse collapse">
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <div class="container-fluid body-content">
+        <div class="container container-main">
             {{!base}}
         </div>
         <div class="footer">

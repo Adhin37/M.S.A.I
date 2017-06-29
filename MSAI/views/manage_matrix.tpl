@@ -7,7 +7,7 @@
 		<div class="col-md-offset-3 col-md-6">
 			<div class="panel panel-default panel-submit">
 				<div class="panel-heading">Etat de génération des matrices</div>
-				<div class="panel-body paddingPanel">
+				<div class="panel-body">
 					<div>
 						%for ligne in message_check_matrix:
 							<p class="text-results">{{ligne[0]}}<b>{{ligne[1]}}</b>{{ligne[2]}}</p>
@@ -23,7 +23,7 @@
 	<div class="col-md-offset-2 col-md-4 col-form">
 		<div class="panel panel-default panel-submit">
 			<div class="panel-heading">Les matrices</div>
-			<div class="panel-body paddingPanel">
+			<div class="panel-body">
 				<div class="form-group">
 					<form action="/add_matrix" method="post" enctype="multipart/form-data">
 						<div class="form-group">
@@ -61,7 +61,7 @@
 	<div class="col-md-4">
 		<div class="panel panel-default panel-submit">
 			<div class="panel-heading">Les images</div>
-			<div class="panel-body paddingPanel">
+			<div class="panel-body">
 				<form action="/add_pictures" method="post" enctype="multipart/form-data">
 					<div class="form-group">
 						<div class="{{ color_add_pic }}" role="alert">
@@ -89,7 +89,7 @@
 	<div class="col-md-offset-3 col-md-6">
 		<div class="panel panel-default panel-submit">
 			<div class="panel-heading">Génération Classifier</div>
-			<div class="panel-body paddingPanel">
+			<div class="panel-body">
 				<form action="/do_classifier" method="post" enctype="multipart/form-data">
 					<div class="form-group">
 						%if defined('message_do_matrix'):
