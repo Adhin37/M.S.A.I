@@ -167,7 +167,7 @@ class Database(object):
         self.list_user = []
         cursor = self.conn.cursor()
         cursor.execute(
-            """SELECT U.id_user, U.identifiant, U.password, R.name_role FROM users as U JOIN role as R ON U.id_role = R.id_role""")
+            """SELECT U.id_user, U.identifiant, R.name_role FROM users as U JOIN role as R ON U.id_role = R.id_role""")
         rows = cursor.fetchall()
         for row in rows:
             self.list_user.append(row)

@@ -46,42 +46,42 @@
                     </thead>
                     <tbody>
                         %for l in list_user:
-                            <form class="form-signin" action="/deleteUser" method="post" enctype="multipart/form-data">
-                                <tr>
-                                    <td>{{l[0]}}
-                                        <div class="form-group">
-                                            <input type="hidden" class="form-control" id="usr" name="idUser" value={{l[0]}}>
-                                        </div>
-                                    </td>
-                                    <td>{{l[1]}}</td>
-                                    <td>{{l[3]}}</td>
-                                    <td>
-                                        <button class="btn btn-primary" type="button" id="afficheUpdate" onclick="updateForm({{l[0]}})">Modifier</button>
-                                        <button type="submit" class="btn btn-danger">Supprimer</button>
-                                    </td>
-                                </tr>
-                            </form>
-                            <form class="form-signin" action="/updateUser" method="post" enctype="multipart/form-data">
-                                <tr id="updateZone{{l[0]}}" style="display:none;">
-                                    <td>
-                                        <div class="form-group">
-                                            <input type="hidden" class="form-control" id="usr" name="idMajUser" value={{l[0]}}>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" id="majIdentifiant" name="majIdentifiant" value={{l[1]}} required>
-                                    </td>
-                                    <td>
-                                        <select class="form-control" id="majRole" name="majRole">
+                        <form class="form-signin" action="/deleteUser" method="post" enctype="multipart/form-data">
+                            <tr>
+                                <td>{{l[0]}}
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" id="usr" name="idUser" value={{l[0]}}>
+                                    </div>
+                                </td>
+                                <td>{{l[1]}}</td>
+                                <td>{{l[2]}}</td>
+                                <td>
+                                    <button class="btn btn-primary" type="button" id="afficheUpdate" onclick="updateForm({{l[0]}})">Modifier</button>
+                                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                                </td>
+                            </tr>
+                        </form>
+                        <form class="form-signin" action="/updateUser" method="post" enctype="multipart/form-data">
+                            <tr id="updateZone{{l[0]}}" style="display:none;">
+                                <td>
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" id="usr" name="idMajUser" value={{l[0]}}>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" id="majIdentifiant" name="majIdentifiant" value={{l[1]}} required>
+                                </td>
+                                <td>
+                                    <select class="form-control" id="majRole" name="majRole">
                                             <option value="2">Utilisateur</option>
                                             <option value="1">Administrateur</option>
                                         </select>
-                                    </td>
-                                    <td>
-                                        <button type="submit" class="btn btn-primary" id="btnMaj">Modifier</button>
-                                    </td>
-                                </tr>
-                            </form>
+                                </td>
+                                <td>
+                                    <button type="submit" class="btn btn-primary" id="btnMaj">Modifier</button>
+                                </td>
+                            </tr>
+                        </form>
                         % end
                     </tbody>
                 </table>
