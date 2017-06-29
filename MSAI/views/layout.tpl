@@ -6,17 +6,15 @@
         <title>{{ title }} - Projet MSAI</title>
         <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href="/static/content/site.css"/>
-        <link rel="stylesheet" type="text/css" href="/static/content/Admin.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/content/admin.css"/>
 	</head>
     <script type="text/javascript">
         function afficher() {
             if (document.getElementById("role").value == 'Administrateur') {
                 document.getElementById("zoneAdmin").style.display = "";
-                }
-            else{
+            } else{
                 document.getElementById("zoneAdmin").style.display = "none";
             }
-
         }
     </script>
     <body onLoad="afficher();">
@@ -28,13 +26,14 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
+					<a href="/home" class="navbar-left"><img src="static/fonts/ptitLogo.png" style="margin-right: 20px;" alt="Accueil"></a>
                     <a href="/home" class="navbar-brand">MSAI</a>
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a href="/test">Test OpenCV</a></li>
+                        <li><a href="/traitement">Traitement</a></li>
                         <li><a href="/manage_matrix">Gestion des matrices</a></li>
-                        <li><a href="/about">A propos</a></li>
+                        <li><a href="/faq">FAQ</a></li>
                         <li><a href="/contact">Contact</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -46,7 +45,7 @@
                             </button>
                             <ul class="dropdown-menu">
                                 <li><a href="#"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> Profil</a></li>
-                                <li id="zoneAdmin" style="display:none;"><a href="/manage_database"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Panneau administration</a></li>
+                                <li id="zoneAdmin" style="display:none;"><a href="/manage_users"><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Panneau administration</a></li>
                                 <li><a href="#"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Editer configuration</a></li>
                                 <li><a href="/disconnect"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> Déconnexion</a></li>
                             </ul>
@@ -56,12 +55,12 @@
             </div>
         </div>
 
-        <div class="container-fluid body-content">
+        <div class="container container-main">
             {{!base}}
+        </div>
+        <div class="footer">
             <hr />
-            <footer>
-                <p>&copy; {{ year }} - MSAI</p>
-            </footer>
+            <p>&copy; {{ year }} - MSAI</p>
         </div>
         <script src="/static/scripts/modernizr-2.6.2.js"></script>
         <script src="/static/scripts/jquery-1.10.2.js"></script>

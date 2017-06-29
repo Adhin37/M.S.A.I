@@ -1,15 +1,20 @@
 #!/usr/bin/env python
-#
+# -*- coding: utf-8 -*-
 #  Bottle session manager.  See README for full documentation.
 #
 #  Written by: Sean Reifschneider <jafo@tummy.com>
 #
 #  License: 3-clause BSD
-
+"""
+Ce module permet de gérer les sessions
+"""
 from __future__ import with_statement
 
-import bottle
+import pickle
+import os
+import uuid
 import time
+import bottle
 
 
 def authenticator(session_manager, login_url='/auth/login'):
@@ -22,11 +27,14 @@ def authenticator(session_manager, login_url='/auth/login'):
             (default: ``'/auth/login'``).
     '''
     def valid_user(login_url=login_url):
-        def decorator(handler, *a, **ka):
+        """Save session."""
+        def decorator(handler):
+            """No idea."""
             import functools
 
             @functools.wraps(handler)
             def check_auth(*a, **ka):
+                """Check authentificate."""
                 try:
                     data = session_manager.get_session()
                     if not data['valid']:
@@ -45,12 +53,7 @@ def authenticator(session_manager, login_url='/auth/login'):
                 return handler(*a, **ka)
             return check_auth
         return decorator
-    return(valid_user)
-
-
-import pickle
-import os
-import uuid
+    return valid_user
 
 
 class BaseSession(object):
@@ -61,28 +64,34 @@ class BaseSession(object):
             if the cookie is not to expire, a number of seconds in the future,
             or a datetime object.  (default: 30 days)
     '''
+
     def __init__(self, cookie_expires=86400 * 30):
         self.cookie_expires = cookie_expires
 
     def load(self, sessionid):
+        """Load session."""
         raise NotImplementedError
 
-    def save(self, sessionid, data):
+    def save(self, data):
+        """Save session."""
         raise NotImplementedError
 
     def make_session_id(self):
+        """Create session id."""
         return str(uuid.uuid4())
 
     def allocate_new_session_id(self):
-        #  retry allocating a unique sessionid
-        for i in range(100):
+        """Retry allocating a unique sessionid."""
+        allocaterange = 1
+        while allocaterange < 100:
             sessionid = self.make_session_id()
             if not self.load(sessionid):
                 return sessionid
+        allocaterange += 1
         raise ValueError('Unable to allocate unique session')
 
     def get_session(self):
-        #  get existing or create new session identifier
+        """Get existing or create new session identifier."""
         sessionid = bottle.request.get_cookie('sessionid')
         if not sessionid:
             sessionid = self.allocate_new_session_id()
@@ -105,6 +114,7 @@ class PickleSession(BaseSession):
     :param session_dir: Directory that session information is stored in.
             (default: ``'/tmp'``).
     '''
+
     def __init__(self, session_dir='/tmp', *args, **kwargs):
         super(PickleSession, self).__init__(*args, **kwargs)
         self.session_dir = session_dir
@@ -113,17 +123,19 @@ class PickleSession(BaseSession):
         filename = os.path.join(self.session_dir, 'session-%s' % sessionid)
         if not os.path.exists(filename):
             return None
-        with open(filename, 'r') as fp:
-            session = pickle.load(fp)
+        with open(filename, 'r') as filepath:
+            session = pickle.load(filepath)
         return session
 
     def save(self, data):
+        """Save session."""
         sessionid = data['sessionid']
-        fileName = os.path.join(self.session_dir, 'session-%s' % sessionid)
-        tmpName = fileName + '.' + str(uuid.uuid4())
-        with open(tmpName, 'w') as fp:
-            self.session = pickle.dump(data, fp)
-        os.rename(tmpName, fileName)
+        sessionfilename = os.path.join(
+            self.session_dir, 'session-%s' % sessionid)
+        sessiontmpname = sessionfilename + '.' + str(uuid.uuid4())
+        with open(sessiontmpname, 'w') as filepath:
+            pickle.dump(data, filepath)
+        os.rename(sessiontmpname, sessionfilename)
 
 
 class CookieSession(BaseSession):
@@ -150,8 +162,8 @@ class CookieSession(BaseSession):
         self.httponly = httponly
 
         if not secret and secret_file is not None:
-            with open(secret_file, 'r') as fp:
-                secret = fp.readline().strip()
+            with open(secret_file, 'r') as filepath:
+                secret = filepath.readline().strip()
 
         if not secret:
             import string
@@ -164,8 +176,8 @@ class CookieSession(BaseSession):
                 '%s.secret' % os.path.basename(sys.argv[0]))
 
             if os.path.exists(tmpfilename):
-                with open(tmpfilename, 'r') as fp:
-                    secret = fp.readline().strip()
+                with open(tmpfilename, 'r') as filepath:
+                    secret = filepath.readline().strip()
             else:
                 #  save off a secret to a tmp file
                 secret = ''.join([
@@ -173,8 +185,8 @@ class CookieSession(BaseSession):
                     for x in range(32)])
 
                 old_umask = os.umask(int('077', 8))
-                with open(tmpfilename, 'w') as fp:
-                    fp.write(secret)
+                with open(tmpfilename, 'w') as filepath:
+                    filepath.write(secret)
                 os.umask(old_umask)
 
         self.secret = secret
@@ -188,6 +200,7 @@ class CookieSession(BaseSession):
         return pickle.loads(cookie)
 
     def save(self, data):
+        """Save."""
         args = dict(secret=self.secret,
                     path='/', expires=int(time.time()) + self.cookie_expires)
         if self.secure:

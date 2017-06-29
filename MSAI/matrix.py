@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-This script implement the matrix navigation tab.
+Ce module permet de gérer les matrices.
 """
 import os
 import shutil
 import subprocess
-from routes import cv2
 from utils import Utils
 
 
 class Matrix(object):
-    """Class for matrix management"""
+    """
+    Classe gérant les matrices
+    :param object: Objet courant
+    """
     dir_matrix = ''
     dir_models = ''
     list_dir_matrix = []
@@ -38,6 +40,14 @@ class Matrix(object):
     def generate(self, name_matrix):
         """
         Permet de lancer la génération de la matrice name_matrix.
+        :param self: Objet courant
+        :param name_matrix: Nom matrice
+        :type self: Object
+        :type name_matrix: String
+        :return message_create_matrix: Message création matrice
+        :return color_status_matrix: Couleur création matrice
+        :rtype message_create_matrix: String
+        :rtype color_status_matrix: String
         """
         if name_matrix == '' or name_matrix is None:
             message_create_matrix = "Erreur, vous n'avez pas selectionné de matrice !"
@@ -45,67 +55,125 @@ class Matrix(object):
         elif os.path.isfile(os.path.join(self.dir_models, name_matrix + "_classifier.xml")):
             message_create_matrix = "La matrice " + name_matrix + " a déjà été generé !"
             color_status_matrix = "alert alert-danger"
+        elif os.path.isfile(os.path.join(self.dir_matrix, name_matrix + "/classifier/cascade.xml")):
+            message_create_matrix = "La matrice " + name_matrix + \
+                " a déjà été generé, cependant un problème a eu lieu " + \
+                "lors de la mise à disposition de celle-ci dans les models!"
+            color_status_matrix = "alert alert-danger"
         else:
             current_matrix = os.path.join(self.dir_matrix, name_matrix)
             cmd = "ps -aef | grep generate_matrice_" + \
                 name_matrix + " | grep -v grep | wc -l"
-            #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
             in_progress = subprocess.check_output([cmd], shell=True)
             if int(in_progress) >= 1:
-                # print format(in_progress)>0
                 message_create_matrix = "La matrice " + \
                     name_matrix + " est déjà cours de génération. "
                 color_status_matrix = "alert alert-danger"
             else:
-                dir_script = os.path.abspath(
-                    self.my_utility.dir_path + "/doMatrice/screen.sh")
-                os.chmod(dir_script, 0777)
-                # Obliger d'utiliser une "," pour passer les paramètres (on passe le chemin pour generate)
-                subprocess.call(
-                    ['. ' + dir_script, current_matrix, name_matrix], shell=True)
+                cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
+                nb_generate_in_progress = subprocess.check_output(
+                    [cmd], shell=True)
+                if int(nb_generate_in_progress) >= 1:
+                    message_create_matrix = "La génération de la matrice " + \
+                        name_matrix + \
+                        " n'a pas pu être lancé car la limite de génération simultanée est déjà" + \
+                        " atteinte (limite : 1). "
+                    color_status_matrix = "alert alert-danger"
+                else:
+                    dir_script = os.path.abspath(
+                        self.my_utility.dir_path + "/doMatrice/screen.sh")
+                    os.chmod(dir_script, 0777)
+                    # Obliger d'utiliser une "," pour passer les paramètres
+                    # (on passe le chemin pour generate)
+                    subprocess.call(
+                        ['. ' + dir_script, current_matrix, name_matrix], shell=True)
 
-                message_create_matrix = "La matrice est désormais cours de génération, vous pouvez consulter son avancement par le check."
-                color_status_matrix = "alert alert-success"
+                    message_create_matrix = "La matrice est désormais cours de génération, " \
+                        "vous pouvez consulter son avancement par le check."
+                    color_status_matrix = "alert alert-success"
         return message_create_matrix, color_status_matrix
 
-    def status(self, name_matrix):
+    def status(self):
         """
         Permet de check le statut de génération d'une matrice.
+        :param self: Objet courant
+        :type self: Object
+        :return result: Tableau des résultats
+        :return show_status: Montrer status
+        :rtype result: Array
+        :rtype show_status: Boolean
         """
-        # il faut regarder le repertoire classifier de la matrice
-        classifier_matrix = os.path.join(
-            self.dir_matrix, name_matrix + "/classifier")
-        matrix_path = os.path.join(self.dir_matrix, name_matrix)
-        if os.path.isfile(classifier_matrix + "/cascade.xml"):
-            result = "La génération de la matrice " + name_matrix + " est terminé"
+        show_status = False
+        result = []
+
+        if self.my_utility.os_name != 'Linux':
+            show_status = True
+            message = []
+            message.append("Non pris en compte, cause environnement : ")
+            message.append(self.my_utility.os_name)
+            # troisieme argument requis
+            message.append("")
+            result.append(message)
         else:
-            result = "Aucune génération en cours pour la matrice " + name_matrix
-            # commande pour recuperer si un proc generate_matrice est en marche
-            if self.my_utility.os_name == 'Linux':
-                cmd = "ps -aef | grep generate_matrice_" + \
-                    name_matrix + " | grep -v grep | wc -l"
-                #cmd = "ps -aef | grep generate_matrice | grep -v grep | wc -l"
-                in_progress = subprocess.check_output([cmd], shell=True)
-                if format(in_progress) >= 1:
-                    result = "La matrice " + name_matrix + " est en cours de génération. "
-                    i = 19
-                    fin = False
-                    while (i >= 0 and fin is False):
-                        if os.path.isfile(classifier_matrix + "/stage" + str(i) + ".xml"):
-                            fin = True
-                            result = result + os.linesep + \
-                                "Génération en cours : étape " + str(i) + "/19"
-                        i = i - 1
-                    if fin is False:
-                        result = result + os.linesep + "Génération en cours : étape 0/19"
-            else:
-                # TODO windows
-                print self.my_utility.os_name
-                result = "Non pris en compte, cause environnement :" + self.my_utility.os_name
-        return result
+            for name_matrix in self.list_dir_matrix:
+                # il faut regarder le repertoire classifier de chaque matrice
+                classifier_matrix = os.path.join(
+                    self.dir_matrix, name_matrix + "/classifier")
+                message = []
+                message.append("La matrice ")
+                message.append(name_matrix)
+
+                if os.path.isfile(classifier_matrix + "/cascade.xml"):
+                    message.append(" est genéré")
+                    show_status = True
+                else:
+                    # commande pour recuperer si un proc generate_matrice est en marche
+                    cmd = "ps -aef | grep generate_matrice_" + \
+                        name_matrix + " | grep -v grep | wc -l"
+                    in_progress = subprocess.check_output([cmd], shell=True)
+                    if int(in_progress) >= 1:
+                        show_status = True
+                        msg = " est en cours de génération. "
+                        i = 19
+                        fin = False
+                        msg_end = "Etape 0/20"
+                        while i >= 0 and fin is False:
+                            if os.path.isfile(classifier_matrix + "/stage" + str(i) + ".xml"):
+                                fin = True
+                                msg_end = "Etape " + str(i+1) + "/20"
+                            i = i - 1
+                        msg = msg + msg_end
+                    else:
+                        msg = " n'est pas encore lancé."
+                        current_matrix = os.path.join(
+                            self.dir_matrix, name_matrix)
+                        dir_pos = current_matrix + '/positive_img'
+                        dir_neg = current_matrix + '/negative_img'
+                        list_pos = os.listdir(dir_pos)
+                        msg = msg + " Nb image positive : " + \
+                            str(len(list_pos)) + " -"
+                        list_neg = os.listdir(dir_neg)
+                        msg = msg + " Nb image negative : " + \
+                            str(len(list_neg)) + "."
+                    # 3 eme append (obligatoire)
+                    message.append(msg)
+                # on pousse les messages dans le tableau result
+                result.append(message)
+            # fin de for
+        return result, show_status
 
     def add_directory_matrix(self, name_matrix):
-        """Add one matrix directory to matrix directory list"""
+        """
+        Cette fonction ajoute un dossier matrice dans la liste des dossiers des matrices.
+        :param self: Objet Courant
+        :param name_matrix: Nom de la matrice
+        :type self: Object
+        :type name_matrix: String
+        :return message_create_matrix: Message création matrice
+        :return color_status_matrix: Couleur status matrice
+        :rtype message_create_matrix: String
+        :rtype color_status_matrix: String
+        """
         message_create_matrix = ''
         color_status_matrix = ''
 
@@ -131,7 +199,13 @@ class Matrix(object):
         return message_create_matrix, color_status_matrix
 
     def update_directory_matrix(self):
-        """Refresh matrix directory list"""
+        """
+        Cette fonction rafraichit les dossiers des matrices.
+        :param self: Objet Courant
+        :type self: Object
+        :return self.list_dir_matrix: Liste des dossiers matrices
+        :rtype self.list_dir_matrix: List
+        """
         self.list_dir_matrix = []
         dirs = os.listdir(self.dir_matrix)
         for one_dir in sorted(dirs):
@@ -140,7 +214,17 @@ class Matrix(object):
         return self.list_dir_matrix
 
     def delete_directory_matrix(self, name_matrix):
-        """Delete one matrix directory from matrix directory list"""
+        """
+        Cette fonction permet de supprimer un dossier de matrice.
+        :param self: Objet Courant
+        :param name_matrix: Nom matrice
+        :type self: Object
+        :type name_matrix: String
+        :return message_delete_matrix: Message suppression matrice
+        :return color_suppr_matrix: Couleur suppression matrice
+        :rtype message_delete_matrix: String
+        :rtype color_suppr_matrix: String
+        """
         message_delete_matrix = ''
         color_suppr_matrix = ''
 
@@ -159,7 +243,13 @@ class Matrix(object):
         return message_delete_matrix, color_suppr_matrix
 
     def update_matrix(self):
-        """Actualisation de la liste des matrices"""
+        """
+        Actualisation de la liste des matrices.
+        :param self: Objet Courant
+        :type self: Object
+        :return self.list_matrix: Liste des matrices
+        :rtype self.list_matrix: List
+        """
         self.list_matrix = []
         files = os.listdir(self.dir_models)
         for matrix_file in sorted(files):
@@ -169,17 +259,37 @@ class Matrix(object):
         return self.list_matrix
 
     def add_object(self, name_matrix, picture_pos_neg, picture_ext, picture_filename):
-        """Ajout objet dans la matrice sélectionnée via la liste"""
+        """
+        Ajout objet dans la matrice sélectionnée via la liste.
+        :param self: Objet Courant
+        :param name_matrix: Nom de la matrice
+        :param picture_pos_neg: Nom de l'image négative
+        :param picture_ext: Nom de l'extension de l'image
+        :param picture_filename: Nom de l'image
+        :type self: Object
+        :type name_matrix: String
+        :type picture_pos_neg: String
+        :type picture_ext: String
+        :type picture_filename: String
+        :return message_add_pic: Message Ajout Image
+        :return color_add_pic: Couleur Ajout Image
+        :return file_path: Chemin du fichier
+        :rtype message_add_pic: String
+        :rtype color_add_pic: String
+        :rtype file_path: String
+        """
         message_add_pic = ''
         color_add_pic = ''
         file_path = ''
 
-        if picture_ext not in '.png':
-            message_add_pic = "Attention ! Seules les images en .png sont acceptees, le format de votre image est en " + picture_ext + "."
+        if picture_ext not in '.jpg':
+            message_add_pic = "Attention ! Seules les images en .jpg sont acceptees, " \
+                "le format de votre image est en " + picture_ext + "."
             color_add_pic = "alert alert-danger"
         else:
             file_path = os.path.abspath(
-                self.dir_matrix + '/' + name_matrix + '/' + picture_pos_neg + '/' + picture_filename)
+                self.dir_matrix + '/' + name_matrix + '/' + \
+                    picture_pos_neg + '/' + picture_filename)
             if os.path.isfile(file_path):
                 os.remove(file_path)
 
@@ -187,21 +297,3 @@ class Matrix(object):
             color_add_pic = "alert alert-success"
 
         return message_add_pic, color_add_pic, file_path
-
-    def nom_classifier(self, knife_cascade, img, gray):
-        """Récupération du nom du classifier"""
-        found = ''
-
-        knifes = knife_cascade.detectMultiScale(gray, 20, 50)
-        if len(knifes):
-            print 'FOUND'
-            for (x, y, w, h) in knifes:
-                cv2.rectangle(img, (x, y), (x + w, y + h), (125, 0, 255), 2)
-                font = cv2.FONT_HERSHEY_SIMPLEX
-                cv2.putText(img, 'Knife', (x + w / 2, y - h / 2),
-                            font, 1, (100, 255, 255), 2, cv2.LINE_AA)
-            found = True
-        else:
-            found = False
-
-        return found

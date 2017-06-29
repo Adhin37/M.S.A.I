@@ -1,19 +1,29 @@
 # -*- coding: utf-8 -*-
 """
-Ce module permet de reconnaitre les émotions sur une image ou une vidéo
+Ce module permet de reconnaitre les émotions sur une image ou une vidéo.
 """
 import operator
 import cv2
-from face_detect import findfaces, locatefaces
+from facedetect import findfaces, locatefaces
+
 
 def emotionspresent(model, sourcefilepath, filteremotion):
     """
-    Cette fonction permet de récupérer les émotions présentes
+    Cette fonction permet de récupérer les émotions présentes.
     :param model: Matrice XML des émotions
     :param sourcefilepath: Source du fichier
     :param filteremotion: Filtre des émotions sélectionnés
+    :type model: XML
+    :type sourcefilepath: String
+    :type filteremotion: Array
+    :return dict_emotion: Liste des émotions
+    :return faces: Nombres de visages
+    :return bmatch: Emotion présente
+    :rtype dict_emotion: Dictionnay
+    :rtype faces: Integer
+    :rtype bmatch: Boolean
     """
-    dict_emotion = {"Neutre": 0, "Enervé": 0, "Dégoût": 0,
+    dict_emotion = {"Neutre": 0, "Enerve": 0, "Degout": 0,
                     "Joyeux": 0, "Triste": 0, "Surpris": 0}
     bmatch = False
 
@@ -33,9 +43,9 @@ def emotionspresent(model, sourcefilepath, filteremotion):
             if prediction == 0:
                 dict_emotion["Neutre"] += 1
             if prediction == 1:
-                dict_emotion["Enervé"] += 1
+                dict_emotion["Enerve"] += 1
             if prediction == 2:
-                dict_emotion["Dégoût"] += 1
+                dict_emotion["Degout"] += 1
             if prediction == 3:
                 dict_emotion["Joyeux"] += 1
             if prediction == 4:
@@ -55,65 +65,36 @@ def emotionspresent(model, sourcefilepath, filteremotion):
 
         return dict_emotion, faces, bmatch
 
-
 def emotionsmatch(dictemotion, indexchoose):
     """
-    Cette fonction permet de déterminer si les émotions présentes sont celles sélectionnées
+    Cette fonction permet de déterminer si les émotions présentes sont celles sélectionnées.
     :param dictemotion: Liste des émotions
     :param indexchoose: Index des émotions choisis
+    :type dictemotion: dictionnary
+    :type indexchoose: Array
+    :return b_match: Emotion présente
+    :rtype b_match: Boolean
     """
-    position_1, position_2, position_3, position_4, position_5, position_6 = positionemotion(
-        dictemotion)
-
-    if len(indexchoose) == 1:
-        b_match = bool(indexchoose[0] in position_1.keys())
-
-    if len(indexchoose) == 2:
-        for index in indexchoose:
-            if index in position_1.keys() or index in position_2.keys():
-                b_match = True
-            else:
-                b_match = False
-                break
-
-    if len(indexchoose) == 3:
-        for index in indexchoose:
-            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys():
-                b_match = True
-            else:
-                b_match = False
-                break
-
-    if len(indexchoose) == 4:
-        for index in indexchoose:
-            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys() or index in position_4.keys():
-                b_match = True
-            else:
-                b_match = False
-                break
-
-    if len(indexchoose) == 5:
-        for index in indexchoose:
-            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys() or index in position_4.keys() or index in position_5.keys():
-                b_match = True
-            else:
-                b_match = False
-                break
-
-    if len(indexchoose) == 6:
-        for index in indexchoose:
-            if index in position_1.keys() or index in position_2.keys() or index in position_3.keys() or index in position_4.keys() or index in position_5.keys() or index in position_6.keys():
-                b_match = True
-            else:
-                b_match = False
-                break
+    pos_dictemotion = positionemotion(dictemotion)
+    for index in indexchoose:
+        if index in pos_dictemotion.keys():
+            b_match = True
+        else:
+            b_match = False
+            break
 
     return b_match
 
+
 def positionemotion(dictemotion):
     """
-    Cette fonction permet de déterminer les position des émotions présentes
+    Cette fonction permet de déterminer les position des émotions présentes.
     :param dictemotion: Liste des émotions
+    :type dictemotion: dictionnary
+    :return dict(position_1.items() + position_2.items() + position_3.items() +
+                position_4.items() + position_5.items() + position_6.items()): Dictionnaire des positions
+    :rtype dict(position_1.items() + position_2.items() + position_3.items() +
+                position_4.items() + position_5.items() + position_6.items()): dictionnary
     """
     position_1 = {}
     position_2 = {}
@@ -125,75 +106,77 @@ def positionemotion(dictemotion):
     for emotion in dictemotion:
         b_use = False
         if emotion[1] != 0:
-            if len(position_1.keys()) >= 0:
-                if len(position_1.keys()) == 0:
-                    position_1[emotion[0]] = emotion[1]
-                else:
-                    for value in position_1.values():
-                        if value == emotion[1]:
-                            position_1[emotion[0]] = emotion[1]
-                            b_use = True
-                        else:
-                            break
-                    if len(position_2.keys()) >= 0 and not b_use:
-                        if len(position_2.keys()) == 0:
-                            position_2[emotion[0]] = emotion[1]
-                        else:
-                            for value in position_2.values():
-                                if value == emotion[1]:
-                                    position_2[emotion[0]] = emotion[1]
-                                    b_use = True
-                                else:
-                                    break
-                            if len(position_3.keys()) >= 0 and not b_use:
-                                if len(position_3.keys()) == 0:
-                                    position_3[emotion[0]] = emotion[1]
-                                else:
-                                    for value in position_3.values():
-                                        if value == emotion[1]:
-                                            position_3[emotion[0]] = emotion[1]
-                                            b_use = True
-                                        else:
-                                            break
-                                    if len(position_4.keys()) >= 0 and not b_use:
-                                        if len(position_4.keys()) == 0:
-                                            position_4[emotion[0]] = emotion[1]
-                                        else:
-                                            for value in position_4.values():
-                                                if value == emotion[1]:
-                                                    position_4[emotion[0]] = emotion[1]
-                                                    b_use = True
-                                                else:
-                                                    break
-                                            if len(position_5.keys()) >= 0 and not b_use:
-                                                if len(position_5.keys()) == 0:
-                                                    position_5[emotion[0]] = emotion[1]
-                                                else:
-                                                    for value in position_5.values():
-                                                        if value == emotion[1]:
-                                                            position_5[emotion[0]] = emotion[1]
-                                                            b_use = True
-                                                        else:
-                                                            break
-                                                    if len(position_6.keys()) >= 0 and not b_use:
-                                                        if len(position_6.keys()) == 0:
-                                                            position_6[emotion[0]] = emotion[1]
-                                                        else:
-                                                            for value in position_6.values():
-                                                                if value == emotion[1]:
-                                                                    position_6[emotion[0]] = emotion[1]
-                                                                else:
-                                                                    break
+            if len(position_1.keys()) == 0:
+                position_1[emotion[0]] = emotion[1]
+            else:
+                for value in position_1.values():
+                    if value == emotion[1]:
+                        position_1[emotion[0]] = emotion[1]
+                        b_use = True
+                    else:
+                        break
+                if len(position_2.keys()) >= 0 and not b_use:
+                    if len(position_2.keys()) == 0:
+                        position_2[emotion[0]] = emotion[1]
+                    else:
+                        for value in position_2.values():
+                            if value == emotion[1]:
+                                position_2[emotion[0]] = emotion[1]
+                                b_use = True
+                            else:
+                                break
+                        if len(position_3.keys()) >= 0 and not b_use:
+                            if len(position_3.keys()) == 0:
+                                position_3[emotion[0]] = emotion[1]
+                            else:
+                                for value in position_3.values():
+                                    if value == emotion[1]:
+                                        position_3[emotion[0]] = emotion[1]
+                                        b_use = True
+                                    else:
+                                        break
+                                if len(position_4.keys()) >= 0 and not b_use:
+                                    if len(position_4.keys()) == 0:
+                                        position_4[emotion[0]] = emotion[1]
+                                    else:
+                                        for value in position_4.values():
+                                            if value == emotion[1]:
+                                                position_4[emotion[0]] = emotion[1]
+                                                b_use = True
+                                            else:
+                                                break
+                                        if len(position_5.keys()) >= 0 and not b_use:
+                                            if len(position_5.keys()) == 0:
+                                                position_5[emotion[0]] = emotion[1]
+                                            else:
+                                                for value in position_5.values():
+                                                    if value == emotion[1]:
+                                                        position_5[emotion[0]] = emotion[1]
+                                                        b_use = True
+                                                    else:
+                                                        break
+                                                if len(position_6.keys()) >= 0 and not b_use:
+                                                    if len(position_6.keys()) == 0:
+                                                        position_6[emotion[0]] = emotion[1]
+                                                    else:
+                                                        for value in position_6.values():
+                                                            if value == emotion[1]:
+                                                                position_6[emotion[0]] = emotion[1]
+                                                            else:
+                                                                break
         else:
             break
 
-    return position_1, position_2, position_3, position_4, position_5, position_6
-
+    return dict(position_1.items() + position_2.items() + position_3.items() +
+                position_4.items() + position_5.items() + position_6.items())
 
 def emotionscount(dictemotion):
     """
-    Cette fonction permet de retourner le nombre d'émotion détecté
+    Cette fonction permet de retourner le nombre d'émotion détecté.
     :param dictemotion: Liste des émotions
+    :type dictemotion: dictionnary
+    :return emotion_count: Nombre d'émotions présentes
+    :rtype emotion_count: Integer
     """
     emotion_count = 0
     for emotion in dictemotion:
@@ -209,6 +192,9 @@ def drawrectangle(sourceimage, coordinatesface, sourcefilepath):
     :param sourceimage: Source de l'image.
     :param coordinatesface: Coordonnées du visage.
     :param sourcefilepath: Chemin du fichier
+    :type sourceimage: Object
+    :type coordinatesface: Ordinal
+    :type sourcefilepath: String
     """
     x_coord, y_coord, w_coord, h_coord = coordinatesface
     cv2.rectangle(sourceimage, (x_coord, y_coord),

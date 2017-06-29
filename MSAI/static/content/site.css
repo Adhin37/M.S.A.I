@@ -1,8 +1,12 @@
-﻿body {
-    /*padding-top: 50px;*/
-    padding-bottom: 20px;
+﻿html {
+    height: 100%;
 }
-
+body {
+    min-height: 100%;
+    position: relative;
+    margin: 0;
+    padding-bottom: 6rem;
+}
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
@@ -50,7 +54,15 @@ input[type="checkbox"].input-validation-error {
 .text-results, .content-results {
     padding-left: 15px;
 }
-
+.red-color{
+    color:red;
+}
+.orange-color{
+    color:orange;
+}
+.green-color{
+    color:green;
+}
 .content-results {
     padding-bottom: 15px;
 }
@@ -68,6 +80,16 @@ input[type="checkbox"].input-validation-error {
     border-color: #95a5a6;
 }
 
-footer {
+.footer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding-bottom: 1rem;
     text-align: center;
+}
+
+.container-main {
+    max-width: none;
+    width: 85%;
 }
